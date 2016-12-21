@@ -1,17 +1,32 @@
 <template>
 <div class="devices">
-  Devices Component
+  <h1>Devices</h1>
+
+  <table>
+    <tr v-for="message in data">
+      <td>{{ message }}</td>
+  </tr>
+  </table>
+
   </div>
 </template>
 
 <script>
+  import io from 'socket.io-client'
 
   export default {
+    data() {
+      return {
+        data: [],
+      }
+    },
     created() {
-      var io = require('socket.io-client')();
-      io.on('connection', function(client){
-
-      });
+      const socket = io()
+      const self = this
+      socket.on('sensors', function(msg) {
+        console.log('message', msg)
+        self.data.push(msg)
+      })
     }
   }  
 </script>
