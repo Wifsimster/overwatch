@@ -1,0 +1,22 @@
+@import 'colors';
+
+.app {
+  height: 100%;
+  background-color: $black;
+  color: $white;
+}
+
+a {
+  color: $orange-light;
+  text-decoration: none;
+  &:hover {
+    color: $orange;
+  }
+}
+
+a.link {
+  color: hsla(0,0%,100%,.7);
+  &:hover {
+    color: $white;
+  }
+}

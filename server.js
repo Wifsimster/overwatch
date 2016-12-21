@@ -29,5 +29,9 @@ if('production' == app.get('env')) {app.use(errorHandler());}
 //require('./src/models/createDatabase');
 
 // Start server with 'node server.js'
-app.listen(port);
+var server = app.listen(port);
+
 console.log('Server started at 127.0.0.1:8080');
+
+var io = require('socket.io').listen(server);
+require('./src/controllers/socket')(io);

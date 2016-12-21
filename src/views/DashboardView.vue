@@ -1,14 +1,26 @@
 <template>
 <div>
-<h1>Dashboard</h1>
-<p>Ipsum !</p>
+  <com-header></com-header>
+  <com-devices></com-devices>
   </div>
 </template>
 
 <script>
+  import ComHeader from '../components/HeaderComponent.vue'
+  import ComDevices from '../components/DevicesComponent.vue'
 
+  export default {
+    data() {
+      return {
+
+      }
+    },
+    components: {
+      ComHeader, ComDevices,
+    }
+  }
 </script>
 
-<style>
+<style lang="sass" scoped>
 
 </style>

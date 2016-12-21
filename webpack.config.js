@@ -18,7 +18,7 @@ module.exports = {
   },
   module: {
     loaders: [
-      {test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/, query: { presets: ['es2015'] }},
+      {test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
       {test: /\.vue?$/, loader: 'vue'},      
       {test: /\.html$/, loader: 'vue-html'},
       {test: /\.css$/, loader: 'style!css'},
