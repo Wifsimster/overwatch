@@ -1,5 +1,5 @@
 var Sequelize = require('sequelize');
-var config = require('./config');
+var config = require('../../../config');
 
 var db = config.database;
 

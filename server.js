@@ -24,7 +24,7 @@ if('development' == env) {
 if('production' == app.get('env')) {app.use(errorHandler());}
 
 // Drop & create tables in DB
-//require('../src/models/createDatabase');
+require('./src/back/models/createDatabase');
 
 // Start server with 'node server.js'
 var server = app.listen(port);

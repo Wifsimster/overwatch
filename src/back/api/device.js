@@ -1,5 +1,5 @@
 import router from('express').Router()
-import User from('../models/device')
+import Device from('../models/device')
 import errorHandler from('./errorHandler')
 
 router.get('/', function(req, res) {    
@@ -10,7 +10,7 @@ router.get('/', function(req, res) {
         //        include: [ Establishment ],
         where : {},
     }
-    if(username) { options.where.name = name }    
+    if(name) { options.where.name = name }    
     if(id) { options.where.id = id }
     Device.findAll(options).then(function(rst) { res.json(rst) })
 })

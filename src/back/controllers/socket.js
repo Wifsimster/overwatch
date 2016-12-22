@@ -1,15 +1,22 @@
+var Message = require('../models/message')
+
 module.exports = function(io) {
 
   const mqtt = require('mqtt')
   const mqttClient  = mqtt.connect('mqtt://192.168.0.35:1883')
 
-  const data = {
-    "mac":"18:fe:34:d7:f2:1f", "ip":"192.168.0.56", "temperature":"24", "humidity":"34"
-  }
+  mqttClient.subscribe('/#')
+
+  mqttClient.on('message', function (topic, message) {
+    let data = JSON.parse(message.toString())
+    Message.create(data)
+      .then(function(rst) { console.log('New message saved !') })
+      .catch(function(err) { console.error(err) })
+  })
 
   io.on('connection', (socket) => {
     console.log('Socket connection open')    
-    mqttClient.subscribe('/#')
+
 
     mqttClient.on('message', function (topic, message) {
       socket.emit('sensors', message.toString())
