@@ -1,16 +1,25 @@
 var errorHandler = require('./errorHandler')
 var Device = require('../models/device')
+var Type = require('../models/type')
 
 module.exports = function(socket) {
 
     socket.on('get.device', (fn) => {
-        Device.findAll()
-            .then((devices) => { fn(devices) })
+        Device.findAll({
+            include: [ Type ]
+        })
+            .then((devices) => { 
+            console.log(devices);
+            fn(devices) })
             .catch((err) => { console.error(err) })
     })
 
     socket.on('update.device', (device) => {
-        Device.update({name: device.name}, {where: {id: device.id}})
+        console.log('Type', device.type)
+        Device.update({
+            name: device.name,
+            type: device.type,
+        }, {where: {id: device.id}})
             .then((rst) => {})
             .catch((err) => { console.error(err) })
     })

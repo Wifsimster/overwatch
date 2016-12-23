@@ -13,13 +13,13 @@
                 <tbody>
                     <tr v-for="message in messages">
                         <td>{{ message.createdAt | moment('DD/MM/YY HH:mm:ss') }}</td>
-                        <td>{{ message.data }} <a @click="remove(message)"><i class="material-icons">remove</i></a></td>
+                        <td>{{ message.data }} <a @click="remove(message)" title="Remove the message"><i class="material-icons">remove</i></a></td>
     </tr>
     </tbody>
     </table>
     </div>
         <div v-else>
-            <p>Aucun message.</p>
+            <p>No message found.</p>
     </div>
     </transition>
     </div>

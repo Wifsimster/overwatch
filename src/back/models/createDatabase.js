@@ -1,7 +1,11 @@
 var sequelize = require('../db/database');
+var Type = require('./type');
 
-sequelize.sync({ force: true }).then(function () {
+sequelize.sync({ force: true }).then(() => {
+    Type.create({name: 'Temperature'})
+    Type.create({name: 'Humidity'})
+    Type.create({name: 'Luminosity'})
     console.log('Create models into DB');
-}, function (err) {
+}, (err) => {
     console.error(err);
 });

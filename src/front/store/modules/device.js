@@ -1,4 +1,3 @@
-import Device from '../../api/device'
 import * as types from '../mutation-types'
 
 const state = {
@@ -23,11 +22,7 @@ const actions = {
     //    }
 }
 
-const mutations = {
-    //    [types.CHECKOUT_SUCCESS] (state) {
-    //        state.checkoutStatus = 'successful'
-    //    },
-    
+const mutations = {    
     [types.OPEN_MODAL] (state, data) {
         state.device = data;
         state.modal = true;

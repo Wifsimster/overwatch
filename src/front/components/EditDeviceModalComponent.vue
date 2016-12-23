@@ -14,23 +14,25 @@
     </div>
     </div>
     </div>            
-                <div class="modal-body">
+                <div class="modal-body modal-lg">
                     <form class="pure-form pure-form-aligned">
-                        <div class="pure-g">
-                            <div class="pure-u-1-2">
-                                <div class="pure-control-group">
-                                    <label for="name">Name</label>
-                                    <input id="name" v-model="device.name">
+                        <div class="pure-control-group">
+                            <label for="name">Name</label>
+                            <input id="name" type="text" v-model="device.name">
     </div>
-                                <div class="pure-control-group">
-                                    <label for="mac">MAC</label>
-                                    <input id="mac" v-model="device.mac">
+                        <div class="pure-control-group">
+                            <label for="mac">MAC</label>
+                            <input id="mac" type="text" v-model="device.mac" readonly>
     </div>
-                                <div class="pure-control-group">
-                                    <label for="ip">IP</label>
-                                    <input id="ip" v-model="device.ip">
+                        <div class="pure-control-group">
+                            <label for="ip">IP</label>
+                            <input id="ip" type="text" v-model="device.ip" readonly>
     </div>
-    </div>
+                        <div class="pure-control-group">
+                            <label for="type">Type</label>
+                            <select id="type" v-model="device.type">
+                                <option v-for="type in types" :value="type.id">{{ type.name }}</option>
+    </select>
     </div>
     </form>
     </div>
@@ -54,12 +56,18 @@
             return {
                 error: '',
                 socket: io(),
+                types: [],
             }
         },
         computed: {
             ...mapGetters({
                 isOpenModal: 'modal',
                 device: 'device',
+            })
+        },
+        created() {
+            this.socket.emit('get.type', (types) => {
+                this.types = types
             })
         },
         methods: {

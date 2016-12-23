@@ -35,6 +35,7 @@ module.exports = function(io) {
 
         require('../api/device')(socket)
         require('../api/message')(socket)
+        require('../api/type')(socket)
 
         // Wait for MQTT message to send
         mqttClient.on('message', (topic, message) => {
@@ -56,7 +57,12 @@ module.exports = function(io) {
                         .then((rst) => {})
                         .catch((err) => { console.error(err) })
                 } else {
-                    Device.create({ name: data.name, mac: data.mac, ip: data.ip })
+                    Device.create({
+                        name: data.name, 
+                        mac: data.mac, 
+                        ip: data.ip,
+                        type: { id: 1, name: 'Temperature' },
+                    })
                         .then((rst) => { 
                         Device.findAll().then((devices) => {
                             socket.broadcast.emit('get.device', devices)  

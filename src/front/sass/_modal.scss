@@ -27,14 +27,14 @@
             }
             width: 600px;
             margin: 0px auto;
-            background-color: $gallery;
+            background-color: $mine-shaft-app;
             box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
             transition: all .3s ease;
             border-radius: 4px;
             .modal-header {
                 border-radius: 3px 3px 0 0;
                 padding: 10px 20px;
-                background-color: $mine-shaft;
+                background-color: $mine-shaft-light;
                 h2 {
                     font-weight: 300;
                     color: $gallery;
@@ -62,8 +62,8 @@
                 }
             }
             .modal-footer {
-                border-top: $gallery solid 1px;
                 padding: 10px 20px;
+                background-color: $mine-shaft-light;
                 button {
                     margin-left: 10px;
                     float: right;
