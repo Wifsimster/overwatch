@@ -1,5 +1,5 @@
 # Overwatch
-Home automation
+Home automation for ESP8266 devices
 
 - Vue.js
 - Webpack
