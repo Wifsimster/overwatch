@@ -1,20 +1,14 @@
 <template>
 <div class="header">
-  <router-link to="/" exact>Home</router-link>
-  <span class="title">Overwatch</span>
-  </div>
+    <router-link to="/" exact class="link"><i class="material-icons">home</i></router-link>
+    <span class="title">Overwatch</span>
+    <router-link to="/settings" class="link settings"><i class="material-icons">settings</i></router-link>
+    </div>
 </template>
 
-<style lang="sass">
-.header {
-  padding: 10px;
-  .icons {
+<script>
+</script>
 
-    }
-  .title {
-    float: right;
-    font-size: 22px;
-    font-weight: 400;
-    }
-  }
+<style lang="sass">
+@import '../sass/_header.scss';
 </style>

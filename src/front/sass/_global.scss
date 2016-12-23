@@ -1,22 +1,43 @@
 @import 'colors';
+@import 'font';
+
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
 
 .app {
-  height: 100%;
-  background-color: $black;
-  color: $white;
+    height: 100%;
+    background-color: $mine-shaft;
+    color: $gallery;
 }
 
 a {
-  color: $orange-light;
-  text-decoration: none;
-  &:hover {
-    color: $orange;
-  }
+    color: $tulip-tree;
+    text-decoration: none;
+    &:hover {
+        color: $geebung;
+    }
 }
 
 a.link {
-  color: hsla(0,0%,100%,.7);
-  &:hover {
-    color: $white;
-  }
+    color: hsla(0,0%,100%,.7);
+    &:hover {
+        color: $gallery;
+    }
+}
+
+.wrapper {
+    //    position: fixed;
+    //    top: 50px;
+    //    left: 50px;
+    //    right: 0;
+    //    bottom: 0;
+    margin-left: 50px;
+    .container {
+        margin: 0 auto;
+        max-width: 768px;
+        padding: 0 20px;
+    }
 }
