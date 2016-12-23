@@ -6,7 +6,7 @@ var db = config.database;
 var sequelize = new Sequelize(db.database, db.user, db.password, {
     host: db.host,
     dialect: 'sqlite',
-    storage: 'database.sqlite',
+    storage: './src/back/db/database.sqlite',
 });
 
 module.exports = sequelize;

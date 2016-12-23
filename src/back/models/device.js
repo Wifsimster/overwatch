@@ -13,6 +13,6 @@ var Device = sequelize.define('device', {
     ip: Sequelize.STRING,
 }, { freezeTableName: true })
 
-Device.hasOne(Type)
+//Device.hasOne(Type)
 
 module.exports = Device

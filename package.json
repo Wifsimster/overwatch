@@ -27,6 +27,7 @@
   "dependencies": {
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "file-loader": "^0.9.0",
     "font-awesome": "^4.7.0",
     "font-awesome-webpack": "0.0.4",
     "method-override": "^2.3.7",
@@ -38,6 +39,7 @@
     "socket.io": "^1.7.2",
     "sqlite": "^2.2.4",
     "vue-moment": "^2.0.2",
-    "vuex": "^2.1.1"
+    "vuex": "^2.1.1",
+    "webpack-material-design-icons": "0.0.2"
   }
 }
