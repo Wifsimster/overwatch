@@ -1,5 +1,5 @@
 var Sequelize = require('sequelize');
-var sequelize = require('../../db');
+var sequelize = require('../db/db');
 
 var Device = sequelize.define('device', {
     id: {
