@@ -12,8 +12,8 @@ module.exports = function(io) {
     let data = JSON.parse(message.toString())
 
     Message.create({data: JSON.stringify(data)})
-      .then(function(message) {      
-      io.emit('new.mqtt.message', message)      
+      .then(function(message) {
+      io.emit('new.mqtt.message', message)
     })
       .catch(function(err) { console.error(err) })
 
@@ -29,7 +29,13 @@ module.exports = function(io) {
           mac: data.mac, 
           ip: data.ip,
         })
-          .then((rst) => {})
+          .then((rst) => {
+          Device.findAll()
+            .then((devices) => { 
+            io.emit('get.device', devices)
+          })
+            .catch((err) => { console.error(err) })
+        })
           .catch((err) => { console.error(err) })
       }
     })
@@ -42,6 +48,7 @@ module.exports = function(io) {
     require('../api/device')(socket)
     require('../api/message')(socket)
     require('../api/type')(socket)
+    require('../api/location')(socket)
 
   })
 }

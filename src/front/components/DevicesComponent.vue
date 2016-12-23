@@ -9,6 +9,7 @@
           <th>Mac</th>
           <th>IP</th>
           <th>Type</th>
+          <th>Location</th>
           <th>Last seen</th>
           <th></th>
   </tr>
@@ -18,6 +19,7 @@
           <td>{{ device.name }}</td>
           <td>{{ device.mac }}</td>
           <td>{{ device.ip }}</td>
+          <td>--</td>
           <td>--</td>
           <td>{{ device.updatedAt | moment('DD/MM/YY HH:mm:ss') }}</td>
           <td>

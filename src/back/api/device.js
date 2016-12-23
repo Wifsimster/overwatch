@@ -1,15 +1,15 @@
 var errorHandler = require('./errorHandler')
 var Device = require('../models/device')
 var Type = require('../models/type')
+var Location = require('../models/location')
 
 module.exports = function(socket) {
 
   socket.on('get.device', (fn) => {
     Device.findAll({
-//      include: [ Type ]
+      include: [ Type, Location ]
     })
-      .then((devices) => {
-      fn(devices) })
+      .then((devices) => { fn(devices) })
       .catch((err) => { console.error(err) })
   })
 
