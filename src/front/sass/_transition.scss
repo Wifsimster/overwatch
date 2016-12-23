@@ -1,0 +1,6 @@
+.expand-transition-active .modal-leave-active {
+    transition: all .4s ease;
+}
+.expand-enter, .expand-leave-active {
+    opacity: 0;
+}

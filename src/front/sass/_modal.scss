@@ -1,0 +1,83 @@
+@import 'colors';
+
+.modal-mask {
+    position: fixed;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .5);
+    display: table;
+    transition: opacity .3s ease;
+    .modal-wrapper {
+        display: table-cell;
+        vertical-align: middle;
+        &.modal-red {
+            .modal-header {
+                background-color: $red !important;
+            }
+        }
+        .modal-container {
+            &.modal-lg {
+                width: 860px;
+            }
+            &.modal-xl {
+                width: 1024px;
+            }
+            width: 600px;
+            margin: 0px auto;
+            background-color: $gallery;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+            transition: all .3s ease;
+            border-radius: 4px;
+            .modal-header {
+                border-radius: 3px 3px 0 0;
+                padding: 10px 20px;
+                background-color: $mine-shaft;
+                h2 {
+                    font-weight: 300;
+                    color: $gallery;
+                    margin: 0;
+                    padding: 5px 0;
+                    a {
+                        font-size: 16px;
+                        color: inherit;
+                    }
+                }
+            }
+            .alert {
+                margin-top: 0;
+                border-radius: 0;
+                p {
+                    padding: 5px 10px;
+                }
+            }
+            .modal-body {
+                margin: 20px;
+                p {
+                    overflow: auto;
+                    padding: 0 0 10px;
+                    white-space: pre;
+                }
+            }
+            .modal-footer {
+                border-top: $gallery solid 1px;
+                padding: 10px 20px;
+                button {
+                    margin-left: 10px;
+                    float: right;
+                }
+            }
+        }
+    }
+}
+
+.modal-enter, .modal-leave-active {
+    opacity: 0;
+}
+
+.modal-enter-active .modal-leave-active {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+}

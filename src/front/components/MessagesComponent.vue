@@ -1,52 +1,69 @@
 <template>
 <div>
-  <h2>MQTT messages</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Date</th>
-        <th>Temperature</th>
-        <th>Humidity</th>
-  </tr>
-  </thead>
-    <tbody>
-      <tr v-for="message in messages">
-        <td>{{ message.id }}</td>
-        <td>{{ message.createdAt }}</td>
-        <td>{{ message.temperature }}</td>
-        <td>{{ message.humidity }}</td>
-  </tr>
-  </tbody>
-  </table>
-  </div>
+    <h2>MQTT messages ({{ messages.length }}) <a @click="removeAll" title="Remove all messages"><i class="material-icons">delete</i></a></h2>
+    <transition name="expand">
+        <div class="messages" v-if="messages.length > 0">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Data</th>
+    </tr>
+    </thead>
+                <tbody>
+                    <tr v-for="message in messages">
+                        <td>{{ message.createdAt | moment('DD/MM/YY HH:mm:ss') }}</td>
+                        <td>{{ message.data }} <a @click="remove(message)"><i class="material-icons">remove</i></a></td>
+    </tr>
+    </tbody>
+    </table>
+    </div>
+        <div v-else>
+            <p>Aucun message.</p>
+    </div>
+    </transition>
+    </div>
 </template>
 
 <script>
-  import io from 'socket.io-client'
+    import io from 'socket.io-client'
 
-  export default {
-    data() {
-      return {
-        messages: [],
-      }
-    },
-    created() {      
-      const socket = io()
-      const self = this
-      
-      socket.on('messages', function(messages) {
-        self.messages = messages
-      })
+    export default {
+        data() {
+            return {
+                messages: [],
+                socket: io(),
+            }
+        },
+        created() {
+            this.socket.emit('get.message', (messages) => {
+                this.messages = messages
+            })
 
-      socket.on('mqttMessage', function(msg) {
-        console.log('message', msg)
-        self.messages.push(msg)
-      })
+            this.socket.on('get.message', (messages) => {
+                this.messages = messages
+            })
 
-    }
-  }  
+            this.socket.on('mqtt.message', (message) => {
+                this.messages.push(message)
+            })
+        },
+        methods: {
+            remove(message) { 
+                this.socket.emit('remove.message', message) 
+            },
+            removeAll() { 
+                this.socket.emit('removeAll.message') 
+            },
+        },
+    }  
 </script>
 
 <style lang="sass">
+@import '../sass/transition';
+.messages {
+    width: 100%;
+    max-height: 650px;
+    overflow: auto;
+    }
 </style>

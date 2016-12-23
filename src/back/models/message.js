@@ -7,10 +7,7 @@ var Message = sequelize.define('message', {
         autoIncrement: true,
         primaryKey: true
     },
-    name: Sequelize.STRING,
-    mac: Sequelize.STRING,
-    ip: Sequelize.STRING,
-
+    data: Sequelize.STRING
 }, { freezeTableName: true });
 
 module.exports = Message;

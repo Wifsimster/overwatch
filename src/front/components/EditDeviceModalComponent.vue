@@ -1,0 +1,79 @@
+<template>
+<transition name="modal">
+    <div class="modal-mask" v-show="isOpenModal">
+        <div class="modal-wrapper">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h2>Edit device <a @click="close" class="pull-right">x</a></h2>
+    </div>
+
+                <div class="pure-g" v-show="error" transition="expand">
+                    <div class="pure-u-1">
+                        <div class="alert alert-error">
+                            <p>{{ error }}</p>
+    </div>
+    </div>
+    </div>            
+                <div class="modal-body">
+                    <form class="pure-form pure-form-aligned">
+                        <div class="pure-g">
+                            <div class="pure-u-1-2">
+                                <div class="pure-control-group">
+                                    <label for="name">Name</label>
+                                    <input id="name" v-model="device.name">
+    </div>
+                                <div class="pure-control-group">
+                                    <label for="mac">MAC</label>
+                                    <input id="mac" v-model="device.mac">
+    </div>
+                                <div class="pure-control-group">
+                                    <label for="ip">IP</label>
+                                    <input id="ip" v-model="device.ip">
+    </div>
+    </div>
+    </div>
+    </form>
+    </div>
+                <div class="modal-footer">
+                    <button class="pure-button pure-button-primary" @click="edit">Edit</button>
+                    <button class="pure-button" @click="close">Cancel</button>
+                    <div class="clearfix"></div>
+    </div>
+    </div>
+    </div>
+    </div>
+    </transition>
+</template>
+
+<script>
+    import io from 'socket.io-client'
+    import { mapGetters, mapActions } from 'vuex'
+
+    export default {
+        data() { 
+            return {
+                error: '',
+                socket: io(),
+            }
+        },
+        computed: {
+            ...mapGetters({
+                isOpenModal: 'modal',
+                device: 'device',
+            })
+        },
+        methods: {
+            edit() {
+                this.socket.emit('update.device', this.device)
+                this.$store.dispatch('closeModal')
+            },
+            close() {
+                this.$store.dispatch('closeModal')
+            },
+        }
+    }
+</script>
+
+<style lang="sass" scoped>
+@import '../sass/modal';
+</style>

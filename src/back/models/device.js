@@ -10,6 +10,7 @@ var Device = sequelize.define('device', {
     name: Sequelize.STRING,
     mac: Sequelize.STRING,
     ip: Sequelize.STRING,
+    type: Sequelize.STRING,
 
 }, { freezeTableName: true });
 
