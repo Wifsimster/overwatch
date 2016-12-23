@@ -1,4 +1,4 @@
-var sequelize = require('../db/db');
+var sequelize = require('../db/database');
 
 sequelize.sync({
     force: true

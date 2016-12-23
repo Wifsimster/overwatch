@@ -12,9 +12,9 @@
 </template>
 
 <script>
-    import ComDevices from '../components/DevicesComponent.vue'
+    import ComDevices from '../components/DevicesComponent.vue'    
     import ComMessages from '../components/MessagesComponent.vue'
-
+    
     export default {
         data() {
             return {

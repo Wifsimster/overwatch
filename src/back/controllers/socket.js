@@ -3,52 +3,55 @@ var Device = require('../models/device')
 
 module.exports = function(io) {
 
-  const mqtt = require('mqtt')
-  const mqttClient  = mqtt.connect('mqtt://192.168.0.35:1883')
+    const mqtt = require('mqtt')
+    const mqttClient  = mqtt.connect('mqtt://192.168.0.35:1883')
 
-  mqttClient.subscribe('/#')
+    mqttClient.subscribe('/#')
 
-  mqttClient.on('message', function (topic, message) {
-    let data = JSON.parse(message.toString())    
-    Message.create(data)
-      .then(function(rst) { console.log('New message saved !') })
-      .catch(function(err) { console.error(err) })
+    mqttClient.on('message', function (topic, message) {
+        let data = JSON.parse(message.toString())    
+        Message.create(data)
+            .then(function(rst) { console.log('New message saved !') })
+            .catch(function(err) { console.error(err) })
 
-    Device.findAll({ where: { mac: data.mac }}).then((devices) => {
-      if(devices.length > 0) {
-        // TODO : Update device info
-      } else {
-        Device.create({ mac: data.mac, ip: data.ip }).then((rst) => {
-          console.log('New device added !')
+        Device.findAll({ where: { mac: data.mac }}).then((devices) => {
+            if(devices.length > 0) {
+                // TODO : Update device info
+            } else {
+                Device.create({ mac: data.mac, ip: data.ip }).then((rst) => {
+                    console.log('New device added !')
+                }).catch((err) => {
+                    console.error(err)
+                })
+            }
         }).catch((err) => {
-          console.error(err)
+            console.error(err)
         })
-      }
-    }).catch((err) => {
-      console.error(err)
+
     })
 
-  })
+    // Client connection detected
+    io.on('connection', (socket) => {
 
-  // Client connection detected
-  io.on('connection', (socket) => {
+        const dummy = { mac: '00:00:00:00:00', ip: '192.168.0.69'}
+        Device.create(dummy).then((device) => {})
 
-    Device.findAll().then((devices) => {
-      socket.emit('devices', devices)
-    }).catch((err) => {
-      console.error(err)
+        Device.findAll().then((devices) => {
+            socket.emit('devices', devices)
+        }).catch((err) => {
+            console.error(err)
+        })
+
+        Message.findAll().then((messages) => {
+            socket.emit('messages', messages)
+        }).catch((err) => {
+            console.error(err)
+        })
+
+        mqttClient.on('message', (topic, message) => {
+            socket.emit('mqttMessage', message.toString())
+        }, (err) => {
+            console.error(err)
+        })
     })
-
-    Message.findAll().then((messages) => {
-      socket.emit('messages', messages)
-    }).catch((err) => {
-      console.error(err)
-    })
-
-    mqttClient.on('message', (topic, message) => {
-      socket.emit('mqttMessage', message.toString())
-    }, (err) => {
-      console.error(err)
-    })
-  })
 }

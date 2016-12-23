@@ -3,7 +3,10 @@ var webpack = require('webpack');
 
 module.exports = {
     entry: {
-        vendors: [ path.resolve('src/front', 'app.js'), "webpack-material-design-icons" ],
+        vendors: [
+            path.resolve('src/front', 'app.js'),
+            "webpack-material-design-icons"
+        ],
     },
     output: {
         path: path.resolve('dist'),

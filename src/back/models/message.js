@@ -1,5 +1,5 @@
 var Sequelize = require('sequelize');
-var sequelize = require('../db/db');
+var sequelize = require('../db/database');
 
 var Message = sequelize.define('message', {
     id: {

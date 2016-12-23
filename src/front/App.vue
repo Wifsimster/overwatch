@@ -13,6 +13,8 @@
 <script>
     import ComHeader from './components/HeaderComponent.vue'
     import ComSidebar from './components/SidebarComponent.vue'
+    import 'purecss'
+    import '../../node_modules/purecss/build/grids-responsive.css'
 
     export default {      
         components: {

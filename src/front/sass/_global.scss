@@ -29,15 +29,13 @@ a.link {
 }
 
 .wrapper {
-    //    position: fixed;
-    //    top: 50px;
-    //    left: 50px;
-    //    right: 0;
-    //    bottom: 0;
     margin-left: 50px;
     .container {
         margin: 0 auto;
-        max-width: 768px;
         padding: 0 20px;
     }
+}
+
+.material-icons {
+    vertical-align: sub;
 }
