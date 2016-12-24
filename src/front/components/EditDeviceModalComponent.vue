@@ -30,13 +30,13 @@
   </div>
             <div class="pure-control-group">
               <label for="type">Type</label>
-              <select id="type" v-model="device.type">
+              <select id="type" v-model="device.typeId">
                 <option v-for="type in types" :value="type.id">{{ type.name }}</option>
   </select>
   </div>
             <div class="pure-control-group">
               <label for="location">Location</label>
-              <select id="location" v-model="device.location">
+              <select id="location" v-model="device.locationId">
                 <option v-for="location in locations" :value="location.id">{{ location.name }}</option>
   </select>
   </div>

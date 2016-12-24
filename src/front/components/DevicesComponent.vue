@@ -19,8 +19,14 @@
           <td>{{ device.name }}</td>
           <td>{{ device.mac }}</td>
           <td>{{ device.ip }}</td>
-          <td>--</td>
-          <td>--</td>
+          <td>
+            <span v-if="device.type">{{ device.type.name }}</span>
+            <span v-else>--</span>
+  </td>
+          <td>
+            <span v-if="device.location">{{ device.location.name }}</span>
+            <span v-else>--</span>
+  </td>
           <td>{{ device.updatedAt | moment('DD/MM/YY HH:mm:ss') }}</td>
           <td>
             <a @click="openModal(device)"><i class="material-icons" title="Edit device info">edit</i></a> 
