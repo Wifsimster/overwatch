@@ -35,7 +35,7 @@ module.exports = function(socket) {
     Device.destroy({ where: { id: device.id }})
       .then((rst) => {
       Device.findAll({ include: [ Type, Location ] })
-        .then((devices) => { socket.emit('get.device', devices) })
+        .then((devices) => { socket.broadcast.emit('get.device', devices) })
         .catch((err) => { console.error(err) })
     })
       .catch((err) => { console.error(err) })

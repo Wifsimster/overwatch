@@ -30,12 +30,13 @@
           <td>{{ device.updatedAt | moment('DD/MM/YY HH:mm:ss') }}</td>
           <td>
             <a @click="openModal(device)"><i class="material-icons" title="Edit device info">edit</i></a> 
-            <a @click="remove(device)" title="Remove the device"><i class="material-icons">remove</i></a>
+            <a @click="openRemoveModal(device)" title="Remove the device"><i class="material-icons">remove</i></a>
   </td>
   </tr>
   </tbody>
   </table>
     <edit-device-modal></edit-device-modal>
+    <remove-device-modal></remove-device-modal>
   </div>
   <div v-else>
     <p>No device found.</p>
@@ -47,11 +48,13 @@
 <script>
   import io from 'socket.io-client'
   import EditDeviceModal from './EditDeviceModalComponent.vue'
+  import RemoveDeviceModal from './RemoveDeviceModalComponent.vue'
   import { mapGetters, mapActions } from 'vuex'
 
   export default {
     components: {
       EditDeviceModal,
+      RemoveDeviceModal,
     },
     data() {
       return {
@@ -72,8 +75,8 @@
       openModal(device) {
         this.$store.dispatch('openModal', device)
       },
-      remove(device) { 
-        this.socket.emit('remove.device', device) 
+      openRemoveModal(device) {
+        this.$store.dispatch('openRemoveModal', device)
       },
       removeAll() { 
         this.socket.emit('removeAll.device') 
