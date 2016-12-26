@@ -34,4 +34,18 @@ module.exports = function(socket) {
         })
             .catch((err) => { console.error(err) })
     })
+
+    socket.on('updateAll.type', (types) => {
+        types.forEach((type, index) => {
+            Type.update({name: type.name}, { where: { id: type.id}}).then((count, row) => {
+                console.log('index', index)
+                if(index = types.length - 1) {
+                    Type.findAll()
+                        .then((types) => { socket.emit('get.type', types) })
+                        .catch((err) => { console.error(err) })
+                }
+            })
+                .catch((err) => { console.error(err) })
+        })
+    })
 }

@@ -29,6 +29,16 @@ a.link {
     }
 }
 
+ul {
+    margin: 0;
+    padding: 0;
+    li {
+        list-style: none;
+        margin: 0;        
+        padding: 5px 0;
+    }
+}
+
 .wrapper {
     margin-left: 50px;
     .container {
@@ -56,6 +66,6 @@ table {
     }
 }
 
-.pure-form input[type=password], .pure-form input[type=email], .pure-form input[type=url], .pure-form input[type=date], .pure-form input[type=month], .pure-form input[type=time], .pure-form input[type=datetime], .pure-form input[type=datetime-local], .pure-form input[type=week], .pure-form input[type=tel], .pure-form input[type=color], .pure-form input[type=number], .pure-form input[type=search], .pure-form input[type=text], .pure-form select, .pure-form textarea {
-    color: $black;
+input[type=password], [type=email], [type=url], input[type=date], input[type=month], input[type=time], input[type=datetime], input[type=datetime-local], input[type=week], input[type=tel], input[type=color], input[type=number], input[type=search], input[type=text], select, textarea {
+    color: $black !important;
 }

@@ -11,3 +11,11 @@ export const openRemoveModal = ({ commit }, data) => {
 export const closeModal = ({ commit }) => {
     commit(types.CLOSE_MODAL)
 }
+
+export const setAlert = ({ commit }, data) => {
+    commit(types.SET_ALERT, data)
+}
+
+export const resetAlert = ({ commit }) => {
+    commit(types.RESET_ALERT)
+}

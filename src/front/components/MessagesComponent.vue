@@ -44,7 +44,7 @@
         this.messages = messages
       })
       
-      this.socket.on('new.mqtt.message', (message) => {
+      this.socket.on('new.message', (message) => {
         this.messages.push(message)
       })
     },

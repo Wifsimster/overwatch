@@ -3,52 +3,76 @@ var Device = require('../models/device')
 
 module.exports = function(io) {
 
-  const mqtt = require('mqtt')
-  const mqttClient  = mqtt.connect('mqtt://192.168.0.35:1883')
-
-  mqttClient.subscribe('/#')
-
-  mqttClient.on('message', function (topic, message) {
-    let data = JSON.parse(message.toString())
-
-    Message.create({data: JSON.stringify(data)})
-      .then(function(message) {
-      io.emit('new.mqtt.message', message)
-    })
-      .catch(function(err) { console.error(err) })
-
-    Device.findAll({ where: { mac: data.mac }})
-      .then((devices) => {
-      if(devices.length > 0) {
-        Device.update({ip: devices[0].ip}, {where: {id: devices[0].id}})
-          .then((rst) => {})
-          .catch((err) => { console.error(err) })
-      } else {
-        Device.create({
-          name: data.name, 
-          mac: data.mac, 
-          ip: data.ip,
-        })
-          .then((rst) => {
-          Device.findAll()
-            .then((devices) => { 
+    function getDevices() {
+        Device.findAll().then((devices) => { 
             io.emit('get.device', devices)
-          })
-            .catch((err) => { console.error(err) })
+        }).catch((err) => { console.error(err) })
+    }
+
+    function addMessage(data, device) {
+        Message.create({
+            data: JSON.stringify(data)
+        }).then(function(message) {
+            message.setDevice(device)
+            io.emit('new.message', message)
+        }).catch(function(err) { console.error(err) })        
+    }
+
+    function addDevice(data) {
+        Device.create({
+            name: data.name, 
+            mac: data.mac, 
+            ip: data.ip,
+        }).then((device) => {
+            getDevices()
+            addMessage(data, device)
+        }).catch((err) => { console.error(err) })
+    }
+
+    function updateDevice(data, device) {
+        Device.update({ ip: device.ip }, {
+            where: { id: device.id }
+        }).then((count, device) => {
+            getDevices()
+            addMessage(data, device)
+        }).catch((err) => { console.error(err) })
+    }
+
+    setTimeout(() => {
+        console.log('Add new device...')
+        addDevice({
+            mac: '00:00:00:00:00:00',
+            ip: '192.168.0.35',
+            data: '{"temperature":"25","humidity":"35"}',
         })
-          .catch((err) => { console.error(err) })
-      }
+        addDevice({
+            mac: '00:00:00:00:00:11',
+            ip: '192.168.0.35',
+            data: '{"temperature":"23.5","humidity":"45"}',
+        })    
+    }, 2000)
+
+
+    const mqtt = require('mqtt')
+    const mqttClient  = mqtt.connect('mqtt://192.168.0.35:1883')
+
+    mqttClient.subscribe('/#')
+
+    mqttClient.on('message', function (topic, message) {
+        let data = JSON.parse(message.toString())
+
+        Device.findAll({ 
+            where: { mac: data.mac }
+        }).then((devices) => {
+            if(devices.length > 0) { updateDevice(data, devices[0]) } 
+            else { addDevice(data) }
+        }).catch((err) => { console.error(err) })
     })
-      .catch((err) => { console.error(err) })
-  })
 
-  // Client connection detected
-  io.on('connection', (socket) => {
-
-    require('../api/device')(socket)
-    require('../api/message')(socket)
-    require('../api/type')(socket)
-    require('../api/location')(socket)
-
-  })
+    io.on('connection', (socket) => {
+        require('../api/device')(socket)
+        require('../api/message')(socket)
+        require('../api/type')(socket)
+        require('../api/location')(socket)
+    })
 }

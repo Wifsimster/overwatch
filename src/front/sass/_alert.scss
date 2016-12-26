@@ -1,0 +1,32 @@
+@import 'colors';
+
+.alert {
+    display: block;
+    position: relative;
+    background-color: $cod-gray;
+    color: $gallery;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 3px;
+
+    &.alert-error {
+        background-color: $red;
+        p a { color: darken($red, 20%); }
+    }
+    &.alert-info {
+        background-color: $mine-shaft;
+    }
+    &.alert-success {
+        background-color: $mine-shaft;
+    }
+    &.alert-warning {
+        background-color: $mine-shaft;
+    }
+    p {
+        margin: 0;
+        a {
+            text-decoration: underline;
+            font-size: 14px; 
+        }
+    }
+}
