@@ -22,7 +22,14 @@ module.exports = function(socket) {
 
     socket.on('update.device', (data) => {
         Device.findById(data.id).then((device) => {
-            device.setType(data.typeId)
+            
+            console.log('device', data)
+
+            data.types.forEach((type) => {
+                console.log('Type', type)
+                device.addType(type.typeId)  
+            })
+
             device.setLocation(data.locationId)
 
             Device.update({

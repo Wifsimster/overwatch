@@ -5,15 +5,15 @@ var Location = require('./location')
 var Message = require('./message')
 
 const Device = sequelize.define('device', {
-  name: Sequelize.STRING,
-  mac: Sequelize.STRING,
-  ip: Sequelize.STRING,
+    name: Sequelize.STRING,
+    mac: Sequelize.STRING,
+    ip: Sequelize.STRING,
 }, {
-  freezeTableName: true,
+    freezeTableName: true,
 })
 
-Device.belongsTo(Type)
-Type.hasMany(Device)
+Device.hasMany(Type)
+//Type.hasMany(Device)
 
 Device.belongsTo(Location)
 Location.hasMany(Device)
