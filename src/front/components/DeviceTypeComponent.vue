@@ -15,25 +15,46 @@
     </div>
 
     <div v-if="device.type.name == 'Luminosity'">
-        <span>{{ device.luminosity }} LUX</span>
+        <div class="image"><img :src="icons.luminosity"></div>
+        <span class="data">{{ data.luminosity }} LUX</span>
+        <span class="name">{{ device.name }}</span>
+        <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
     <div v-if="device.type.name == 'Pressure'">
-        <span>{{ device.pressure }} HPA</span>
+        <div class="image"><img :src="icons.pressure"></div>
+        <span class="data">{{ data.pressure }} HPA</span>
+        <span class="name">{{ device.name }}</span>
+        <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
     <div v-if="device.type.name == 'Switch'">
-        <span>{{ device.switch }}</span>
+        <div class="image"><img :src="icons.switch"></div>
+        <span class="data">{{ data.switch }}</span>
+        <span class="name">{{ device.name }}</span>
+        <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
     <div v-if="device.type.name == 'Dimmer'">
-        <span>{{ device.dimmer }}</span>
+        <div class="image"><img :src="icons.dimmer"></div>
+        <span class="data">{{ data.dimmer }} LUX</span>
+        <span class="name">{{ device.name }}</span>
+        <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
-    <div v-if="device.type.name == 'Gaz'">
-        <span>{{ device.gaz }}</span>
+    <div v-if="device.type.name == 'Gas'">
+        <div class="image"><img :src="icons.gas"></div>
+        <span class="data">{{ data.gas }} LUX</span>
+        <span class="name">{{ device.name }}</span>
+        <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
     <div v-if="device.type.name == 'Water'">
-        <span>{{ device.water }}</span>
+        <div class="image"><img :src="icons.water"></div>
+        <span class="data">{{ data.water }} LUX</span>
+        <span class="name">{{ device.name }}</span>
+        <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
     <div v-if="device.type.name == 'RGBW'">
-        <span>{{ device.rgbw }}</span>
+        <div class="image"><img :src="icons.rgbw"></div>
+        <span class="data">{{ data.rgbw }} LUX</span>
+        <span class="name">{{ device.name }}</span>
+        <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
     </div>
 </template>
@@ -41,6 +62,11 @@
 <script>
     import thermometer from '../assets/thermometer.png'
     import humidity from '../assets/humidity.png'
+    import pressure from '../assets/pressure.png'
+    import _switch from '../assets/switch.png'
+    import dimmer from '../assets/dimmer.png'
+    import gas from '../assets/gas.png'
+    import rgbw from '../assets/led_strip.png'
 
     export default {
         props: {
@@ -49,7 +75,15 @@
         data() {
             return {
                 data: {},
-                icons: { temperature: thermometer, humidity: humidity },
+                icons: { 
+                    temperature: thermometer, 
+                    humidity: humidity,
+                    pressure: pressure,
+                    switch: _switch,
+                    dimmer: dimmer,
+                    gas: gas,
+                    rgbw: rgbw,
+                },
             }
         },
         created() {
