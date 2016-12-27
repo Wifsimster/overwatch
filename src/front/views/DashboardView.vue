@@ -12,6 +12,27 @@
                 <div v-for="sd in splitDevices" class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
                     <device-type :device="sd"></device-type>
     </div>
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+                    <netatmo-temperature :device="netatmoDevice"></netatmo-temperature>
+    </div> 
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+                    <netatmo-outdoor-temperature :device="netatmoDevice"></netatmo-outdoor-temperature>
+    </div>
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+                    <netatmo-humidity :device="netatmoDevice"></netatmo-humidity>
+    </div> 
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+                    <netatmo-outdoor-humidity :device="netatmoDevice"></netatmo-outdoor-humidity>
+    </div>
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+                    <netatmo-noise :device="netatmoDevice"></netatmo-noise>
+    </div>
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+                    <netatmo-co2 :device="netatmoDevice"></netatmo-co2>
+    </div>
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+                    <netatmo-pressure :device="netatmoDevice"></netatmo-pressure>
+    </div>
     </div>
             <div v-else>
                 <p>No device found.</p>
@@ -23,21 +44,40 @@
 
 <script>
     import io from 'socket.io-client'
-    import DateTime from '../components/DateTimeComponent.vue'
-    import DeviceType from '../components/DeviceTypeComponent.vue'
+    import netatmo from 'netatmo'
     import Alert from '../components/AlertComponent.vue'
+    import DateTime from '../components/DateTimeComponent.vue'
+    import DeviceType from '../components/DeviceTypeComponent.vue'    
+    import NetatmoHumidity from '../components/netatmo/HumidityComponent.vue'
+    import NetatmoOutdoorHumidity from '../components/netatmo/ModuleHumidityComponent.vue'
+    import NetatmoTemperature from '../components/netatmo/TemperatureComponent.vue'
+    import NetatmoOutdoorTemperature from '../components/netatmo/ModuleTemperatureComponent.vue'
+    import NetatmoNoise from '../components/netatmo/NoiseComponent.vue'
+    import NetatmoCo2 from '../components/netatmo/CO2Component.vue'
+    import NetatmoPressure from '../components/netatmo/PressureComponent.vue'
 
     export default {
         data() {
             return {
                 socket: io(),
                 splitDevices: [],
+                auth : {
+                },
+                netatmoDevice: {},
+                netatmoApi: {},
             }
         },
         components: {
-            DeviceType, 
-            DateTime,
             Alert,
+            DeviceType,
+            DateTime,
+            NetatmoHumidity,
+            NetatmoOutdoorHumidity,
+            NetatmoTemperature,
+            NetatmoOutdoorTemperature,
+            NetatmoCo2,
+            NetatmoPressure,
+            NetatmoNoise,
         },
         methods: {
             renderDevices(devices) {
@@ -61,6 +101,15 @@
                     this.$store.dispatch('setAlert', {type: 'info', message: devices.length + ' device(s) to configure !'})
                 }
             },
+            getNetatmoData() {
+                this.netatmoApi.getStationsData((err, devices) => {
+                    if(!err) {
+                        this.netatmoDevice = devices[0]
+                    } else {
+                        console.error(err)
+                    }
+                })
+            },
         },
         created() {
             this.socket.emit('get.device', (devices) => {
@@ -75,6 +124,10 @@
             this.socket.emit('get.untype.device', (devices) => {
                 this.renderAlert(devices)
             })
+            
+            this.netatmoApi = new netatmo(this.auth)
+            this.getNetatmoData()
+            setInterval(() => { this.getNetatmoData() }, 5000)
         },
     }
 </script>
