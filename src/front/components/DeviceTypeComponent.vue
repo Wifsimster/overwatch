@@ -1,5 +1,5 @@
 <template>
-<div v-if="device.type" class="device">
+<div v-if="device" class="device">    
     <div v-if="device.type.name === 'Temperature'">
         <div class="image"><img :src="icons.temperature"></div>
         <span class="data">{{ data.temperature }} °C</span>
@@ -65,6 +65,7 @@
     import pressure from '../assets/pressure.png'
     import _switch from '../assets/switch.png'
     import dimmer from '../assets/dimmer.png'
+    import luminosity from '../assets/luminosity.png'
     import gas from '../assets/gas.png'
     import rgbw from '../assets/led_strip.png'
 
@@ -81,6 +82,7 @@
                     pressure: pressure,
                     switch: _switch,
                     dimmer: dimmer,
+                    luminosity: luminosity,
                     gas: gas,
                     rgbw: rgbw,
                 },
@@ -89,44 +91,49 @@
         created() {
             this.data = JSON.parse(JSON.parse(this.device.messages[0].data).data)
         },
-        methods: {},
-        watch: {
-            device(value) {
-                console.log(device)
-            }  
-        },
     }
 </script>
 
 <style lang="sass" scoped>
 @import '../sass/_colors.scss';
 
+$height: 100px;
+
 .device {
-    position: relative;   
-    .image {
-    height: 75px;
-    width: 90px;
-    overflow: hidden;
-    img {
-        width: inherit;
-        overflow: hidden;
+    position: relative;
+    background-color: $mine-shaft-app;
+    margin: 5px;
+    padding: 5px 10px;
+    height: $height;
+    div {
+        position: relative;
+        .image {
+            position: absolute;
+            overflow: hidden;
+            height: $height - 10px;
+            left: calc(50% - 45px);
+            img {
+                height: calc(100% + 15px);
+                overflow: hidden;
+                }
+            }
+        span {
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            position: relative;
+            padding: 2px 0;
+            }
+        .data {
+            color: $gallery;
+            font-size: 38px;
+            top: 0;
+            right: 0;
+            }
+        .location {
+            color: $dusty-gray;
+            }
         }
     }
-span {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    }
-.location {
-    color: $dusty-gray;
-    }
-.data {
-    color: $gallery;
-    font-size: 32px;
-    position: absolute;
-    top: 0;
-    right: 0;
-    }
-}
 </style>

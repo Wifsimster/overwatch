@@ -8,9 +8,9 @@
                     <th>Name</th>
                     <th>Mac</th>
                     <th>IP</th>
-                    <th>Type</th>
+                    <th>Types</th>
                     <th>Location</th>
-                    <th>Last seen</th>
+                    <th>Last update</th>
                     <th></th>
     </tr>
     </thead>
@@ -20,8 +20,11 @@
                     <td>{{ device.mac }}</td>
                     <td>{{ device.ip }}</td>
                     <td>
-                        <span v-if="device.type">{{ device.type.name }}</span>
-                        <span v-else>--</span>
+                        <span v-if="device.types">
+                            <span v-if="device.types.length === 0">--</span>
+                            <span v-if="device.types.length === 1">{{ device.types[0].name }}</span>
+                            <span v-if="device.types.length > 1">Multiples</span>
+    </span>
     </td>
                     <td>
                         <span v-if="device.location">{{ device.location.name }}</span>

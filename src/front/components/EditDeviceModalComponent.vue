@@ -36,6 +36,7 @@
                                          selectLabel="" 
                                          selectedLabel="" 
                                          deselectLabel="" 
+                                         :close-on-select="false"
                                          :value="selectedTypes"
                                          @input="updateSelectedTypes"
                                          v-model="device.types">
@@ -78,18 +79,21 @@
         created() {
             this.socket.emit('get.type', (types) => {
                 this.types = types
-                console.log('Types', this.device.types)
             })
             this.socket.emit('get.location', (locations) => {
                 this.locations = locations
             })
+        },
+        watch: {
+            device: function() {
+                this.selectedTypes = this.device.types   
+            },
         },
         methods: {
             updateSelectedTypes(types) {
                 this.device.types = types
             },
             edit() {
-                console.log('types', this.device)
                 this.socket.emit('update.device', this.device)
                 this.$store.dispatch('closeModal')
             },

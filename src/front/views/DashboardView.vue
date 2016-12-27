@@ -5,10 +5,9 @@
 
     <div class="pure-g">
         <div class="pure-u-1 pure-u-lg-1-1">
-            <h2>Devices ({{ devices.length }})</h2>
-            <div v-if="devices.length > 0" class="pure-g">
-                <div v-for="device in devices" class="pure-u-1-2 pure-u-sm-1-4 pure-u-md-1-8 pure-u-lg-1-12">
-                    <device-type :device="device"></device-type>
+            <div v-if="splitDevices.length > 0" class="pure-g">
+                <div v-for="sd in splitDevices" class="pure-u-1-2 pure-u-md-1-4 pure-u-lg-1-8">
+                    <device-type :device="sd"></device-type>
     </div>
     </div>
             <div v-else>
@@ -28,30 +27,48 @@
         data() {
             return {
                 socket: io(),
-                devices: [],
+                splitDevices: [],
             }
         },
         components: {
             DeviceType, 
             Alert,
         },
+        methods: {
+            renderDevices(devices) {
+                this.splitDevices = []
+                if(devices) {
+                    devices.forEach((device, i) => {
+                        if(device.types) {
+                            device.types.forEach((type, j) => {
+                                let sd = JSON.parse(JSON.stringify(device))
+                                sd.type = type
+                                delete sd.types
+                                this.splitDevices.push(sd)
+                            })
+                        }
+                    })
+                }
+            }, 
+            renderAlert(devices) {
+                this.$store.dispatch('resetAlert')
+                if(devices.length > 0) {
+                    this.$store.dispatch('setAlert', {type: 'info', message: devices.length + ' device(s) to configure !'})
+                }
+            },
+        },
         created() {
             this.socket.emit('get.device', (devices) => {
-                this.devices = devices
+                this.renderDevices(devices)
             })
             this.socket.on('get.device', (devices) => {
-                this.devices = devices
+                this.renderDevices(devices)
+                this.socket.emit('get.untype.device', (devices) => {
+                    this.renderAlert(devices)
+                })
             })
-
             this.socket.emit('get.untype.device', (devices) => {
-                if(devices.length > 0) {
-                    this.$store.dispatch('setAlert', {type: 'info', message: devices.length + ' device(s) to configure !'})
-                }
-            })
-            this.socket.on('get.untype.device', (devices) => {
-                if(devices.length > 0) {
-                    this.$store.dispatch('setAlert', {type: 'info', message: devices.length + ' device(s) to configure !'})
-                }
+                this.renderAlert(devices)
             })
         },
     }

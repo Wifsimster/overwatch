@@ -12,8 +12,13 @@ const Device = sequelize.define('device', {
     freezeTableName: true,
 })
 
-Device.hasMany(Type)
-//Type.hasMany(Device)
+Device.belongsToMany(Type, {
+    through: 'DeviceType',
+})
+
+Type.belongsToMany(Device, {    
+    through: 'DeviceType',
+})
 
 Device.belongsTo(Location)
 Location.hasMany(Device)

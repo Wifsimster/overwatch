@@ -38,8 +38,8 @@ module.exports = function(io) {
         }).catch((err) => { console.error(err) })
     }
 
+    // Dummy data
     setTimeout(() => {
-        console.log('Add new device...')
         addDevice({
             mac: '00:00:00:00:00:00',
             ip: '192.168.0.35',
@@ -47,8 +47,18 @@ module.exports = function(io) {
         })
         addDevice({
             mac: '00:00:00:00:00:11',
-            ip: '192.168.0.35',
+            ip: '192.168.0.36',
             data: '{"temperature":"23.5","humidity":"45"}',
+        })   
+        addDevice({
+            mac: '00:00:00:00:00:22',
+            ip: '192.168.0.37',
+            data: '{"temperature":"24.3","pressure":"45"}',
+        })   
+        addDevice({
+            mac: '00:00:00:00:00:33',
+            ip: '192.168.0.38',
+            data: '{"luminosity":"1002"}',
         })    
     }, 2000)
 
