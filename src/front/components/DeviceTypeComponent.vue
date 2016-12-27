@@ -2,27 +2,27 @@
 <div v-if="device" class="device">    
     <div v-if="device.type.name === 'Temperature'">
         <div class="image"><img :src="icons.temperature"></div>
-        <span class="data">{{ data.temperature }} °C</span>
+        <span class="data">{{ data.temperature }}°C</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
 
     <div v-if="device.type.name === 'Humidity'">
         <div class="image"><img :src="icons.humidity"></div>
-        <span class="data">{{ data.humidity }} %</span>
+        <span class="data">{{ data.humidity }}%</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
 
     <div v-if="device.type.name == 'Luminosity'">
         <div class="image"><img :src="icons.luminosity"></div>
-        <span class="data">{{ data.luminosity }} LUX</span>
+        <span class="data">{{ data.luminosity }}LUX</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
     <div v-if="device.type.name == 'Pressure'">
         <div class="image"><img :src="icons.pressure"></div>
-        <span class="data">{{ data.pressure }} HPA</span>
+        <span class="data">{{ data.pressure }}mB</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
@@ -34,25 +34,25 @@
     </div>
     <div v-if="device.type.name == 'Dimmer'">
         <div class="image"><img :src="icons.dimmer"></div>
-        <span class="data">{{ data.dimmer }} LUX</span>
+        <span class="data">{{ data.dimmer }}</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
     <div v-if="device.type.name == 'Gas'">
         <div class="image"><img :src="icons.gas"></div>
-        <span class="data">{{ data.gas }} LUX</span>
+        <span class="data">{{ data.gas }}ppm</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
     <div v-if="device.type.name == 'Water'">
         <div class="image"><img :src="icons.water"></div>
-        <span class="data">{{ data.water }} LUX</span>
+        <span class="data">{{ data.water }}</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
     <div v-if="device.type.name == 'RGBW'">
         <div class="image"><img :src="icons.rgbw"></div>
-        <span class="data">{{ data.rgbw }} LUX</span>
+        <span class="data">{{ data.rgbw }}</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
     </div>
@@ -94,7 +94,7 @@
     }
 </script>
 
-<style lang="sass" scoped>
+<style lang="sass">
 @import '../sass/_colors.scss';
 
 $height: 100px;

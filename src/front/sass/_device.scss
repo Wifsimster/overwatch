@@ -1,0 +1,38 @@
+@import 'colors';
+
+$height: 100px;
+
+.device {
+    position: relative;
+    background-color: $mine-shaft-app;
+    margin: 5px;
+    padding: 5px 10px;
+    height: $height;
+    .image {
+        position: absolute;
+        overflow: hidden;
+        height: $height - 10px;
+        left: calc(50% - 45px);
+        img {
+            height: calc(100% + 15px);
+            overflow: hidden;
+        }
+    }
+    span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: relative;
+        padding: 2px 0;
+    }
+    .data {
+        color: $gallery;
+        font-size: 38px;
+        top: 0;
+        right: 0;
+    }
+    .location {
+        color: $dusty-gray;
+    }
+}

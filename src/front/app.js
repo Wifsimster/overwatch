@@ -3,6 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import VueMoment from 'vue-moment'
+import VueResource from 'vue-resource'
 
 new Vue({
     el: "#app",
@@ -12,3 +13,4 @@ new Vue({
 })
 
 Vue.use(VueMoment)
+Vue.use(VueResource)

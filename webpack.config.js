@@ -21,10 +21,14 @@ module.exports = {
             'vue$': 'vue/dist/vue.common.js'
         }
     },
+    node: {
+        fs: "empty"
+    },
     module: {
         loaders: [
             {test: /\.js$/, loader: 'babel-loader', exclude: /node_modules/ },
             {test: /\.vue?$/, loader: 'vue'},      
+            {test: /\.json?$/, loader: 'json'},      
             {test: /\.html$/, loader: 'vue-html'},
             {test: /\.css$/, loader: 'style!css'},
             {test: /\.(jpe?g|png)(\?[a-z0-9=\.]+)?$/i, loader: 'url-loader?limit=100000&name=./img/[name].[ext]'},
