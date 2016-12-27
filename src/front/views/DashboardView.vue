@@ -6,7 +6,10 @@
     <div class="pure-g">
         <div class="pure-u-1 pure-u-lg-1-1">
             <div v-if="splitDevices.length > 0" class="pure-g">
-                <div v-for="sd in splitDevices" class="pure-u-1-2 pure-u-md-1-4 pure-u-lg-1-8">
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+                    <date-time></date-time>
+    </div>
+                <div v-for="sd in splitDevices" class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
                     <device-type :device="sd"></device-type>
     </div>
     </div>
@@ -20,6 +23,7 @@
 
 <script>
     import io from 'socket.io-client'
+    import DateTime from '../components/DateTimeComponent.vue'
     import DeviceType from '../components/DeviceTypeComponent.vue'
     import Alert from '../components/AlertComponent.vue'
 
@@ -32,6 +36,7 @@
         },
         components: {
             DeviceType, 
+            DateTime,
             Alert,
         },
         methods: {
