@@ -131,7 +131,7 @@
 
       this.netatmoApi = new netatmo(this.auth)
       this.getNetatmoData()
-      setInterval(() => { this.getNetatmoData() }, 5000)
+      setInterval(() => { this.getNetatmoData() }, 50000)
     },
   }
 </script>

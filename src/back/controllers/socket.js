@@ -1,10 +1,13 @@
 var Message = require('../models/message')
 var Device = require('../models/device')
+var Location = require('../models/location')
+var Type = require('../models/type')
 
 module.exports = function(io) {
 
   function getDevices() {
-    Device.findAll().then((devices) => { 
+    Device.findAll({ include: [ Type, Location, Message ] })
+      .then((devices) => { 
       io.emit('get.device', devices)
     }).catch((err) => { console.error(err) })
   }

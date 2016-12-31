@@ -38,8 +38,10 @@
     </tr>
     </tbody>
     </table>
+      
         <edit-device-modal></edit-device-modal>
         <remove-device-modal></remove-device-modal>
+      
     </div>
     <div v-else>
         <p>No device found.</p>
