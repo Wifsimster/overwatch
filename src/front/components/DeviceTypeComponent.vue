@@ -5,6 +5,7 @@
     <span class="data">{{ data.temperature }}°C</span>
     <span class="name">{{ device.name }}</span>
     <span class="location" v-if="device.location">{{ device.location.name }}</span>
+    <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
   </div>
 
   <div v-if="device.type.name === 'Humidity'">
@@ -12,6 +13,7 @@
     <span class="data">{{ data.humidity }}%</span>
     <span class="name">{{ device.name }}</span>
     <span class="location" v-if="device.location">{{ device.location.name }}</span>
+    <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
   </div>
 
   <div v-if="device.type.name == 'Luminosity'">
@@ -19,42 +21,49 @@
     <span class="data">{{ data.luminosity }}LUX</span>
     <span class="name">{{ device.name }}</span>
     <span class="location" v-if="device.location">{{ device.location.name }}</span>
+    <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
   </div>
   <div v-if="device.type.name == 'Pressure'">
     <div class="image"><img :src="icons.pressure"></div>
     <span class="data">{{ data.pressure }}mB</span>
     <span class="name">{{ device.name }}</span>
     <span class="location" v-if="device.location">{{ device.location.name }}</span>
+    <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
   </div>
   <div v-if="device.type.name == 'Switch'">
-    <div class="image"><img :src="icons.switch"></div>
-    <span class="data">{{ data.switch }}</span>
+    <div class="image"><img :src="icons.switch"></div>    
+    <span class="data">{{ data.state }}</span>
     <span class="name">{{ device.name }}</span>
     <span class="location" v-if="device.location">{{ device.location.name }}</span>
+    <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
   </div>
   <div v-if="device.type.name == 'Dimmer'">
     <div class="image"><img :src="icons.dimmer"></div>
     <span class="data">{{ data.dimmer }}</span>
     <span class="name">{{ device.name }}</span>
     <span class="location" v-if="device.location">{{ device.location.name }}</span>
+    <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
   </div>
   <div v-if="device.type.name == 'Gas'">
     <div class="image"><img :src="icons.gas"></div>
     <span class="data">{{ data.gas }}ppm</span>
     <span class="name">{{ device.name }}</span>
     <span class="location" v-if="device.location">{{ device.location.name }}</span>
+    <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
   </div>
   <div v-if="device.type.name == 'Water'">
     <div class="image"><img :src="icons.water"></div>
     <span class="data">{{ data.water }}</span>
     <span class="name">{{ device.name }}</span>
     <span class="location" v-if="device.location">{{ device.location.name }}</span>
+    <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
   </div>
   <div v-if="device.type.name == 'RGBW'">
     <div class="image"><img :src="icons.rgbw"></div>
     <span class="data">{{ data.rgbw }}</span>
     <span class="name">{{ device.name }}</span>
     <span class="location" v-if="device.location">{{ device.location.name }}</span>
+    <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
   </div>
   </div>
 </template>
@@ -86,10 +95,31 @@
           gas: gas,
           rgbw: rgbw,
         },
+        lastSeen: null,
       }
     },
     created() {
-      this.data = JSON.parse(this.device.messages[0].data)
+      if(this.device.messages && this.device.messages.length > 0) {
+
+        this.device.messages.sort((a, b) => {
+          return new Date(a.createdAt) - new Date(b.createdAt)
+        })
+
+        this.data = JSON.parse(this.device.messages[this.device.messages.length - 1].data)
+
+        this.lastSeen = this.device.messages[this.device.messages.length - 1].createdAt
+      }
+    },
+    watch: {
+      device: function() {
+        this.device.messages.sort((a, b) => {
+          return new Date(a.createdAt) - new Date(b.createdAt)
+        })
+
+        this.data = JSON.parse(this.device.messages[this.device.messages.length - 1].data)
+
+        this.lastSeen = this.device.messages[this.device.messages.length - 1].createdAt
+      }
     },
   }
 </script>
@@ -107,6 +137,7 @@ $height: 100px;
   height: $height;
   div {
     position: relative;
+    height: calc(100% - 2px);
     .image {
       position: absolute;
       overflow: hidden;
@@ -133,6 +164,12 @@ $height: 100px;
       }
     .location {
       color: $dusty-gray;
+      }
+    .date {
+      position: absolute;
+      right: 2px;
+      bottom: 2px;
+      font-size: 12px;
       }
     }
   }

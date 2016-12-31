@@ -7,6 +7,7 @@
         <thead>
           <tr>
             <th>Date</th>
+            <th>Device</th>
             <th>Message</th>
             <th></th>
   </tr>
@@ -14,6 +15,7 @@
         <tbody>
           <tr v-for="message in messages">
             <td>{{ message.createdAt | moment('DD/MM/YY HH:mm:ss') }}</td>
+            <td>{{ message.device.mac }}</td>
             <td>{{ message.data }}</td>
             <td><a @click="remove(message)" title="Remove the message"><i class="material-icons">remove</i></a></td>
   </tr>
@@ -44,10 +46,6 @@
 
       this.socket.on('get.message', (messages) => {
         this.messages = messages
-      })
-      
-      this.socket.on('new.message', (message) => {
-        this.messages.push(message)
       })
     },
     methods: {

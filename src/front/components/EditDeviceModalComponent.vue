@@ -97,8 +97,8 @@
     watch: {
       device: function() {
         this.selectedTypes = this.device.types
-        this.message = this.device.messages[0].data
-        this.refreshRate = parseInt(JSON.parse(this.device.messages[0].data).refresh) / 60000
+        this.message = this.device.messages[this.device.messages.length - 1].data
+        this.refreshRate = parseInt(JSON.parse(this.device.messages[this.device.messages.length - 1].data).refresh) / 60000
       },
     },
     methods: {

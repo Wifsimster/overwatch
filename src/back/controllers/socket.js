@@ -12,13 +12,22 @@ module.exports = function(io) {
     }).catch((err) => { console.error(err) })
   }
 
+  function getMessages() {
+    Message.findAll({ order: 'message.createdAt DESC', include: [ Device ] })
+      .then((messages) => { 
+      io.emit('get.message', messages)      
+    }).catch((err) => { console.error(err) })
+  }
+
   function addMessage(data, device) {
     Message.create({
       data: JSON.stringify(data)
     }).then(function(message) {
-      message.setDevice(device)
-      io.emit('new.message', message)
-    }).catch(function(err) { console.error(err) })        
+      message.setDevice(device.id).then(() => {
+        getDevices()
+        getMessages()  
+      })      
+    }).catch(function(err) { console.error(err) })
   }
 
   function addDevice(data) {
@@ -27,7 +36,6 @@ module.exports = function(io) {
       mac: data.mac, 
       ip: data.ip,
     }).then((device) => {
-      getDevices()
       addMessage(data, device)
     }).catch((err) => { console.error(err) })
   }
@@ -35,8 +43,7 @@ module.exports = function(io) {
   function updateDevice(data, device) {
     Device.update({ ip: device.ip }, {
       where: { id: device.id }
-    }).then((count, device) => {
-      getDevices()
+    }).then((count) => {
       addMessage(data, device)
     }).catch((err) => { console.error(err) })
   }

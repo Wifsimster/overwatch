@@ -115,7 +115,7 @@
         })
       },
     },
-    created() {
+    created() {      
       this.socket.emit('get.device', (devices) => {
         this.renderDevices(devices)
       })
@@ -136,6 +136,4 @@
   }
 </script>
 
-<style lang="sass" scoped>
-
-</style>
+<style lang="sass"></style>
