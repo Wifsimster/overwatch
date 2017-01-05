@@ -15,7 +15,7 @@
         <tbody>
           <tr v-for="message in messages">
             <td>{{ message.createdAt | moment('DD/MM/YY HH:mm:ss') }}</td>
-            <td>{{ message.device.mac }}</td>
+            <td v-if="message.device/mac">{{ message.device.mac }}</td>
             <td>{{ message.data }}</td>
             <td><a @click="remove(message)" title="Remove the message"><i class="material-icons">remove</i></a></td>
   </tr>
