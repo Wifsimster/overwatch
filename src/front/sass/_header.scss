@@ -1,21 +1,22 @@
 @import 'colors';
 
 .header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 44px;
-  padding: 8px 10px;
-  background-color: $black;
-  z-index: 1000;
-  width: 100%;
-  .settings {
-    float: right;    
-  }
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 44px;
+    padding: 8px 10px;
+    background-color: $black;
+    z-index: 1000;
+    width: 100%;
+    .settings {
+        float: right;    
+    }
 
-  .title {
-    font-size: 24px;
-    font-weight: 600;
-    padding: 0 10px;
-  }
+    .title {
+        font-size: 24px;
+        font-weight: 600;
+        padding: 0 10px;
+        cursor: pointer;
+    }
 }

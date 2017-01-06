@@ -35,4 +35,7 @@ $height: 100px;
     .location {
         color: $dusty-gray;
     }
+    &.red {
+        border: 1px solid $red;
+    }
 }

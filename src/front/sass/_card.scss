@@ -1,3 +1,47 @@
+@import 'colors';
+
 .card {
-    
+    border-radius: 3px;
+    box-shadow: 0px 2px 3px 0px rgba(0, 0, 0, 0.1);
+    background-color: $mine-shaft-app;
+    transition: box-shadow .25s;
+    position: relative;
+    padding: 10px;
+    margin: 10px;
+
+    h1 {
+        color: white;
+        text-transform: uppercase;
+        font-size: 20px;
+        padding: 0;
+        i {
+            margin: 0 10px 0 0;
+        }
+        a {
+            padding: 0 5px;
+            &.right {
+                float: right;
+                margin: 10px 0 0 0;
+            }
+        }
+    }
+    &.card-notification {
+        min-height: 100px;
+        cursor: pointer;
+        h1 {
+            text-transform: none;
+            color: black;
+            margin: 0;
+            position: relative;
+            z-index: 2;
+        }
+        .bg {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1;
+            font-size: 82px;
+            color: black;
+        }
+    }
 }

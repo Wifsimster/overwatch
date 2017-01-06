@@ -9,6 +9,7 @@ import MessageView from '../views/MessageView.vue'
 import TypeView from '../views/TypeView.vue'
 import LocationView from '../views/LocationView.vue'
 import BackupView from '../views/BackupView.vue'
+import SettingsView from '../views/SettingsView.vue'
 
 export default new Router({
     //  mode: 'history',
@@ -20,5 +21,6 @@ export default new Router({
         { path: '/types', component: TypeView },
         { path: '/locations', component: LocationView },
         { path: '/backup', component: BackupView },
+        { path: '/settings', component: SettingsView },
     ]
 })

@@ -70,6 +70,7 @@
         created() {
             this.socket.emit('get.device', (devices) => {
                 this.devices = devices
+                console.log('devices', devices)
             })
             this.socket.on('get.device', (devices) => {
                 this.devices = devices

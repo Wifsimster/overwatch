@@ -22,7 +22,6 @@
     }
 </script>
 
-
 <style lang="sass" scoped>
 @import '../../sass/_device.scss';
 </style>
