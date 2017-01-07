@@ -1,7 +1,8 @@
 const express = require('express'),
       methodOverride = require('method-override'),
       bodyParser = require('body-parser'),
-      favicon = require('serve-favicon'),
+      favicon = require('serve-favicon'),      
+      cors = require('cors'),
       app = module.exports = express(),
       router = express.Router()
 
@@ -10,6 +11,7 @@ app.use(bodyParser.json())
 app.use(methodOverride())
 app.use(express.static(__dirname + '/'))
 app.use(favicon(__dirname + '/src/front/assets/logo.png'))
+app.use(cors)
 
 var port = process.env.PORT || 8080
 var env = process.env.NODE_ENV

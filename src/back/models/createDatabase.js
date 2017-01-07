@@ -30,8 +30,8 @@ sequelize.sync({ force: true }).then(() => {
     Setting.create({name: 'freebox', value: 'true'})
 
     Netatmo.create({    
-        clientId: "586274dec4978493ab8ba235",
-        clientSecret: "UdxSaUVTgRNuJ6fOPKQECM9ZMzQ4X1Jxbn",
+        client_id: "586274dec4978493ab8ba235",
+        client_secret: "UdxSaUVTgRNuJ6fOPKQECM9ZMzQ4X1Jxbn",
         username: "wifsimster@gmail.com",
         password: "192lucie"
     })

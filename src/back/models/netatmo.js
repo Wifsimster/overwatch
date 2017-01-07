@@ -2,8 +2,8 @@ var Sequelize = require('sequelize')
 var sequelize = require('../db/database')
 
 var Netatmo = sequelize.define('netatmo', {
-    clientId: Sequelize.STRING,
-    clientSecret: Sequelize.STRING,
+    client_id: Sequelize.STRING,
+    client_secret: Sequelize.STRING,
     username: Sequelize.STRING,
     password: Sequelize.STRING,
 }, {
