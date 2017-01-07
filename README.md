@@ -9,4 +9,4 @@ Home automation for ESP8266 devices
 
 ## Dasboard
 
-![scheme](https://github.com/Wifsimster/pir-mqtt/blob/master/scheme.png)
+![scheme](https://github.com/Wifsimster/overwatch/blob/master/cover.png)
