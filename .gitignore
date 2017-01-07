@@ -51,3 +51,5 @@ Temporary Items
 database.sqlite
 src/back/db/database.sqlite
 npm-debug.log.1732676291
+*.sqlite
+src/back/db/database.sqlite-journal
