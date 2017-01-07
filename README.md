@@ -1,5 +1,5 @@
 # Overwatch
-Home automation for ESP8266 devices powered with
+Home automation for ESP8266 devices powered with :
 - Vue.js
 - Webpack
 - MQTT
