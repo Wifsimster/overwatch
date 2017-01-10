@@ -32,7 +32,7 @@ module.exports = function(io) {
 
   function addDevice(data) {
     Device.create({
-      name: data.name, 
+      name: data.name,
       mac: data.mac, 
       ip: data.ip,
     }).then((device) => {
@@ -80,13 +80,14 @@ module.exports = function(io) {
 
   mqttClient.on('message', function (topic, message) {
     let data = JSON.parse(message.toString())
-
-    Device.findAll({ 
-      where: { mac: data.mac }
-    }).then((devices) => {
-      if(devices.length > 0) { updateDevice(data, devices[0]) } 
-      else { addDevice(data) }
-    }).catch((err) => { console.error(err) })
+    if(data.mac) {
+      Device.findAll({ 
+        where: { mac: data.mac }
+      }).then((devices) => {
+        if(devices.length > 0) { updateDevice(data, devices[0]) } 
+        else { addDevice(data) }
+      }).catch((err) => { console.error(err) })
+    }
   })
 
   io.on('connection', (socket) => {

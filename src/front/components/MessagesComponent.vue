@@ -7,6 +7,7 @@
         <thead>
           <tr>
             <th>Date</th>
+            <th>Mac</th>
             <th>Device</th>
             <th>Message</th>
             <th></th>

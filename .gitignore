@@ -54,3 +54,4 @@ npm-debug.log.1732676291
 *.sqlite
 src/back/db/database.sqlite-journal
 *.sqlite
+*.sqlite
