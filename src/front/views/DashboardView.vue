@@ -122,7 +122,7 @@
       })
       this.socket.emit('get.device', (devices) => {
         this.renderDevices(devices)
-      })  
+      })      
       this.socket.on('get.device', (devices) => {
         this.renderDevices(devices)
         this.socket.emit('get.untype.device', (devices) => {
@@ -131,7 +131,7 @@
       })
       this.socket.emit('get.untype.device', (devices) => {
         this.renderAlert(devices)
-      })    
+      })
       this.socket.emit('get.netatmo', (auth) => {
         this.netatmoApi = new netatmo(auth)
         this.getNetatmoData()
