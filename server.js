@@ -35,9 +35,9 @@ require('./src/back/controllers/socket')(io)
 // RTSP stream
 var url = 'rtsp://192.168.0.62:554/ch0_0.h264'
 
-Stream = require('node-rtsp-stream');
+Stream = require('node-rtsp-stream')
 stream = new Stream({
-    name: 'name',
-    streamUrl: url,
-    wsPort: 9999
-});
+  name: 'name',
+  streamUrl: url,
+  wsPort: 9999
+})
