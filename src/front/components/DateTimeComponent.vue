@@ -23,7 +23,7 @@
 <style lang="sass" scoped>
 @import '../sass/_colors.scss';
 
-$height: 100px;
+$height: 116px;
 
 .device {
     position: relative;

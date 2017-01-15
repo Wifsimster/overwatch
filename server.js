@@ -1,7 +1,8 @@
 const express = require('express'),
       methodOverride = require('method-override'),
       bodyParser = require('body-parser'),
-      favicon = require('serve-favicon'),      
+      favicon = require('serve-favicon'),
+      Stream = require('node-rtsp-stream'),
       cors = require('cors'),
       app = module.exports = express(),
       router = express.Router()
@@ -34,10 +35,7 @@ require('./src/back/controllers/socket')(io)
 
 // RTSP stream
 var url = 'rtsp://192.168.0.62:554/ch0_0.h264'
+stream = new Stream({ name: 'name', streamUrl: url, wsPort: 9962 })
 
-Stream = require('node-rtsp-stream')
-stream = new Stream({
-  name: 'name',
-  streamUrl: url,
-  wsPort: 9999
-})
+var url = 'rtsp://192.168.0.63:554/ch0_0.h264'
+stream = new Stream({ name: 'name', streamUrl: url, wsPort: 9963 })

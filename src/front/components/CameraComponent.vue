@@ -1,25 +1,29 @@
 <template>
 <div class="camera">
-  <canvas id="videoCanvas"></canvas>
+  <canvas :id="id"></canvas>
+  <span class="name">{{ name }}</span>
   </div>
 </template>
 
 <script>
   import io from 'socket.io-client'
   export default {
+    props: {
+      name: String,
+      port: String,
+    },
     data() {
       return {
         socket: io(),
+        id: 'canvas_'+this.port
       }
     },
     created() {
-      var jsmpeg = require('jsmpeg')
-      var client = new WebSocket('ws://localhost:9999')
-      this.$nextTick(function () {
-        var canvas = document.getElementById('videoCanvas')
-        console.log('Canvas', canvas)
-        console.log('Canvas', this.$el)
-        var player = new jsmpeg(client, { canvas: canvas })
+      const jsmpeg = require('jsmpeg')
+      const client = new WebSocket('ws://localhost:'+this.port)
+      this.$nextTick(() => {
+        let canvas = document.getElementById('canvas_'+this.port)
+        let player = new jsmpeg(client, { canvas: canvas })
         })
     },
   }
@@ -27,9 +31,10 @@
 
 <style lang="sass" scoped>
 .camera {
+  text-align: center;
   margin: 5px;
   canvas {
-    height: 100px;
+    width: 200px;
     }
   }
 </style>

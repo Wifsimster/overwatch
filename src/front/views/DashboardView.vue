@@ -36,7 +36,10 @@
           <netatmo-pressure :device="netatmoDevice"></netatmo-pressure>
   </div>
         <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">          
-          <camera></camera>
+          <camera port="9962"></camera>
+  </div>
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">          
+          <camera port="9963"></camera>
   </div>
   </div>
   </div>
