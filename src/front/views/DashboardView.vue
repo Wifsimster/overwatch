@@ -143,6 +143,7 @@
       })
 
       // RTSP client
+      var Websocket = require('websocket').client
       client = new Websocket('ws://localhost:9999')
       player = new jsmpeg(client, { canvas: canvas })
     },
