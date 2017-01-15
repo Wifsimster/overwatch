@@ -5,6 +5,9 @@
   <div class="pure-g">
     <div class="pure-u-1 pure-u-lg-1-1">
       <div class="pure-g">
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+          <canvas></canvas>
+  </div>
         <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.datetime">
           <date-time></date-time>
   </div>
@@ -64,6 +67,7 @@
         settings: [],
         netatmoDevice: {},
         netatmoApi: {},
+        camera: null,
       }
     },
     components: {
@@ -137,6 +141,10 @@
         this.getNetatmoData()
         setInterval(() => { this.getNetatmoData() }, 300000)
       })
+
+      // RTSP client
+      client = new Websocket('ws://localhost:9999')
+      player = new jsmpeg(client, { canvas: canvas })
     },
   }
 </script>
