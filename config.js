@@ -3,6 +3,6 @@ module.exports = {
     host: 'localhost',
     user: 'damien',
     password: '',
-    database: 'hexaflux'
+    database: 'overwatch'
   }
 }

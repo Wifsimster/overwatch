@@ -1,11 +1,11 @@
-const express = require('express'),
-      methodOverride = require('method-override'),
-      bodyParser = require('body-parser'),
-      favicon = require('serve-favicon'),
-      Stream = require('node-rtsp-stream'),
-      cors = require('cors'),
-      app = module.exports = express(),
-      router = express.Router()
+const express = require('express')
+const methodOverride = require('method-override')
+const bodyParser = require('body-parser')
+const favicon = require('serve-favicon')
+const cors = require('cors')
+const Stream = require('node-rtsp-stream')
+const app = module.exports = express()
+const router = express.Router()
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -21,6 +21,9 @@ if('development' == env) {
   app.use(errorHandler({dumpExceptions: true, showStack: true}))
 }
 if('production' == app.get('env')) { app.use(errorHandler()) }
+
+// Config
+require('./src/back/config.js')
 
 // Drop & create tables in DB
 require('./src/back/models/createDatabase')
