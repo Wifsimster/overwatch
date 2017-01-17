@@ -56,3 +56,4 @@ src/back/db/database.sqlite-journal
 *.sqlite
 *.sqlite
 *.sqlite
+*.sqlite

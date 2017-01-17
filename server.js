@@ -22,9 +22,6 @@ if('development' == env) {
 }
 if('production' == app.get('env')) { app.use(errorHandler()) }
 
-// Config
-require('./src/back/config.js')
-
 // Drop & create tables in DB
 require('./src/back/models/createDatabase')
 
@@ -38,7 +35,7 @@ require('./src/back/controllers/socket')(io)
 
 // RTSP stream
 var url = 'rtsp://192.168.0.62:554/ch0_0.h264'
-stream = new Stream({ name: 'name', streamUrl: url, wsPort: 9962 })
+//stream = new Stream({ name: 'name', streamUrl: url, wsPort: 9962 })
 
 var url = 'rtsp://192.168.0.63:554/ch0_0.h264'
-stream = new Stream({ name: 'name', streamUrl: url, wsPort: 9963 })
+//stream = new Stream({ name: 'name', streamUrl: url, wsPort: 9963 })

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node server.js",
+    "production": "set NODE_ENV=production&&node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -37,6 +38,7 @@
     "mqtt": "^2.1.3",
     "net": "^1.0.2",
     "netatmo": "^2.0.0",
+    "node-config": "0.0.2",
     "pure-css": "^1.0.4",
     "purecss": "^0.6.1",
     "request": "^2.79.0",
