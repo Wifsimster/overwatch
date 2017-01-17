@@ -21,8 +21,12 @@
       "app_id": "fr.freebox.overwatch"
     },
     "google": {
-      "dispaly": "true",
-      "email": "wifsimster@gmail.com"
+      "email": "wifsimster@gmail.com",
+      "password": "password",
+      "display": "true"
+    },
+    "cameras": {
+      "display": "true"
     }
   }
 }

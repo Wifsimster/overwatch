@@ -12,13 +12,13 @@ app.use(bodyParser.json())
 app.use(methodOverride())
 app.use(express.static(__dirname + '/'))
 app.use(favicon(__dirname + '/src/front/assets/logo.png'))
-app.use(cors)
+//app.use(cors)
 
 var port = process.env.PORT || 8080
 var env = process.env.NODE_ENV
 
 if('development' == env) {
-  app.use(errorHandler({dumpExceptions: true, showStack: true}))
+    app.use(errorHandler({dumpExceptions: true, showStack: true}))
 }
 if('production' == app.get('env')) { app.use(errorHandler()) }
 
