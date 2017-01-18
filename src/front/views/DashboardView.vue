@@ -126,7 +126,7 @@
       },
     },
     created() {
-      this.socket.emit('get.setting.object', (settings) => {
+      this.socket.emit('get.setting', (settings) => {
         this.settings = settings
       })
       this.socket.emit('get.device', (devices) => {

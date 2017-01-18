@@ -1,10 +1,20 @@
 # Overwatch
-Home automation for ESP8266 devices powered with :
-- Vue.js
+Personal Home Automation for Raspberry Pi 3
+
+Current functions:
+- Date & time
+- ESP8266 sensors
+- Freebox 
+- Netatmo
+- Xiaomi Camera
+
+Powered with :
+- Vue.js 2.x
 - Webpack
 - MQTT
 - Socket.io
 - SQLITE
+- RTSP stream
 
 ## Dashboard
 
