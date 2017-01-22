@@ -1,5 +1,4 @@
 const errorHandler = require('./errorHandler')
-const Setting = require('../models/setting')
 const jsonfile = require('jsonfile')
 jsonfile.spaces = 2
 const file = 'config/default.json'

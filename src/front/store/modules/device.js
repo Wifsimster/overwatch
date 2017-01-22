@@ -1,5 +1,3 @@
-import * as types from '../mutation-types'
-
 const state = {
   device: {},
   modal: false,
@@ -17,19 +15,19 @@ const getters = {
 const actions = {}
 
 const mutations = {    
-  [types.OPEN_MODAL] (state, data) {
-    state.device = data;
-    state.modal = true;
+  openModal (state, data) {
+    state.device = data
+    state.modal = true
   },
 
-  [types.OPEN_REMOVE_MODAL] (state, data) {
-    state.removeDevice = data;
-    state.removeModal = true;
+  openRemoveModal (state, data) {
+    state.removeDevice = data
+    state.removeModal = true
   },
 
-  [types.CLOSE_MODAL] (state) {
-    state.modal = false;
-    state.removeModal = false;
+  closeModal (state) {
+    state.modal = false
+    state.removeModal = false
   },
 }
 

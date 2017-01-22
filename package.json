@@ -36,6 +36,7 @@
     "net": "^1.0.2",
     "netatmo": "^2.0.0",
     "node-config": "0.0.2",
+    "node-rtsp-stream-es6": "^1.0.0",
     "purecss": "^0.6.1",
     "request": "^2.79.0",
     "rtsp-ffmpeg": "0.0.10",

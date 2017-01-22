@@ -40,10 +40,10 @@
     methods: {
       remove() { 
         this.socket.emit('remove.device', this.device) 
-        this.$store.dispatch('closeModal')
+        this.$store.commit('closeModal')
       },
       close() {
-        this.$store.dispatch('closeModal')
+        this.$store.commit('closeModal')
       },
     }
   }

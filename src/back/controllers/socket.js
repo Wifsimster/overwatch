@@ -3,7 +3,7 @@ var Device = require('../models/device')
 var Location = require('../models/location')
 var Type = require('../models/type')
 
-module.exports = function(io) {
+module.exports = (io) => {
 
   function getDevices() {
     Device.findAll({ include: [ Type, Location, Message ] })
@@ -22,12 +22,12 @@ module.exports = function(io) {
   function addMessage(data, device) {
     Message.create({
       data: JSON.stringify(data)
-    }).then(function(message) {
+    }).then((message) => {
       message.setDevice(device.id).then(() => {
         getDevices()
         getMessages()  
       })      
-    }).catch(function(err) { console.error(err) })
+    }).catch((err) => { console.error(err) })
   }
 
   function addDevice(data) {
@@ -48,37 +48,12 @@ module.exports = function(io) {
     }).catch((err) => { console.error(err) })
   }
 
-  // Dummy data
-  //    setTimeout(() => {
-  //        addDevice({
-  //            mac: '00:00:00:00:00:00',
-  //            ip: '192.168.0.35',
-  //            data: '{"temperature":"25","humidity":"35"}',
-  //        })
-  //        addDevice({
-  //            mac: '00:00:00:00:00:11',
-  //            ip: '192.168.0.36',
-  //            data: '{"temperature":"23.5","humidity":"45"}',
-  //        })   
-  //        addDevice({
-  //            mac: '00:00:00:00:00:22',
-  //            ip: '192.168.0.37',
-  //            data: '{"temperature":"24.3","pressure":"45"}',
-  //        })   
-  //        addDevice({
-  //            mac: '00:00:00:00:00:33',
-  //            ip: '192.168.0.38',
-  //            data: '{"luminosity":"1002"}',
-  //        })    
-  //    }, 2000)
-
-
   const mqtt = require('mqtt')
   const mqttClient  = mqtt.connect('mqtt://192.168.0.35:1883')
 
   mqttClient.subscribe('/#')
 
-  mqttClient.on('message', function (topic, message) {
+  mqttClient.on('message', (topic, message) => {
     let data = JSON.parse(message.toString())
     if(data.mac) {
       Device.findAll({ 
@@ -96,7 +71,6 @@ module.exports = function(io) {
     require('../api/type')(socket)
     require('../api/location')(socket)
     require('../api/setting')(socket)
-    require('../api/netatmo')(socket)
     require('../api/freebox')(socket)
   })
 }

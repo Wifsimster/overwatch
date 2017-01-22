@@ -110,9 +110,10 @@
         }
       }, 
       renderAlert(devices) {
-        this.$store.dispatch('resetAlert')
         if(devices.length > 0) {
-          this.$store.dispatch('setAlert', {type: 'info', message: devices.length + ' device(s) to configure !'})
+          this.$store.commit('setAlert', {type: 'info', message: devices.length + ' device(s) to configure !'})
+        } else {
+          this.$store.commit('resetAlert')
         }
       },    
       getNetatmoData() {
@@ -126,6 +127,7 @@
       },
     },
     created() {
+      this.$store.commit('resetAlert')
       this.socket.emit('get.setting', (settings) => {
         this.settings = settings
       })
@@ -141,8 +143,8 @@
       this.socket.emit('get.untype.device', (devices) => {
         this.renderAlert(devices)
       })
-      this.socket.emit('get.netatmo', (auth) => {
-        this.netatmoApi = new netatmo(auth)
+      this.socket.emit('get.setting', (settings) => {
+        this.netatmoApi = new netatmo(settings.netatmo)
         this.getNetatmoData()
         setInterval(() => { this.getNetatmoData() }, 300000)
       })

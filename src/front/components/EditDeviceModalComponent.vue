@@ -95,7 +95,7 @@
       })
     },
     watch: {
-      device: function() {
+      device() {
         this.selectedTypes = this.device.types
         this.message = this.device.messages[this.device.messages.length - 1].data
         this.refreshRate = parseInt(JSON.parse(this.device.messages[this.device.messages.length - 1].data).refresh) / 60000
@@ -107,10 +107,10 @@
       },
       edit() {
         this.socket.emit('update.device', this.device)
-        this.$store.dispatch('closeModal')
+        this.$store.commit('closeModal')
       },
       close() {
-        this.$store.dispatch('closeModal')
+        this.$store.commit('closeModal')
       },
     }
   }

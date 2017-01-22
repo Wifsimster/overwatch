@@ -54,7 +54,6 @@
     import io from 'socket.io-client'
     import EditDeviceModal from './EditDeviceModalComponent.vue'
     import RemoveDeviceModal from './RemoveDeviceModalComponent.vue'
-    import { mapGetters, mapActions } from 'vuex'
 
     export default {
         components: {
@@ -70,7 +69,6 @@
         created() {
             this.socket.emit('get.device', (devices) => {
                 this.devices = devices
-                console.log('devices', devices)
             })
             this.socket.on('get.device', (devices) => {
                 this.devices = devices
@@ -78,10 +76,10 @@
         },
         methods: {
             openModal(device) {
-                this.$store.dispatch('openModal', device)
+                this.$store.commit('openModal', device)
             },
             openRemoveModal(device) {
-                this.$store.dispatch('openRemoveModal', device)
+                this.$store.commit('openRemoveModal', device)
             },
             removeAll() { 
                 this.socket.emit('removeAll.device') 

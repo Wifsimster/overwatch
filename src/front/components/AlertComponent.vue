@@ -2,7 +2,7 @@
 <div class="pure-g">
     <div class="pure-u-1">
         <transition name="expand">
-            <div v-if="$store.state.alert.message">
+            <div v-if="$store.state.alert.message.length > 0">
                 <div class="alert">
                     <a class="right" @click="close">x</a>
                     <p>{{ $store.state.alert.message }}</p>
@@ -19,7 +19,7 @@
     export default {
         methods: {
             close() {
-                this.$store.dispatch('resetAlert')
+                this.$store.commit('resetAlert')
             }
         },
     }
