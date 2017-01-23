@@ -1,42 +1,40 @@
 {
-    "settings": {
-        "datetime": {
-            "display": "true"
-        },
-        "esp8266": {
-            "display": "true"
-        },
-        "netatmo": {
-            "display": "true",
-            "client_id": "586274dec4978493ab8ba235",
-            "client_secret": "UdxSaUVTgRNuJ6fOPKQECM9ZMzQ4X1Jxbn",
-            "username": "wifsimster@gmail.com",
-            "password": "192lucie"
-        },
-        "freebox": {
-            "display": "true",
-            "baseURL": "http://mafreebox.freebox.fr/api/v3/",
-            "app_token": "3kYbyFKbG3GUi0LLV6C8HqPx8kwhbPfiXNI8fCW6pt4v57GmtpnAatkOXVwNjwXn",
-            "track_id": "7",
-            "app_id": "fr.freebox.overwatch"
-        },
-        "google": {
-            "email": "wifsimster@gmail.com",
-            "password": "password",
-            "display": "true"
-        },
-        "cameras": {
-            "display": "true",
-            "camera_01": {
-                "ip": "192.168.0.62",
-                "port": "554",
-                "format": "ch0_0.h264"
-            },
-            "camera_02": {
-                "ip": "192.168.0.63",
-                "port": "554",
-                "format": "ch0_0.h264"
-            }
-        }
+  "settings": {
+    "datetime": {
+      "display": "true"
+    },
+    "esp8266": {
+      "display": "true"
+    },
+    "netatmo": {
+      "display": "true",
+      "client_id": "586274dec4978493ab8ba235",
+      "client_secret": "UdxSaUVTgRNuJ6fOPKQECM9ZMzQ4X1Jxbn",
+      "username": "wifsimster@gmail.com",
+      "password": "192lucie"
+    },
+    "freebox": {
+      "display": "true",
+      "baseURL": "http://mafreebox.freebox.fr/api/v3/",
+      "app_token": "3kYbyFKbG3GUi0LLV6C8HqPx8kwhbPfiXNI8fCW6pt4v57GmtpnAatkOXVwNjwXn",
+      "track_id": "7",
+      "app_id": "fr.freebox.overwatch"
+    },
+    "google": {
+      "email": "wifsimster@gmail.com",
+      "password": "password",
+      "display": "true"
+    },
+    "cameras": {
+      "display": "true",
+      "camera_01": {
+        "ip": "192.168.0.83",
+        "port": "9962",
+      },
+      "camera_02": {
+        "ip": "192.168.0.83",
+        "port": "9963",
+      }
     }
+  }
 }

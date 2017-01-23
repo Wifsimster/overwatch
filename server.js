@@ -17,7 +17,7 @@ var port = process.env.PORT || 8080
 var env = process.env.NODE_ENV
 
 if('development' == env) {
-    app.use(errorHandler({dumpExceptions: true, showStack: true}))
+  app.use(errorHandler({dumpExceptions: true, showStack: true}))
 }
 if('production' == app.get('env')) { app.use(errorHandler()) }
 
@@ -31,4 +31,4 @@ console.log('Server started at 127.0.0.1:8080')
 
 var io = require('socket.io').listen(server)
 require('./src/back/controllers/socket')(io)
-require('./src/back/controllers/rtsp')
+//require('./src/back/controllers/rtsp')

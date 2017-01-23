@@ -20,7 +20,7 @@
     },
     created() {
       const jsmpeg = require('jsmpeg')
-      const client = new WebSocket('ws://localhost:'+this.port)
+      const client = new WebSocket('ws://192.168.0.83:'+this.port)
       this.$nextTick(() => {
         let canvas = document.getElementById('canvas_'+this.port)
         let player = new jsmpeg(client, { canvas: canvas })
