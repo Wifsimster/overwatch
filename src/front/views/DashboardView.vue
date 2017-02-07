@@ -4,42 +4,41 @@
 
   <div class="pure-g">
     <div class="pure-u-1 pure-u-lg-1-1">
-      <div class="pure-g">
-        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.datetime">
+      <div class="pure-g" v-if="settings">        
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.datetime && settings.datetime.display !== 'false'">
           <date-time></date-time>
   </div>
-        <div v-if="settings.freebox" class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.freebox && settings.freebox.display !== 'false'">
           <freebox></freebox>
   </div>
-        <div v-for="sd in splitDevices" class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.esp8266">
-          <device-type :device="sd"></device-type>
-  </div>
-        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo">
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo && settings.netatmo.display !== 'false'">
           <netatmo-temperature :device="netatmoDevice"></netatmo-temperature>
   </div> 
-        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo">
-          <netatmo-outdoor-temperature :device="netatmoDevice"></netatmo-outdoor-temperature>
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo && settings.netatmo.display !== 'false'" :device="netatmoDevice"></netatmo-outdoor-temperature>
   </div>
-        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo">
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo && settings.netatmo.display !== 'false'">
           <netatmo-humidity :device="netatmoDevice"></netatmo-humidity>
   </div>
-        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo">
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo && settings.netatmo.display !== 'false'">
           <netatmo-outdoor-humidity :device="netatmoDevice"></netatmo-outdoor-humidity>
   </div>
-        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo">
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo && settings.netatmo.display !== 'false'">
           <netatmo-noise :device="netatmoDevice"></netatmo-noise>
   </div>
-        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo">
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo && settings.netatmo.display !== 'false'">
           <netatmo-co2 :device="netatmoDevice"></netatmo-co2>
   </div>
-        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo">
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo && settings.netatmo.display !== 'false'">
           <netatmo-pressure :device="netatmoDevice"></netatmo-pressure>
   </div>
-        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">          
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.cameras && settings.cameras.display !== 'false'">
           <camera port="9962"></camera>
   </div>
-        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">          
+        <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.cameras && settings.cameras.display !== 'false'">
           <camera port="9963"></camera>
+  </div>
+        <div v-for="sd in splitDevices" class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.esp8266 && settings.esp8266.display !== 'false'">
+          <device-type :device="sd"></device-type>
   </div>
   </div>
   </div>
@@ -110,6 +109,7 @@
         }
       }, 
       renderAlert(devices) {
+        console.log('Render alert deices', devices.length)
         if(devices.length > 0) {
           this.$store.commit('setAlert', {type: 'info', message: devices.length + ' device(s) to configure !'})
         } else {

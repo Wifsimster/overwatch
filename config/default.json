@@ -23,10 +23,10 @@
     "google": {
       "email": "wifsimster@gmail.com",
       "password": "password",
-      "display": "true"
+      "display": "false"
     },
     "cameras": {
-      "display": "true",
+      "display": "false",
       "camera_01": {
         "ip": "192.168.0.83",
         "port": "9962"
