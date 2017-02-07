@@ -4,7 +4,7 @@ var Location = require('./location')
 var Device = require('./device')
 var Message = require('./message')
 
-sequelize.sync({ force: true }).then(() => {
+sequelize.sync().then(() => {
 
     Type.create({name: 'Temperature'})
     Type.create({name: 'Humidity'})

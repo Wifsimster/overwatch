@@ -1,5 +1,5 @@
 <template>
-<div class="camera">
+<div class="camera" @click="expand">
   <canvas :id="id"></canvas>
   <span class="name">{{ name }}</span>
   </div>
@@ -24,7 +24,32 @@
       this.$nextTick(() => {
         let canvas = document.getElementById('canvas_'+this.port)
         let player = new jsmpeg(client, { canvas: canvas })
-        })
+
+        fitToContainer(canvas)
+
+        function fitToContainer(canvas) {
+          canvas.style.width = '100%'
+          canvas.style.height = '100%'
+          canvas.width = canvas.offsetWidth
+          canvas.height = canvas.offsetHeight
+        }
+
+      })
+    },
+    methods: {
+      expand() {
+        let canvas = document.getElementById('canvas_'+this.port)
+
+        window.addEventListener('resize', resizeCanvas, false)
+
+        function resizeCanvas() {
+          canvas.width = window.innerWidth
+          canvas.height = window.innerHeight
+        }
+
+        resizeCanvas()
+
+      },
     },
   }
 </script>
@@ -34,7 +59,7 @@
   text-align: center;
   margin: 5px;
   canvas {
-    width: 200px;
+    //    width: 200px;
     }
   }
 </style>
