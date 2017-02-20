@@ -6,15 +6,8 @@ module.exports = function () {
 
     console.log('Yeelight')
 
-    yeelightSearch.on('found', (lightBulb) => {
-        
-        console.log('Found:', lightBulb)
-        
-        lightBulb.toggle().then(() => {
-            console.log('toggled')
-        }).catch((err) => {
-            console.log(`received some error: ${err}`)
-        })
+    yeelightSearch.getYeelights().then((lights) => {
+        console.log('Lights', lights)  
     })
 
 }
