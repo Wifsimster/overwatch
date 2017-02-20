@@ -15,7 +15,10 @@ module.exports = function () {
             console.log('-- Id', light.getId())
             console.log('-- Name', light.getName())
             console.log('-- Model', light.getModel())
-            console.log('-- Values', light.getValues())
+            
+            light.getValues().then((values) => {
+                console.log('-- Values', values)
+            })
         })
         
     })
