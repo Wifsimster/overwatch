@@ -14,9 +14,11 @@ module.exports = function () {
             console.log('-- Name :', light.getName())
             console.log('-- Model :', light.getModel())
             
-            light.getValues(['power', 'bright']).then((values) => {
+            light.getValues('power').then((values) => {
                 console.log('-- Values :', values)
             })
+            
+            light.turnOn('smooth', 1000)
         })
         
     })
