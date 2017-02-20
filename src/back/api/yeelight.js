@@ -6,8 +6,8 @@ module.exports = function () {
 
     console.log('Yeelight')
 
-    yeelightSearch.getYeelights().then((lights) => {
-        console.log('Lights', lights)  
-    })
+    var lights = yeelightSearch.getYeelights()
+    
+    console.log('Lights', lights)
 
 }
