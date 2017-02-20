@@ -7,11 +7,16 @@ module.exports = function () {
 
     yeelightSearch.on('found', (Yeelight) => {
 
-        console.log('Yeelight:', Yeelight)
-
         var lights = yeelightSearch.getYeelights()
         
         console.log('Lights', lights)
+        
+        lights.forEach((light) => {
+            console.log('-- Id', light.getId())
+            console.log('-- Name', light.getName())
+            console.log('-- Model', light.getModel())
+            console.log('-- Values', light.getValues())
+        })
         
     })
 
