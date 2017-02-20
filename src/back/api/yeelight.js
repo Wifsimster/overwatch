@@ -4,16 +4,15 @@ const YeelightSearch = require('yeelight-wifi')
 module.exports = function () {
 
     const yeelightSearch = new YeelightSearch()
-    
-    console.log('Yeelight')
 
-    var lights = yeelightSearch.getYeelights()
+    yeelightSearch.on('found', (Yeelight) => {
 
-    console.log('Lights', lights)
+        console.log('Yeelight:', Yeelight)
 
-    yeelightSearch.on('found', (lightBulb) => {
-
-        console.log('Found:', lightBulb)
+        var lights = yeelightSearch.getYeelights()
+        
+        console.log('Lights', lights)
+        
     })
 
 }
