@@ -32,6 +32,9 @@
                 <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo && settings.netatmo.display !== 'false'">
                     <netatmo-pressure :device="netatmoDevice"></netatmo-pressure>
     </div>
+                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+                    <yeelight></yeelight>
+    </div>
                 <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.cameras && settings.cameras.display !== 'false'">
                     <camera port="9962"></camera>
     </div>
@@ -62,6 +65,7 @@
     import NetatmoCo2 from '../components/netatmo/CO2Component.vue'
     import NetatmoPressure from '../components/netatmo/PressureComponent.vue'
     import Camera from '../components/CameraComponent.vue'
+    import Yeelight from '../components/YeelightComponent.vue'
 
     export default {
         data() {
@@ -87,6 +91,7 @@
             NetatmoPressure,
             NetatmoNoise,
             Camera,
+            Yeelight,
         },
         methods: {
             display(name) {
@@ -125,9 +130,6 @@
                     }
                 })
             },
-            toggleLight(id) {
-                this.socket.emit('set.light', id)
-            }
         },
         created() {
             this.$store.commit('resetAlert')
@@ -151,14 +153,6 @@
                 this.getNetatmoData()
                 setInterval(() => { this.getNetatmoData() }, 300000)
             })
-
-            this.socket.on('found.lights', (lights) => {
-                console.log('Lights', lights)
-                this.socket.emit('get.light', (lights[0].id) => {
-                  console.log('Get light')
-                })
-            })
-
         },
     }
 </script>
