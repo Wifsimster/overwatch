@@ -12,21 +12,14 @@ module.exports = function (socket) {
         
         let object = []
         for(var i = 0; i < lights.length ; i++) {
-            object.push({id: lights[i].getId()})
+            object.push({
+                id: lights[i].getId(),
+                model: lights[i].getModel(),
+                name: lights[i].getName(),
+                values: lights[i].getValues(['power', 'bright'])
+            })
         }        
         socket.broadcast.emit('found.lights', object)
-    })
-
-    socket.on('get.lights', (fn) => {
-        console.log('Getting lights...')
-        if(lights.length > 0) {
-            var ids = []
-            for(var i = 0 ; i < lights.length; i++) {
-                ids.push(lights[i].getId())
-            }
-            fn(ids)
-        }
-        fn('No light for the moment !')
     })
 
     socket.on('get.light', (id, fn) => {
