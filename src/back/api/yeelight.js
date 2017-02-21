@@ -17,7 +17,7 @@ module.exports = function (socket) {
             light.turnOn('smooth', 500)
         })
         
-        socket.emit('get.lights', (fn) => {
+        socket.on('get.lights', (fn) => {
             fn(lights)
         })
     })

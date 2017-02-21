@@ -149,7 +149,7 @@
                 setInterval(() => { this.getNetatmoData() }, 300000)
             })
 
-            this.socket.on('get.lights', (lights) => {
+            this.socket.emit('get.lights', (lights) => {
                 console.log('Lights', lights)
             })
 
