@@ -125,6 +125,9 @@
                     }
                 })
             },
+            toggleLight(id) {
+                this.socket.emit('set.light', id)
+            }
         },
         created() {
             this.$store.commit('resetAlert')
@@ -149,12 +152,8 @@
                 setInterval(() => { this.getNetatmoData() }, 300000)
             })
 
-            this.socket.emit('get.lights', (ids) => {
-                console.log('Lights ids', ids)
-                if(ids) {
-                    this.socket.emit('get.light', ids[0])
-                    this.socket.emit('set.light', ids[0])
-                }
+            this.socket.on('found.lights', (ids) => {
+                console.log('Lights', lights)
             })
 
         },
