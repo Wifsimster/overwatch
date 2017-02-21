@@ -19,9 +19,7 @@
             this.socket.on('found.lights', (lights) => {
                 console.log('Lights', lights)
                 if(lights) {
-                    this.socket.emit('get.light', (lights[0].id) => {
-                        console.log('Get light')
-                    })
+                    this.socket.emit('get.light', lights[0].id)
                 }
             })
         }
