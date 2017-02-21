@@ -154,6 +154,9 @@
 
             this.socket.on('found.lights', (lights) => {
                 console.log('Lights', lights)
+                this.socket.emit('get.light', (lights[0].id) => {
+                  console.log('Get light')
+                })
             })
 
         },
