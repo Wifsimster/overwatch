@@ -1,7 +1,7 @@
 const errorHandler = require('./errorHandler')
 const YeelightSearch = require('yeelight-wifi')
 
-module.exports = function () {
+module.exports = function (socket) {
 
     const yeelightSearch = new YeelightSearch()
 
