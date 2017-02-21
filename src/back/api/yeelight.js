@@ -23,19 +23,28 @@ module.exports = function (socket) {
         fn('No light for the moment !')
     })
 
-    socket.on('get.light', (id) => {
+    socket.on('get.light', (id, fn) => {
         console.log('Get light by id', id)
         const light = yeelightSearch.getYeelightById(id)
-        console.log('Light', light)
+        fn({
+            model: light.getModel(),
+            id: light.getId(),
+            name: light.getName(),
+        })
     })
 
-    socket.on('set.light', (id) => {
+    socket.on('toggle.light', (id) => {
         console.log('Set light by id', id)
         const light = yeelightSearch.getYeelightById(id)
-        light.toggle().then(() => {
-            console.log('Toggle !')
-        }).catch((err) => {
-            console.log('Error', err)
-        })
+        light.toggle().then((rst) => {
+            fn(rst)
+        }).catch((err) => { fn(err) })
+    })
+    
+    socket.on('set.light.name', (options, fn) => {
+        const light = yeelightSearch.getYeelightById(options.id)
+        light.setName(options.name).then((rst) => {
+            fn(rst)
+        }).catch((err) => { fn(err) })
     })
 }
