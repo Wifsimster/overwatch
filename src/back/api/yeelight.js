@@ -10,6 +10,7 @@ module.exports = function (socket) {
         var lights = yeelightSearch.getYeelights()
 
         socket.on('get.lights', (fn) => {
+            console.log('Socket on get lights')
             fn(lights)
         })
 
@@ -18,11 +19,7 @@ module.exports = function (socket) {
             console.log('-- Name :', light.getName())
             console.log('-- Model :', light.getModel())
 
-            light.getValues('power').then((values) => {
-                console.log('-- Values :', values)
-            })
-
-            light.turnOn('smooth', 1000)
+            light.turnOn('smooth', 500)
         })
 
     })
