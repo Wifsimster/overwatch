@@ -9,11 +9,9 @@ module.exports = function (socket) {
 
     console.log('Socket on get lights')
 
-    yeelightSearch.on('found', (fn) => {
+    yeelightSearch.on('found', () => {
 
         var lights = yeelightSearch.getYeelights()
-
-        fn(lights)
 
         lights.forEach((light) => {
             console.log('-- Id :', light.getId())
