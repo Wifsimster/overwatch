@@ -5,10 +5,6 @@ module.exports = function (socket) {
 
     const yeelightSearch = new YeelightSearch()
 
-    //    socket.on('get.lights', (fn) => {
-
-    console.log('Socket on get lights')
-
     yeelightSearch.on('found', () => {
 
         var lights = yeelightSearch.getYeelights()
@@ -20,6 +16,9 @@ module.exports = function (socket) {
 
             light.turnOn('smooth', 500)
         })
+        
+        socket.emit('get.lights', (fn) => {
+            fn(lights)
+        })
     })
-    //    })
 }
