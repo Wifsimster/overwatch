@@ -152,7 +152,7 @@
                 setInterval(() => { this.getNetatmoData() }, 300000)
             })
 
-            this.socket.on('found.lights', (ids) => {
+            this.socket.on('found.lights', (lights) => {
                 console.log('Lights', lights)
             })
 
