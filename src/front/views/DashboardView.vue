@@ -150,23 +150,9 @@
                 setInterval(() => { this.getNetatmoData() }, 300000)
             })
 
-            const yeelightSearch = new YeelightSearch()
-
-            yeelightSearch.on('found', () => {
-                console.log('Found lights')
-                var lights = yeelightSearch.getYeelights()
-                lights.forEach((light) => {
-                    console.log('-- Id :', light.getId())
-                    console.log('-- Name :', light.getName())
-                    console.log('-- Model :', light.getModel())
-
-                    light.turnOn('smooth', 500)
-                })
+            this.socket.on('get.lights', (lights) => {
+                console.log('Lights', lights)
             })
-
-            //            this.socket.on('get.lights', (lights) => {
-            //                console.log('Lights', lights)
-            //            })
 
         },
     }
