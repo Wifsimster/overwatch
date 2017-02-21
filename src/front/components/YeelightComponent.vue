@@ -1,8 +1,10 @@
 <template>
-<div v-for="light in lights">
-    <span class="id">{{ light.id }}</span>
-    <span class="model">{{ light.model }}</span>
-    <span class="name">{{ light.name }}</span>
+<div>
+    <div v-for="light in lights">
+        <span class="id">{{ light.id }}</span>
+        <span class="model">{{ light.model }}</span>
+        <span class="name">{{ light.name }}</span>
+    </div>
     </div>
 </template>
 
