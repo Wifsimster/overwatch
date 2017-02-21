@@ -9,7 +9,12 @@ module.exports = function (socket) {
     yeelightSearch.on('found', () => {
         console.log('Found lights !')
         lights = yeelightSearch.getYeelights()
-        socket.broadcast.emit('found.lights', lights)
+        
+        let object = []
+        for(var i = 0; i < lights.length ; i++) {
+            object.push({id: lights.getId()})
+        }        
+        socket.broadcast.emit('found.lights', object)
     })
 
     socket.on('get.lights', (fn) => {
