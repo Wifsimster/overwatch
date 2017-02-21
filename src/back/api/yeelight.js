@@ -12,9 +12,9 @@ module.exports = function (socket) {
             var ids = []
 
             for(var i = 0 ; i < lights.length; i++) {
-                console.log('-- Id :', light.getId())
-                console.log('-- Name :', light.getName())
-                console.log('-- Model :', light.getModel())
+                //console.log('-- Id :', light.getId())
+                //                console.log('-- Name :', light.getName())
+                //                console.log('-- Model :', light.getModel())
                 ids.push(lights[i].getId())
             }
             fn(ids)
