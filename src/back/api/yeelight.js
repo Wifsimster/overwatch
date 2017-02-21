@@ -10,6 +10,8 @@ module.exports = function (socket) {
 
             var lights = yeelightSearch.getYeelights()
             var ids = []
+            
+            console.log('Get lights...')
 
             for(var i = 0 ; i < lights.length; i++) {
                 //console.log('-- Id :', light.getId())
@@ -17,6 +19,9 @@ module.exports = function (socket) {
                 //                console.log('-- Model :', light.getModel())
                 ids.push(lights[i].getId())
             }
+            
+            console.log('IDS', ids)
+            
             fn(ids)
         })
     })
