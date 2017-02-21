@@ -8,21 +8,23 @@ module.exports = function (socket) {
     yeelightSearch.on('found', (fn) => {
 
         var lights = yeelightSearch.getYeelights()
-    
-        fn(lights)
-        
+
+        socket.on('get.lights', (fn) => {
+            fn(lights)
+        })
+
         lights.forEach((light) => {
             console.log('-- Id :', light.getId())
             console.log('-- Name :', light.getName())
             console.log('-- Model :', light.getModel())
-            
+
             light.getValues('power').then((values) => {
                 console.log('-- Values :', values)
             })
-            
+
             light.turnOn('smooth', 1000)
         })
-        
+
     })
 
 }
