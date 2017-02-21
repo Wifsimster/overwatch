@@ -62,7 +62,6 @@
     import NetatmoCo2 from '../components/netatmo/CO2Component.vue'
     import NetatmoPressure from '../components/netatmo/PressureComponent.vue'
     import Camera from '../components/CameraComponent.vue'
-    import YeelightSearch from 'yeelight-wifi'
 
     export default {
         data() {
