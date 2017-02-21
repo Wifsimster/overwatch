@@ -6,20 +6,21 @@ module.exports = function (socket) {
     const yeelightSearch = new YeelightSearch()
     var lights = []
 
-    socket.on('get.lights', (fn) => {
-        console.log('Get lights...')
-        yeelightSearch.on('found', () => {
-            console.log('Found lights !')
-            lights = yeelightSearch.getYeelights()
+    yeelightSearch.on('found', () => {
+        console.log('Found lights !')
+        lights = yeelightSearch.getYeelights()
+    })
 
+    socket.on('get.lights', (fn) => {
+        console.log('Getting lights...')
+        if(lights.length > 0) {
             var ids = []
             for(var i = 0 ; i < lights.length; i++) {
-                //console.log('-- Id :', light.getId())
-                //                console.log('-- Name :', light.getName())
-                //                console.log('-- Model :', light.getModel())
                 ids.push(lights[i].getId())
             }
-        })
+            fn(ids)
+        }
+        fn('No light for the moment !')
     })
 
     socket.on('get.light', (id) => {
