@@ -72,6 +72,6 @@ module.exports = (io) => {
     require('../api/location')(socket)
     require('../api/setting')(socket)
     require('../api/freebox')(socket)
-    require('../api/yeelight')()
+    require('../api/yeelight')(socket)
   })
 }

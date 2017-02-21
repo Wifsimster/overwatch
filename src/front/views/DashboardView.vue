@@ -142,6 +142,9 @@
       })
       this.socket.emit('get.untype.device', (devices) => {
         this.renderAlert(devices)
+      })
+      this.socket.emit('get.lights', (lights) => {
+        console.log('Lights', lights)
       })      
       this.socket.emit('get.setting', (settings) => {
         this.netatmoApi = new netatmo(settings.netatmo)

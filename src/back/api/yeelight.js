@@ -5,10 +5,12 @@ module.exports = function (socket) {
 
     const yeelightSearch = new YeelightSearch()
 
-    yeelightSearch.on('found', () => {
+    yeelightSearch.on('found', (fn) => {
 
         var lights = yeelightSearch.getYeelights()
-                
+    
+        fn(lights)
+        
         lights.forEach((light) => {
             console.log('-- Id :', light.getId())
             console.log('-- Name :', light.getName())
