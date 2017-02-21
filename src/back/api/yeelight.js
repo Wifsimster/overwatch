@@ -12,7 +12,7 @@ module.exports = function (socket) {
         
         let object = []
         for(var i = 0; i < lights.length ; i++) {
-            object.push({id: lights.getId()})
+            object.push({id: lights[i].getId()})
         }        
         socket.broadcast.emit('found.lights', object)
     })
