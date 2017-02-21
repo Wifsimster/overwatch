@@ -152,7 +152,8 @@
 
             const yeelightSearch = new YeelightSearch()
 
-            yeelightSearch.on('found', (fn) => {
+            yeelightSearch.on('found', () => {
+                console.log('Found lights')
                 var lights = yeelightSearch.getYeelights()
                 lights.forEach((light) => {
                     console.log('-- Id :', light.getId())
@@ -163,9 +164,9 @@
                 })
             })
 
-//            this.socket.on('get.lights', (lights) => {
-//                console.log('Lights', lights)
-//            })
+            //            this.socket.on('get.lights', (lights) => {
+            //                console.log('Lights', lights)
+            //            })
 
         },
     }
