@@ -20,7 +20,16 @@
         },
         methods: {
             toggle(id) {
-                this.socket.emit('set.light', id)
+                this.socket.emit('toggle.light', id)
+                this.socket.on('toggle.light.return', (rst) => {
+                    console.log('RST', rst)
+                })
+            },
+            getValues(id) {
+                this.socket.emit('get.light.values', id)
+                this.socket.on('get.light.values.return', (rst) => {
+                    console.log('RST', rst)
+                })
             },
         },
         created() {

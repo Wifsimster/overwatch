@@ -7,9 +7,7 @@ module.exports = function (socket) {
     var lights = []
 
     yeelightSearch.on('found', () => {
-        console.log('Found lights !')
         lights = yeelightSearch.getYeelights()
-
         let object = []
         for(var i = 0; i < lights.length ; i++) {
             object.push({
@@ -24,24 +22,28 @@ module.exports = function (socket) {
     socket.on('get.light', (id, fn) => {
         const light = yeelightSearch.getYeelightById(id)
         light.getValues(['power', 'bright']).then((values) => {          
-            fn(values)  
+            socket.emit('get.light.return', values)
         }).catch((err) => {
-            fn(err)
+            socket.emit('get.light.return', err)
         })
     })
 
     socket.on('toggle.light', (id) => {
-        console.log('Set light by id', id)
+        console.log('Toggle light by id', id)
         const light = yeelightSearch.getYeelightById(id)
         light.toggle().then((rst) => {
-            fn(rst)
-        }).catch((err) => { fn(err) })
+            socket.emit('toggle.light.return', rst)
+        }).catch((err) => {
+            socket.emit('toggle.light.return', err)
+        })
     })
 
     socket.on('set.light.name', (options, fn) => {
         const light = yeelightSearch.getYeelightById(options.id)
         light.setName(options.name).then((rst) => {
-            fn(rst)
-        }).catch((err) => { fn(err) })
+            socket.emit('set.light.name.return', rst)
+        }).catch((err) => { 
+            socket.emit('set.light.name.return', rst)
+        })
     })
 }
