@@ -4,6 +4,7 @@
         <span class="id">{{ light.id }}</span>
         <span class="model">{{ light.model }}</span>
         <span class="name">{{ light.name }}</span>
+        <a @click="toggle(light.id)">Toggle</a>
     </div>
     </div>
 </template>
@@ -14,16 +15,18 @@
         data() {
             return {
                 socket: io(),
+                lights: [],
             }
         },
         methods: {
-            toggleLight(id) {
+            toggle(id) {
                 this.socket.emit('set.light', id)
             },
         },
         created() {
             this.socket.on('found.lights', (lights) => {
                 console.log('Lights', lights)
+                this.lights = lights
             })
         }
     }
