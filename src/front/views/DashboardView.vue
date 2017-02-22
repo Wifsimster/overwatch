@@ -32,8 +32,10 @@
                 <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo && settings.netatmo.display !== 'false'">
                     <netatmo-pressure :device="netatmoDevice"></netatmo-pressure>
     </div>
-                <yeelight></yeelight>
-                
+                <div v-for="light in lights" class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
+                    <yeelight :light="light"></yeelight>
+    </div>
+
                 <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.cameras && settings.cameras.display !== 'false'">
                     <camera port="9962"></camera>
     </div>
@@ -71,6 +73,7 @@
             return {
                 socket: io(),
                 splitDevices: [],
+                lights: [],
                 settings: [],
                 netatmoDevice: {},
                 netatmoApi: {},
@@ -151,6 +154,9 @@
                 this.netatmoApi = new netatmo(settings.netatmo)
                 this.getNetatmoData()
                 setInterval(() => { this.getNetatmoData() }, 300000)
+            })
+            this.socket.on('found.lights', (lights) => {
+                this.lights = lights
             })
         },
     }
