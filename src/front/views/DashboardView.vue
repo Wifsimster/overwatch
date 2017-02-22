@@ -32,9 +32,8 @@
                 <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.netatmo && settings.netatmo.display !== 'false'">
                     <netatmo-pressure :device="netatmoDevice"></netatmo-pressure>
     </div>
-                <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6">
-                    <yeelight></yeelight>
-    </div>
+                <yeelight></yeelight>
+                
                 <div class="pure-u-1 pure-u-sm-1-2 pure-u-md-1-4 pure-u-lg-1-6" v-if="settings.cameras && settings.cameras.display !== 'false'">
                     <camera port="9962"></camera>
     </div>

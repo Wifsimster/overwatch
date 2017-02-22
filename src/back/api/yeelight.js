@@ -19,22 +19,21 @@ module.exports = function (socket) {
         socket.broadcast.emit('found.lights', object)
     })
 
-    socket.on('get.light', (id, fn) => {
+    socket.on('get.light.values', (id, fn) => {
         const light = yeelightSearch.getYeelightById(id)
         light.getValues(['power', 'bright']).then((values) => {          
             socket.emit('get.light.return', values)
         }).catch((err) => {
-            socket.emit('get.light.return', err)
+            socket.emit('get.light.error', err)
         })
     })
 
     socket.on('toggle.light', (id) => {
-        console.log('Toggle light by id', id)
         const light = yeelightSearch.getYeelightById(id)
         light.toggle().then((rst) => {
             socket.emit('toggle.light.return', rst)
         }).catch((err) => {
-            socket.emit('toggle.light.return', err)
+            socket.emit('toggle.light.error', err)
         })
     })
 
