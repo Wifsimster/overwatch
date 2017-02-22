@@ -9,7 +9,13 @@
 </template>
 
 <script>
+    import io from 'socket.io-client'
     export default {
+        data() {
+            return {
+                socket: io(),
+            }
+        },
         methods: {
             toggleLight(id) {
                 this.socket.emit('set.light', id)
@@ -18,9 +24,6 @@
         created() {
             this.socket.on('found.lights', (lights) => {
                 console.log('Lights', lights)
-                if(lights) {
-                    this.socket.emit('get.light', lights[0].id)
-                }
             })
         }
     }
