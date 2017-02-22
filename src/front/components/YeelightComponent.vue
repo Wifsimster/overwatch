@@ -5,6 +5,7 @@
         <span class="model">{{ light.model }}</span>
         <span class="name">{{ light.name }}</span>
         <a @click="toggle(light.id)">Toggle</a>
+        <a @click="getValues(light.id)">Get values</a>
     </div>
     </div>
 </template>
