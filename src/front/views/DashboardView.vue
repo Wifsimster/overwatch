@@ -161,15 +161,13 @@
             })
             
             this.socket.on('found.light', (light) => {
-                console.log('New light', light)
-                let exist = false
+                let exist = []
                 exist = this.lights.filter((li) => {
                     if(li.id === light.id) {
                         return true    
                     }
                 })
-                console.log('Exist ?', exist)
-                if(!exist) {
+                if(exist.length === 0) {
                     console.log('Add new light to array')
                     this.lights.push(light)
                 }
