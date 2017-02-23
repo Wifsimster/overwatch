@@ -6,6 +6,7 @@ module.exports = function (socket) {
     const yeelightSearch = new YeelightSearch()
     var lights = []
 
+    try {
     yeelightSearch.on('found', () => {
         lights = yeelightSearch.getYeelights()
         let object = []
@@ -18,6 +19,9 @@ module.exports = function (socket) {
         }        
         socket.broadcast.emit('found.lights', object)
     })
+    } catch(err) {
+        console.error('Error: ', err)
+    }
 
     socket.on('get.light.values', (id, fn) => {
         const light = yeelightSearch.getYeelightById(id)
