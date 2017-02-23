@@ -155,8 +155,17 @@
                 this.getNetatmoData()
                 setInterval(() => { this.getNetatmoData() }, 300000)
             })
-            this.socket.on('found.lights', (lights) => {
-                this.lights = lights
+            this.socket.on('found.light', (light) => {
+                console.log('New light', light)
+                let exist = false
+                exist = this.lights.map((li) => {
+                    if(li.id === light.id) {
+                        return true    
+                    }
+                })
+                if(!exist) {
+                    this.lights.push(light)
+                }
             })
         },
     }

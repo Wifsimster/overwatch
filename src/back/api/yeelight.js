@@ -4,23 +4,17 @@ const yeelightSearch = new YeelightSearch()
 
 module.exports = function (socket) {
 
-    yeelightSearch.on('found', (lightBulb) => {
+    yeelightSearch.on('found', (light) => {
 
-        //        const lights = yeelightSearch.getYeelights()
+        console.log('Light found', light.getId())
 
-        console.log('Light found', lightBulb.getId())
+        let object = {
+            id: light.getId(),
+            model: light.getModel(),
+            name: light.getName()
+        }
 
-        //        let object = []
-
-        //        for(var i = 0; i < lights.length ; i++) {
-        //            object.push({
-        //                id: lights[i].getId(),
-        //                model: lights[i].getModel(),
-        //                name: lights[i].getName()
-        //            })
-        //        }        
-
-        //socket.broadcast.emit('found.lights', object)
+        socket.broadcast.emit('found.light', object)
     })
 
     //    socket.on('get.light.values', (id, fn) => {
