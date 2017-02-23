@@ -163,7 +163,9 @@
                         return true    
                     }
                 })
+                console.log('Exist ?', exist)
                 if(!exist) {
+                    console.log('Add new light to array')
                     this.lights.push(light)
                 }
             })
