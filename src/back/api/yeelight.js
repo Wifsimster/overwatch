@@ -5,9 +5,8 @@ module.exports = function (socket) {
 
     try {
         const yeelightSearch = new YeelightSearch()
-        const lights = []
         yeelightSearch.on('found', () => {
-            lights = yeelightSearch.getYeelights()
+            const lights = yeelightSearch.getYeelights()
             let object = []
             for(var i = 0; i < lights.length ; i++) {
                 object.push({
