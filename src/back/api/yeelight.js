@@ -4,22 +4,22 @@ const YeelightSearch = require('yeelight-wifi')
 module.exports = function (socket) {
 
     const yeelightSearch = new YeelightSearch()
-    
+
     yeelightSearch.on('found', () => {
-        
+
         const lights = yeelightSearch.getYeelights()
-        let object = []
-        
-        for(var i = 0; i < lights.length ; i++) {
-            object.push({
-                id: lights[i].getId(),
-                model: lights[i].getModel(),
-                name: lights[i].getName()
-            })
-        }        
-        
+        //        let object = []
+
+        //        for(var i = 0; i < lights.length ; i++) {
+        //            object.push({
+        //                id: lights[i].getId(),
+        //                model: lights[i].getModel(),
+        //                name: lights[i].getName()
+        //            })
+        //        }        
+
         //socket.broadcast.emit('found.lights', object)
-    })
+        })
 
     socket.on('get.light.values', (id, fn) => {
         const yeelightSearch = new YeelightSearch()
