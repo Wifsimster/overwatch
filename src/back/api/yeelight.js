@@ -28,7 +28,7 @@ module.exports = function (socket) {
     socket.on('light.getValues', (id) => {
         const light = yeelightSearch.getYeelightById(id)
         if(light) {
-            light.getValues(['power', 'bright']).then((values) => {          
+            light.getValues(['power']).then((values) => {          
                 socket.emit('light.getValues.return', values)
             }).catch((err) => {
                 socket.emit('light.getValues.error', err)
