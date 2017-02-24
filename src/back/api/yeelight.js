@@ -13,6 +13,19 @@ module.exports = function (socket) {
         socket.broadcast.emit('found.light', object)
     })
 
+    socket.on('get.lights', () => {
+        const lights = yeelightSearch.getYeelights()
+        let list = []
+        lights.map((light) => {
+            list.push({
+                id: light.getId(),
+                model: light.getModel(),
+                name: light.getName()
+            })
+        })
+        socket.emit('get.lights.return', list)
+    })
+
     socket.on('get.light.values', (id) => {
         const light = yeelightSearch.getYeelightById(id)
         light.getValues(['power', 'bright']).then((values) => {          
