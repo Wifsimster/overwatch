@@ -49,11 +49,11 @@
                 })
             },
             getValues(id) {
-                this.socket.emit('light.get.values', id)
-                this.socket.on('light.get.values.return', (rst) => {
+                this.socket.emit('light.getValues', id)
+                this.socket.on('light.getValues.return', (rst) => {
                     console.log('Get values RST', rst)
                 })
-                this.socket.on('light.get.values.error', (err) => {
+                this.socket.on('light.getValues.error', (err) => {
                     this.$store.commit('setAlert', {type: 'error', message: err})
                 })
             },
