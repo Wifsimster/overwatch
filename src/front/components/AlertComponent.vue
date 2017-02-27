@@ -4,7 +4,7 @@
         <transition name="expand">
             <div v-if="$store.state.alert.message.length > 0">
                 <div class="alert">
-                    <a class="right" @click="close">x</a>
+                    <a class="pull-right" @click="close">x</a>
                     <p>{{ $store.state.alert.message }}</p>
     </div>
     </div>
@@ -28,9 +28,4 @@
 <style lang="sass" scoped>
 @import '../sass/alert';
 @import '../sass/transition';
-
-a.right {
-    cursor: pointer;
-    float: right;
-    }
 </style>

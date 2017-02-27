@@ -17,8 +17,8 @@ const mutations = {
 
   resetAlert (state) {
     state = {
-      type: '',
-      message: '',
+      type: null,
+      message: null,
     }
   },
 }
