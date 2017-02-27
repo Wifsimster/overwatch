@@ -44,13 +44,13 @@
             turnOn(id) {
                 this.socket.emit('light.turnOn', id)
                 this.socket.on('light.turnOn.return', (rst) => {
-                    console.log('turnOn RST', rst)
+                    this.state = !this.state
                 })
             },
             turnOff(id) {
                 this.socket.emit('light.turnOff', id)
                 this.socket.on('light.turnOff.return', (rst) => {
-                    console.log('turnOff RST', rst)
+                    this.state = !this.state
                 })
             },
             getValues(id) {
