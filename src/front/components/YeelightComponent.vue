@@ -1,20 +1,25 @@
 <template>
 <div>
     <div class="device">
-        <div class="image"><img :src="icon"></div>
+        <div class="image" v-if="state" @click="turnOn(light.id)">
+            <img :src="icons.lightOn">
+    </div>
+        <div class="image" v-if="!state" @click="turnOff(light.id)">
+            <img :src="icons.lightOff">
+    </div>
         <span class="data"></span>
         <span class="name">{{ light.id }}</span>
-        <span class="location">{{ light.model }}</span>
-        <a @click="toggle(light.id)">Toggle</a>
-        <a @click="turnOn(light.id)">On</a>
-        <a @click="turnOff(light.id)">Off</a>
+        <!--        <span class="location">{{ light.model }}</span>-->
+        <!--        <a @click="toggle(light.id)">Toggle</a>-->
+
         <a @click="getValues(light.id)">Get values</a>
     </div>
     </div>
 </template>
 
 <script>
-    import luminosity from '../assets/luminosity.png'
+    import lightOn from '../assets/bulb.png'
+    import lightOff from '../assets/bulb.png'
     import io from 'socket.io-client'
     export default {
         props: {
@@ -23,7 +28,8 @@
         data() {
             return {
                 socket: io(),
-                icon: luminosity,
+                icons: [ lightOn, lightOff ],
+                state: false,
             }
         },
         methods: {
