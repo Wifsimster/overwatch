@@ -1,18 +1,14 @@
 <template>
 <div>
-    <div class="device">
-        <div class="image" v-if="state" @click="turnOn(light.id)">
+    <div class="yeelight" :class="{ 'red': error }">
+        <span class="led" v-if="state" title="On"></span>
+        <div class="image" v-if="state" @click="turnOff()">
             <img :src="bulb" class="on">
     </div>
-        <div class="image" v-if="!state" @click="turnOff(light.id)">
+        <div class="image" v-if="!state" @click="turnOn()">
             <img :src="bulb">
     </div>
-        <span class="data"></span>
-        <span class="name">{{ light.id }}</span>
-        <!--        <span class="location">{{ light.model }}</span>-->
-        <!--        <a @click="toggle(light.id)">Toggle</a>-->
-
-        <a @click="getValues(light.id)">Get values</a>
+        <span class="location">{{ name }}</span>
     </div>
     </div>
 </template>
@@ -27,43 +23,66 @@
         data() {
             return {
                 socket: io(),
-                bulb: bulb,
                 state: false,
+                bulb: bulb,
+                name: null,
+                error: false,
             }
         },
+        created() {
+            switch(this.light.id) {
+                case '0x00000000033601d3': this.name = "Salon" 
+                break
+                case '0x0000000003360d2c': this.name = "Couloir" 
+                break
+            }
+            this.turnOff()
+        },
         methods: {
-            toggle(id) {
-                this.socket.emit('light.toggle', id)
+            toggle() {
+                this.socket.emit('light.toggle', this.light.id)
                 this.socket.on('light.toggle.return', (rst) => {
-                    console.log('Toggle RST', rst)
+                    this.state = !this.state
                 })
                 this.socket.on('light.toggle.error', (err) => {
                     this.$store.commit('setAlert', {type: 'error', message: err})
+                    this.error = true
                 })
             },
-            turnOn(id) {
-                this.socket.emit('light.turnOn', id)
+            turnOn() {
+                this.socket.emit('light.turnOn', this.light.id)
                 this.socket.on('light.turnOn.return', (rst) => {
-                    this.state = !this.state
+                    this.state = true
+                })
+                this.socket.on('light.turnOn.error', (err) => {
+                    this.$store.commit('setAlert', {type: 'error', message: err})
+                    this.error = true
                 })
             },
-            turnOff(id) {
-                this.socket.emit('light.turnOff', id)
+            turnOff() {
+                this.socket.emit('light.turnOff', this.light.id)
                 this.socket.on('light.turnOff.return', (rst) => {
-                    this.state = !this.state
+                    this.state = false
+                })
+                this.socket.on('light.turnOff.error', (err) => {
+                    this.$store.commit('setAlert', {type: 'error', message: err})
+                    this.error = true
                 })
             },
-            getValues(id) {
-                this.socket.emit('light.getValues', id)
+            getValues() {
+                this.socket.emit('light.getValues', this.light.id)
                 this.socket.on('light.getValues.return', (rst) => {
                     console.log('Get values RST', rst)
                 })
                 this.socket.on('light.getValues.error', (err) => {
                     this.$store.commit('setAlert', {type: 'error', message: err})
+                    this.error = true
                 })
             },
         },
     }
 </script>
 
-<style lang="sass"></style>
+<style lang="sass" scoped>
+@import '../sass/yeelight';
+</style>

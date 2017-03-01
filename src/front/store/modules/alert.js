@@ -1,31 +1,32 @@
 const state = {
-  type: '',
-  message: '',
+    type: null,
+    message: null,
 }
 
 const getters = {
-  alert: state => state.alert,
+    type: state => state.type,
+    message: state => state.message,
 }
 
-const actions = {}
+const actions = {
+    setAlert({ commit, state }, data) { commit('setAlert', data) },
+    resetAlert({ commit, state }) { commit('resetAlert') }
+}
 
 const mutations = {    
-  setAlert (state, data) {
-    state.type = data.type
-    state.message = data.message
-  },
-
-  resetAlert (state) {
-    state = {
-      type: null,
-      message: null,
-    }
-  },
+    setAlert (state, data) {
+        state.type = data.type
+        state.message = data.message
+    },
+    resetAlert (state) {
+        state.type = null
+        state.message = null
+    },
 }
 
 export default {
-  state,
-  getters,
-  actions,
-  mutations
+    state,
+    getters,
+    actions,
+    mutations
 }

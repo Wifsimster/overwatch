@@ -25,5 +25,7 @@
 </script>
 
 <style lang="sass">
-@import './sass/_global.scss'
+@import './sass/global';
+@import './sass/transition';
+@import './sass/led';
 </style>

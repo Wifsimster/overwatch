@@ -1,0 +1,10 @@
+@import 'colors';
+
+.led {
+    font-size: 14px;
+    line-height: 14px;
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    background-color: $amber;
+}

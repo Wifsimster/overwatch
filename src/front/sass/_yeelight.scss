@@ -2,7 +2,7 @@
 
 $height: 116px;
 
-.device {
+.yeelight {
     position: relative;
     background-color: $mine-shaft-app;
     margin: 5px;
@@ -16,30 +16,18 @@ $height: 116px;
         img {
             height: calc(100% + 15px);
             overflow: hidden;
+            cursor: pointer;
         }
     }
-    span {
-        display: block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        position: relative;
-        padding: 2px 0;
-    }
-    .data {
-        color: $gallery;
-        font-size: 38px;
-        top: 0;
-        right: 0;
+    .led {
+        position: absolute;
+        top: 10px;
+        right: 10px;
     }
     .location {
         color: $dusty-gray;
-    }
-    .date {   
         position: absolute;
-        bottom: 5px;
-        right: 5px;
-        font-size: 12px;
+        bottom: 10px;
     }
     &.red {
         border: 1px solid $red;
