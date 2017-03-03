@@ -52,3 +52,4 @@ Temporary Items
 src/back/db/database.sqlite
 src/back/db/*
 src/back/db/database.sqlite
+src/back/db/database.sqlite
