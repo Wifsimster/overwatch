@@ -10,6 +10,7 @@ import TypeView from '../views/TypeView.vue'
 import LocationView from '../views/LocationView.vue'
 import BackupView from '../views/BackupView.vue'
 import SettingsView from '../views/SettingsView.vue'
+import ScenarioView from '../views/ScenarioView.vue'
 
 export default new Router({
     //  mode: 'history',
@@ -22,5 +23,6 @@ export default new Router({
         { path: '/locations', component: LocationView },
         { path: '/backup', component: BackupView },
         { path: '/settings', component: SettingsView },
+        { path: '/scenario', component: ScenarioView },
     ]
 })

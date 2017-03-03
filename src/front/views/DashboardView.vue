@@ -165,7 +165,7 @@
                 if(exist.length === 0) { this.lights.push(light) }
             })
             this.socket.emit('light.getAll')
-            this.socket.on('light.getAll.return', (rst) => { this.lights = rst })
+            this.socket.on('light.getAll.result', (rst) => { this.lights = rst })
         },
     }
 </script>

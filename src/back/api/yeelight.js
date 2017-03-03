@@ -22,7 +22,7 @@ module.exports = function (socket) {
                 name: light.getName()
             })
         })
-        socket.emit('light.getAll.return', list)
+        socket.emit('light.getAll.result', list)
     })
 
     socket.on('light.getValues', (id) => {
@@ -30,7 +30,7 @@ module.exports = function (socket) {
         if(light) {
             light.getValues(["power", "bright"]).then((values) => {
                 console.log('Values', values)
-                socket.emit('light.getValues.return', values)
+                socket.emit('light.getValues.result', values)
             }).catch((err) => {
                 socket.emit('light.getValues.error', err)
             })
@@ -42,7 +42,7 @@ module.exports = function (socket) {
         if(light) {
             console.log('Light to toggle', light.getId())
             light.toggle().then((rst) => {
-                socket.emit('light.toggle.return', rst)
+                socket.emit('light.toggle.result', rst)
             }).catch((err) => {
                 socket.emit('light.toggle.error', err)
             })
@@ -53,7 +53,7 @@ module.exports = function (socket) {
         const light = yeelightSearch.getYeelightById(id)
         if(light) {
             light.turnOn().then((rst) => {
-                socket.emit('light.turnOn.return', rst)
+                socket.emit('light.turnOn.result', rst)
             }).catch((err) => {
                 socket.emit('light.turnOn.error', err)
             })
@@ -64,7 +64,7 @@ module.exports = function (socket) {
         const light = yeelightSearch.getYeelightById(id)
         if(light) {
             light.turnOff().then((rst) => {
-                socket.emit('light.turnOff.return', rst)
+                socket.emit('light.turnOff.result', rst)
             }).catch((err) => {
                 socket.emit('light.turnOff.error', err)
             })
@@ -75,9 +75,9 @@ module.exports = function (socket) {
         const light = yeelightSearch.getYeelightById(options.id)
         if(light) {
             light.setName(options.name).then((rst) => {
-                socket.emit('light.setName.return', rst)
+                socket.emit('light.setName.result', rst)
             }).catch((err) => { 
-                socket.emit('light.setName.return', rst)
+                socket.emit('light.setName.error', rst)
             })
         }
     })
@@ -86,9 +86,9 @@ module.exports = function (socket) {
         const light = yeelightSearch.getYeelightById(options.id)
         if(light) {
             light.setColorTemperature(options.temperature).then((rst) => {
-                socket.emit('light.setColorTemperature.return', rst)
+                socket.emit('light.setColorTemperature.result', rst)
             }).catch((err) => { 
-                socket.emit('light.setColorTemperature.return', rst)
+                socket.emit('light.setColorTemperature.error', rst)
             })
         }
     })
@@ -97,9 +97,9 @@ module.exports = function (socket) {
         const light = yeelightSearch.getYeelightById(options.id)
         if(light) {
             light.setBrightness(options.brightness).then((rst) => {
-                socket.emit('light.setBrightness.return', rst)
+                socket.emit('light.setBrightness.result', rst)
             }).catch((err) => { 
-                socket.emit('light.setBrightness.return', rst)
+                socket.emit('light.setBrightness.error', rst)
             })
         }
     })
@@ -108,9 +108,9 @@ module.exports = function (socket) {
         const light = yeelightSearch.getYeelightById(options.id)
         if(light) {
             light.setRGB(options.hex).then((rst) => {
-                socket.emit('light.setRGB.return', rst)
+                socket.emit('light.setRGB.result', rst)
             }).catch((err) => { 
-                socket.emit('light.setRGB.return', rst)
+                socket.emit('light.setRGB.error', rst)
             })
         }
     })
@@ -119,9 +119,9 @@ module.exports = function (socket) {
         const light = yeelightSearch.getYeelightById(options.id)
         if(light) {
             light.setHSV(options.hue, options.staturation).then((rst) => {
-                socket.emit('light.setHSV.return', rst)
+                socket.emit('light.setHSV.result', rst)
             }).catch((err) => { 
-                socket.emit('light.setHSV.return', rst)
+                socket.emit('light.setHSV.error', rst)
             })
         }
     })
