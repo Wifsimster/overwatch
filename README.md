@@ -1,6 +1,9 @@
 # Overwatch
 Personal home automation with real time messaging for Raspberry Pi 3
 
+## Alpha version
+Work in progress... you can check out my work and ask for new feature leater.
+
 Current functions:
 - Date & time
 - Freebox
