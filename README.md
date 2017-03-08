@@ -1,20 +1,21 @@
 # Overwatch
-Personal Home Automation for Raspberry Pi 3
+Personal home automation with real time messaging for Raspberry Pi 3
 
 Current functions:
 - Date & time
-- ESP8266 sensors
-- Freebox 
+- Freebox
 - Netatmo
-- Xiaomi Camera
+- Custom ESP8266 sensors
+- Xiaomi Camera (testing)
+- Yeelight (in development)
 
 Powered with :
 - Vue.js 2.x
-- Webpack
+- Webpack 2.x
 - MQTT
 - Socket.io
 - SQLITE
-- RTSP stream
+- Custom RTSP stream wrapper
 
 ## Dashboard
 
