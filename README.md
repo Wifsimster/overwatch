@@ -4,7 +4,7 @@ Personal home automation with real time messaging for Raspberry Pi 3
 ## Alpha version
 Work in progress... you can check out my work and ask for new feature leater.
 
-Current functions:
+## Functions
 - Date & time
 - Freebox
 - Netatmo
@@ -12,7 +12,7 @@ Current functions:
 - Xiaomi Camera (testing)
 - Yeelight (in development)
 
-Powered with :
+## Powered
 - Vue.js 2.x
 - Webpack 2.x
 - MQTT
