@@ -32,7 +32,7 @@ module.exports = function (socket) {
                 console.log('Values', values)
                 socket.emit('light.getValues.result', values)
             }).catch((err) => {
-                socket.emit('light.getValues.error', err)
+                socket.emit('light.getValues.error', new errorHandler(err))
             })
         }
     })
@@ -44,7 +44,7 @@ module.exports = function (socket) {
             light.toggle().then((rst) => {
                 socket.emit('light.toggle.result', rst)
             }).catch((err) => {
-                socket.emit('light.toggle.error', err)
+                socket.emit('light.toggle.error', new errorHandler(err))
             })
         }
     })
@@ -55,7 +55,7 @@ module.exports = function (socket) {
             light.turnOn().then((rst) => {
                 socket.emit('light.turnOn.result', rst)
             }).catch((err) => {
-                socket.emit('light.turnOn.error', err)
+                socket.emit('light.turnOn.error', new errorHandler(err))
             })
         }
     })
@@ -66,7 +66,7 @@ module.exports = function (socket) {
             light.turnOff().then((rst) => {
                 socket.emit('light.turnOff.result', rst)
             }).catch((err) => {
-                socket.emit('light.turnOff.error', err)
+                socket.emit('light.turnOff.error', new errorHandler(err))
             })
         }
     })
@@ -77,7 +77,7 @@ module.exports = function (socket) {
             light.setName(options.name).then((rst) => {
                 socket.emit('light.setName.result', rst)
             }).catch((err) => { 
-                socket.emit('light.setName.error', rst)
+                socket.emit('light.setName.error', new errorHandler(err))
             })
         }
     })
@@ -88,7 +88,7 @@ module.exports = function (socket) {
             light.setColorTemperature(options.temperature).then((rst) => {
                 socket.emit('light.setColorTemperature.result', rst)
             }).catch((err) => { 
-                socket.emit('light.setColorTemperature.error', rst)
+                socket.emit('light.setColorTemperature.error', new errorHandler(err))
             })
         }
     })
@@ -99,7 +99,7 @@ module.exports = function (socket) {
             light.setBrightness(options.brightness).then((rst) => {
                 socket.emit('light.setBrightness.result', rst)
             }).catch((err) => { 
-                socket.emit('light.setBrightness.error', rst)
+                socket.emit('light.setBrightness.error', new errorHandler(err))
             })
         }
     })
@@ -110,7 +110,7 @@ module.exports = function (socket) {
             light.setRGB(options.hex).then((rst) => {
                 socket.emit('light.setRGB.result', rst)
             }).catch((err) => { 
-                socket.emit('light.setRGB.error', rst)
+                socket.emit('light.setRGB.error', new errorHandler(err))
             })
         }
     })
@@ -121,7 +121,7 @@ module.exports = function (socket) {
             light.setHSV(options.hue, options.staturation).then((rst) => {
                 socket.emit('light.setHSV.result', rst)
             }).catch((err) => { 
-                socket.emit('light.setHSV.error', rst)
+                socket.emit('light.setHSV.error', new errorHandler(err))
             })
         }
     })

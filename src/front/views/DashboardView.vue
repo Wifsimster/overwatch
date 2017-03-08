@@ -138,18 +138,23 @@
             this.socket.emit('get.setting', (settings) => {
                 this.settings = settings
             })
-            this.socket.emit('get.device', (devices) => {
-                this.renderDevices(devices)
-            })      
-            this.socket.on('get.device', (devices) => {
-                this.renderDevices(devices)
-                this.socket.emit('get.untype.device', (devices) => {
-                    this.renderAlert(devices)
+
+            this.socket.emit('device.getAll', () => {
+                this.socket.on('device.getAll.result', (device) => {
+                    this.renderDevices(devices)
                 })
             })
-            this.socket.emit('get.untype.device', (devices) => {
-                this.renderAlert(devices)
-            })      
+
+            //            this.socket.on('device.get', (devices) => {
+            //                this.renderDevices(devices)
+            //                this.socket.emit('get.untype.device', (devices) => {
+            //                    this.renderAlert(devices)
+            //                })
+
+            //            this.socket.emit('get.untype.device', (devices) => {
+            //                this.renderAlert(devices)
+            //            })      
+            
             this.socket.emit('get.setting', (settings) => {
                 this.netatmoApi = new netatmo(settings.netatmo)
                 this.getNetatmoData()
