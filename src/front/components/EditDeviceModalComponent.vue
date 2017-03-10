@@ -88,10 +88,12 @@
             })
         },
         created() {
-            this.socket.emit('get.type', (types) => {
+            this.socket.emit('type.getAll')
+            this.socket.on('type.getAll.result', (types) => {
                 this.types = types
             })
-            this.socket.emit('get.location', (locations) => {
+            this.socket.emit('location.getAll')
+            this.socket.on('location.getAll.result', (locations) => {
                 this.locations = locations
             })
         },
@@ -107,7 +109,7 @@
                 this.device.types = types
             },
             edit() {
-                this.socket.emit('update.device', this.device)
+                this.socket.emit('device.update', this.device)
                 this.$store.commit('closeModal')
             },
             close() {
@@ -118,8 +120,6 @@
 </script>
 
 <style lang="sass" scoped>
-@import '../sass/modal';
-
 .multiselect {
     display: inline-block;
     width: 250px;

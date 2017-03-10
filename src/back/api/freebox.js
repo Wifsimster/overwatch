@@ -7,72 +7,92 @@ const app_token = "3kYbyFKbG3GUi0LLV6C8HqPx8kwhbPfiXNI8fCW6pt4v57GmtpnAatkOXVwNj
 const track_id = 7
 const app_id = 'fr.freebox.overwatch'
 
-module.exports = function(socket) {
+module.exports = (socket) => {
 
-  socket.on('get.freebox.info', (fn) => {
-    request(baseURL+'/api_version', (err, res, body) => {
-      if(!err && res.statusCode == 200) {
-        fn(JSON.parse(body))
-      } else {
-        fn(err)
-      }
+    socket.on('freebox.getOne', () => {
+        request(baseURL+'/api_version', (err, res, body) => {
+            if(!err && res.statusCode === 200) {
+                socket.emit('freebox.getOne.result', JSON.parse(body))
+            } else {
+                socket.emit('freebox.getOne.error', new errorHandler(err))
+            }
+        })
     })
-  })
 
-  socket.on('request.freebox.autorize', (fn) => {
-    const data = {
-      app_id: app_id,
-      app_name: 'Overwatch',
-      app_version: '1.0.0',
-      device_name: 'Overwatch'
-    }
-    request.post({
-      headers: { 'Content-Type': 'application/json' },
-      url: baseURL + 'login/authorize',
-      form: JSON.stringify({
-        app_id: "fr.freebox.overwatch",
-        app_name: "Overwatch",
-        app_version: "0.1",
-        device_name: "Overwatch"
-      }),
-    }, (err, res, body) => {
-      fn(JSON.parse(body))
+    socket.on('freebox.setAutorize', () => {
+        const data = {
+            app_id: app_id,
+            app_name: 'Overwatch',
+            app_version: '1.0.0',
+            device_name: 'Overwatch'
+        }
+        request.post({
+            headers: { 'Content-Type': 'application/json' },
+            url: baseURL + 'login/authorize',
+            form: JSON.stringify({
+                app_id: "fr.freebox.overwatch",
+                app_name: "Overwatch",
+                app_version: "0.1",
+                device_name: "Overwatch"
+            }),
+        }, (err, res, body) => {
+            if(!err && res.statusCode === 200) {
+                socket.emit('freebox.setAutorize.result', JSON.parse(body))
+            } else {
+                socket.emit('freebox.setAutorize.error', new errorHandler(err))
+            }
+        })
     })
-  })
 
-  socket.on('get.freebox.autorize', (fn) => {
-    request(baseURL+'login/authorize/'+track_id, (err, res, body) => {
-      fn(JSON.parse(body))
+    socket.on('freebox.getAutorize', (fn) => {
+        request(baseURL+'login/authorize/'+track_id, (err, res, body) => {
+            if(!err && res.statusCode === 200) {
+                socket.emit('freebox.getAutorize.result', JSON.parse(body))
+            } else {
+                socket.emit('freebox.getAutorize.error', new errorHandler(err))
+            }
+        })
     })
-  })
 
-  socket.on('get.freebox.login', (fn) => {
-    request(baseURL+'login', (err, res, body) => {
-      fn(JSON.parse(body))
+    socket.on('freebox.login', (fn) => {
+        request(baseURL+'login', (err, res, body) => {
+            if(!err && res.statusCode === 200) {
+                socket.emit('freebox.login.result', JSON.parse(body))
+            } else {
+                socket.emit('freebox.login.error', new errorHandler(err))
+            }
+        })
     })
-  })
 
-  socket.on('open.freebox.session', (data, fn) => {    
-    const password = crypto.createHmac('sha1', app_token).update(data.challenge).digest('hex')
-    request.post({
-      headers: { 'Content-Type': 'application/json' },
-      url: baseURL+'login/session',
-      form: JSON.stringify({
-        app_id: app_id,
-        password: password
-      })
-    }, (err, res, body) => {
-      fn(JSON.parse(body))
+    socket.on('freebox.openSession', (data) => {    
+        const password = crypto.createHmac('sha1', app_token).update(data.challenge).digest('hex')
+        request.post({
+            headers: { 'Content-Type': 'application/json' },
+            url: baseURL+'login/session',
+            form: JSON.stringify({
+                app_id: app_id,
+                password: password
+            })
+        }, (err, res, body) => {
+            if(!err && res.statusCode === 200) {
+                socket.emit('freebox.openSession.result', JSON.parse(body))
+            } else {
+                socket.emit('freebox.openSession.error', new errorHandler(err))
+            }
+        })
     })
-  })
 
-  socket.on('get.freebox.connection', (data, fn) => {
-    request({
-      headers: { 'X-Fbx-App-Auth': data.token },
-      url: baseURL+'connection'
-    }, (err, res, body) => {
-      fn(JSON.parse(body))
+    socket.on('freebox.connection', (data) => {
+        request({
+            headers: { 'X-Fbx-App-Auth': data.token },
+            url: baseURL+'connection'
+        }, (err, res, body) => {
+            if(!err && res.statusCode === 200) {
+                socket.emit('freebox.connection.result', JSON.parse(body))
+            } else {
+                socket.emit('freebox.connection.error', new errorHandler(err))
+            }
+        })
     })
-  })
 
 }

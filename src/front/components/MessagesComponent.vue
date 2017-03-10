@@ -59,8 +59,7 @@
   }  
 </script>
 
-<style lang="sass">
-@import '../sass/transition';
+<style lang="sass" scoped>
 .messages {
   width: 100%;
   max-height: 650px;

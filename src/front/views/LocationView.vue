@@ -42,29 +42,27 @@
             }
         },
         created() {
-            this.socket.emit('get.location', (locations) => {
-                this.locations = locations
-            })
-            this.socket.on('get.location', (locations) => {
+            this.socket.emit('location.getAll')
+            this.socket.on('location.getAll.result', (locations) => {
                 this.locations = locations
             })
         },
         methods: {
             submit() {
-                this.socket.emit('updateAll.location', this.locations)
+                this.socket.emit('location.updateAll', this.locations)
                 this.edit = false
             },
             add() {
                 this.locations.push({})
             },
             remove(location) {
-                this.socket.emit('remove.location', location)
+                this.socket.emit('location.remove', location)
             },
         },
     }  
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '../sass/transition';
 
 .add {

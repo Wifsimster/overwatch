@@ -5,11 +5,18 @@ const file = 'config/default.json'
 
 module.exports = (socket) => {
 
-    socket.on('get.setting', (fn) => {
-        jsonfile.readFile(file, (err, obj) => { fn(obj.settings) })
+    socket.on('setting.getAll', () => {
+        jsonfile.readFile(file, (err, obj) => {
+            if(!err) {
+            socket.emit('setting.getAll.result', obj.settings)
+            } else {
+                socket.emit('setting.getAll.error', new errorHandler(err))
+            }
+        })
     })
 
-    socket.on('updateAll.setting', (settings) => {        
+    socket.on('setting.update', (settings) => {        
         jsonfile.writeFile(file, { settings: settings })
+        socket.emit('setting.update.result')
     })
 }

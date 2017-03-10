@@ -38,22 +38,20 @@
             }
         },
         created() {
-            this.socket.emit('get.type', (types) => {
-                this.types = types
-            })
-            this.socket.on('get.type', (types) => {
+            this.socket.emit('type.getAll')
+            this.socket.on('type.getAll.result', (types) => {
                 this.types = types
             })
         },
         methods: {
             submit() {
-                this.socket.emit('updateAll.type', this.types)
+                this.socket.emit('type.updateAll', this.types)
                 this.edit = false
             },
         },
     }  
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '../sass/transition';
 </style>

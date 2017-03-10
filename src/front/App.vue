@@ -28,4 +28,7 @@
 @import './sass/global';
 @import './sass/transition';
 @import './sass/led';
+@import './sass/card';
+@import './sass/checkbox';
+@import './sass/modal';
 </style>

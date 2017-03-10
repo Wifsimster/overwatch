@@ -12,6 +12,6 @@
 <script>
 </script>
 
-<style lang="sass">
+<style lang="sass" scoped>
 @import '../sass/sidebar'
 </style>

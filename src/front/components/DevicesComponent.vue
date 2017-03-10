@@ -67,10 +67,8 @@
             }
         },
         created() {
-            this.socket.emit('get.device', (devices) => {
-                this.devices = devices
-            })
-            this.socket.on('get.device', (devices) => {
+            this.socket.emit('device.getAll')
+            this.socket.on('device.getAll.result', (devices) => {
                 this.devices = devices
             })
         },
@@ -82,12 +80,10 @@
                 this.$store.commit('openRemoveModal', device)
             },
             removeAll() { 
-                this.socket.emit('removeAll.device') 
+                this.socket.emit('device.removeAll') 
             },
         },
     }  
 </script>
 
-<style lang="sass">
-@import '../sass/transition';
-</style>
+<style lang="sass" scoped></style>

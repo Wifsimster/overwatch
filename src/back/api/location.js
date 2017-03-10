@@ -1,62 +1,63 @@
 var errorHandler = require('./errorHandler')
 var Location = require('../models/location')
 
-module.exports = function(socket) {
+module.exports = (socket) => {
 
-    socket.on('get.location', (fn) => {
-        Location.findAll()
-            .then((locations) => { fn(locations) })
-            .catch((err) => { console.error(err) })
-    })
-
-    socket.on('update.location', (location) => {
-        Location.update({name: location.name}, {where: {id: location.id}})
-            .then((rst) => {})
-            .catch((err) => { console.error(err) })
-    })
-
-    socket.on('remove.location', (location) => {
-        Location.destroy({ where: { id: location.id }})
-            .then((rst) => {
-            Location.findAll()
-                .then((locations) => { socket.emit('get.location', locations) })
-                .catch((err) => { console.error(err) })
+    socket.on('location.getAll', (options) => {
+        Location.findAll(options).then((locations) => {
+            socket.emit('location.getAll.result', locations)
+        }).catch((err) => { 
+            socket.emit('location.getAll.error', new errorHandler(err))
         })
-            .catch((err) => { console.error(err) })
     })
 
-    socket.on('removeAll.location', () => {
-        Location.destroy({where: {}})
-            .then((rst) => {
-            Location.findAll()
-                .then((locations) => { socket.emit('get.location', locations) })
-                .catch((err) => { console.error(err) })
+    socket.on('location.remove', (options) => {
+        Location.destroy({ where: { id: options.id }}).then((rst) => {
+            socket.emit('location.remove.result', rst)
+        }).catch((err) => { 
+            socket.emit('location.remove.error', new errorHandler(err))
         })
-            .catch((err) => { console.error(err) })
     })
 
-    socket.on('updateAll.location', (locations) => {
+    socket.on('location.removeAll', () => {
+        Location.destroy({where: {}}).then((rst) => {
+            socket.emit('location.removeAll.result', rst)
+        }).catch((err) => { 
+            socket.emit('location.removeAll.error', new errorHandler(err))
+        })
+    })
+
+    socket.on('location.update', (data) => {
+        Location.update({name: data.name}, { where: {id: data.id} })
+            .then((rst) => {
+            socket.emit('location.update.result', rst)
+        }).catch((err) => { 
+            socket.emit('location.update.error', new errorHandler(err))
+        })
+    })
+
+    socket.on('location.updateAll', (locations) => {
         locations.forEach((location, index) => {
             Location.findById(location.id).then((loc) => {            
                 if(loc) {
                     Location.update({name: loc.name}, { where: { id: location.id}}).then((count, row) => {
                         if(index = location.length - 1) {
-                            Location.findAll()
-                                .then((locations) => { socket.emit('get.location', locations) })
-                                .catch((err) => { console.error(err) })
+                            if(index = location.length - 1) {
+                                socket.emit('location.updateAll.result', count)
+                            }    
                         }
+                    }).catch((err) => { 
+                        socket.emit('location.updateAll.error', new errorHandler(err))
                     })
-                        .catch((err) => { console.error(err) })
                 } else {
                     Location.create({name: location.name})
                         .then((count, row) => {
                         if(index = location.length - 1) {
-                            Location.findAll()
-                                .then((locations) => { socket.emit('get.location', locations) })
-                                .catch((err) => { console.error(err) })
+                            socket.emit('location.updateAll.result', count)
                         }
+                    }).catch((err) => { 
+                        socket.emit('location.updateAll.error', new errorHandler(err))
                     })
-                        .catch((err) => { console.error(err) })
                 }
             })
 

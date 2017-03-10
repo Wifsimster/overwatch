@@ -1,31 +1,32 @@
-var errorHandler = require('./errorHandler')
-var Scenario = require('../models/scenario')
-var Device = require('../models/device')
+const errorHandler = require('./errorHandler')
+const Scenario = require('../models/scenario')
+const Device = require('../models/device')
 
-module.exports = function(socket) {
+module.exports = (socket) => {
 
-    socket.on('scenario.getAll', (fn) => {
+    socket.on('scenario.getAll', (options) => {
         Scenario.findAll({ include: [ Device ] })
             .then((scenarios) => { 
-            socket.broadcast.emit('scenario.getAll.result', scenarios)
-        }).catch((err) => { socket.broadcast.emit('scenario.getAll.error', err) })
+            socket.emit('scenario.getAll.result', scenarios)
+        }).catch((err) => {
+            socket.emit('scenario.getAll.error', new errorHandler(err))
+        })
     })
 
     socket.on('scenario.update', (data) => {
-        Scenario.findById(data.id).then((scenario) => {
-            Scenario.findAll({ include: [ Device ] })
-                .then((scenarios) => {
-                socket.broadcast.emit('scenario.update.result', scenarios)                 
-            }).catch((err) => { socket.broadcast.emit('scenario.update.error', err) })
-        }).catch((err) => { socket.broadcast.emit('scenario.update.error', err) })
+        Scenario.findById(data.id).then((rst) => {
+            socket.emit('scenario.update.result', rst)
+        }).catch((err) => { 
+            socket.emit('scenario.update.error', new errorHandler(err))
+        })
     })
 
-    socket.on('scenario.remove', (scenario) => {
-        Scenario.destroy({ where: { id: scenario.id }})
+    socket.on('scenario.remove', (data) => {
+        Scenario.destroy({ where: { id: data.id }})
             .then((rst) => {
-            Scenario.findAll({ include: [ Device ] })
-                .then((scenarios) => { socket.broadcast.emit('scenario.remove.result', scenarios) })
-                .catch((err) => { socket.broadcast.emit('scenario.remove.error', err) })
-        }).catch((err) => { socket.broadcast.emit('scenario.remove.error', err) })
+            socket.emit('scenario.remove.result', rst)
+        }).catch((err) => {
+            socket.emit('scenario.remove.error', new errorHandler(err))
+        })
     })
 }

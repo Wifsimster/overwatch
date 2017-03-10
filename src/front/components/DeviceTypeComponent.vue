@@ -130,7 +130,6 @@
     }
 </script>
 
-<style lang="sass">
-@import '../sass/_colors.scss';
+<style lang="sass" scoped>
 @import '../sass/_device.scss';
 </style>

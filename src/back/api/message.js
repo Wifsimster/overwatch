@@ -2,37 +2,43 @@ var errorHandler = require('./errorHandler')
 var Message = require('../models/message')
 var Device = require('../models/device')
 
-module.exports = function(socket) {
+module.exports = (socket) => {
 
-  socket.on('get.message', (fn) => {
-    Message.findAll({ order: 'message.createdAt DESC', include: [ Device ] })
-      .then((messages) => { fn(messages) })
-      .catch((err) => { console.error(err) })
-  })
-
-  socket.on('update.message', (message) => {
-    Message.update({name: message.name}, {where: {id: message.id}})
-      .then((rst) => {})
-      .catch((err) => { console.error(err) })
-  })
-
-  socket.on('remove.message', (message) => {
-    Message.destroy({ where: { id: message.id }})
-      .then((rst) => {
-      Message.findAll({ order: 'message.createdAt DESC', include: [ Device ] })
-        .then((messages) => { socket.emit('get.message', messages) })
-        .catch((err) => { console.error(err) })
+    socket.on('message.getAll', (options) => {
+        Message.findAll({
+            order: 'message.createdAt DESC', 
+            include: [ Device ] 
+        }).then((messages) => { 
+            socket.emit('message.getAll.result', messages)
+        }).catch((err) => {
+            socket.emit('message.getAll.error', new errorHandler(err))
+        })
     })
-      .catch((err) => { console.error(err) })
-  })
 
-  socket.on('removeAll.message', () => {
-    Message.destroy({where: {}})
-      .then((rst) => {
-      Message.findAll({ order: 'message.createdAt DESC', include: [ Device ] })
-        .then((messages) => { socket.emit('get.message', messages) })
-        .catch((err) => { console.error(err) })
+    socket.on('message.update', (data) => {
+        Message.update({name: data.name}, {where: {id: data.id}})
+            .then((rst) => {
+            socket.emit('message.update.result', rst)
+        }).catch((err) => {
+            socket.emit('message.update.error', new errorHandler(err))
+        })
     })
-      .catch((err) => { console.error(err) })
-  })
+
+    socket.on('message.remove', (message) => {
+        Message.destroy({ where: { id: message.id }})
+            .then((rst) => {
+            socket.emit('message.remove.result', rst)
+        }).catch((err) => {
+            socket.emit('message.remove.error', new errorHandler(err))
+        })
+    })
+
+    socket.on('message.removeAll', () => {
+        Message.destroy({where: {}})
+            .then((rst) => {
+            socket.emit('message.removeAll', rst)
+        }).catch((err) => {
+            socket.emit('message.removeAll.error', new errorHandler(err))
+        })
+    })
 }

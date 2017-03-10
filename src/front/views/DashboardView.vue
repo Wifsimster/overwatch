@@ -135,16 +135,20 @@
         },
         created() {
             this.$store.commit('resetAlert')
-            this.socket.emit('get.setting', (settings) => {
-                this.settings = settings
+
+            this.socket.emit('setting.getAll')
+            this.socket.on('setting.getAll.result', (settings) => {
+                this.settings = settings                
+                this.netatmoApi = new netatmo(settings.netatmo)
+                this.getNetatmoData()
+                setInterval(() => { this.getNetatmoData() }, 300000)
             })
 
-            this.socket.emit('device.getAll', () => {
-                this.socket.on('device.getAll.result', (device) => {
-                    this.renderDevices(devices)
-                })
+            this.socket.emit('device.getAll')
+            this.socket.on('device.getAll.result', (devices) => {
+                this.renderDevices(devices)
             })
-
+            
             //            this.socket.on('device.get', (devices) => {
             //                this.renderDevices(devices)
             //                this.socket.emit('get.untype.device', (devices) => {
@@ -154,12 +158,6 @@
             //            this.socket.emit('get.untype.device', (devices) => {
             //                this.renderAlert(devices)
             //            })      
-            
-            this.socket.emit('get.setting', (settings) => {
-                this.netatmoApi = new netatmo(settings.netatmo)
-                this.getNetatmoData()
-                setInterval(() => { this.getNetatmoData() }, 300000)
-            })
 
             this.socket.on('light.found', (light) => {
                 let exist = this.lights.filter((li) => {

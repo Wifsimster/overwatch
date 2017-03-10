@@ -11,7 +11,7 @@ module.exports = function(socket) {
             include: [ Type, Location, Message ],
             where: {}
         }
-        if(data.untype) { options.where = { type: null} }
+        if(data && data.untype) { options.where = { type: null} }
         Device.findAll(options)
             .then((devices) => { 
             socket.emit('device.getAll.result', devices)

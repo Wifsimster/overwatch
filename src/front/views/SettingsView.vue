@@ -108,22 +108,17 @@
             }
         },
         created() {
-            this.socket.emit('get.setting', (settings) => {
-                this.settings = settings
-            })
-            this.socket.on('get.setting', (settings) => {
+            this.socket.emit('setting.getAll')
+            this.socket.on('setting.getAll.result', (settings) => {
                 this.settings = settings
             })
         },
         methods: {
             save() {
-                this.socket.emit('updateAll.setting', (this.settings))
+                this.socket.emit('setting.updateAll', (this.settings))
             },
         },
     }
 </script>
 
-<style lang="sass">
-@import '../sass/card';
-@import '../sass/checkbox';
-</style>
+<style lang="sass" scoped></style>
