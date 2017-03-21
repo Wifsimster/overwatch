@@ -148,7 +148,7 @@
             this.socket.on('device.getAll.result', (devices) => {
                 this.renderDevices(devices)
             })
-            
+
             //            this.socket.on('device.get', (devices) => {
             //                this.renderDevices(devices)
             //                this.socket.emit('get.untype.device', (devices) => {
@@ -168,7 +168,9 @@
                 if(exist.length === 0) { this.lights.push(light) }
             })
             this.socket.emit('light.getAll')
-            this.socket.on('light.getAll.result', (rst) => { this.lights = rst })
+            this.socket.on('light.getAll.result', (rst) => {
+                this.lights = rst 
+            })
         },
     }
 </script>

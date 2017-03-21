@@ -1,7 +1,7 @@
 <template>
 <div>    
     <div class="pure-g">
-        <div class="pure-u-1 pure-u-lg-1-1">
+        <div class="pure-u-1">
             <h2>Backup</h2>
     </div>
     </div>

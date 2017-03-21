@@ -1,6 +1,7 @@
 <template>
 <div class="pure-g">
     <div class="pure-u-1">
+        <h2>Scenario</h2>
         <div class="scenario" v-for="scenario in scenarios"></div>
     </div>
     </div>
@@ -16,9 +17,12 @@
             }
         },
         created() {
-            
+
+        },
+        methods: {
+
         },
     }
 </script>
 
-<style lang="sass"></style>
+<style lang="sass" scoped></style>
