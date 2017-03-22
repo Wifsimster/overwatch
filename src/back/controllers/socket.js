@@ -10,6 +10,7 @@ const EventEmitter = require('events')
 const emitter = new EventEmitter()
 const Light = require('../class/light')
 const light = new Light()
+const sleep = require('system-sleep')
 
 module.exports = (io) => {
 
@@ -108,25 +109,21 @@ module.exports = (io) => {
 
     emitter.on('scenario.event', (device) => {
 
-        // Motion sensor + lights
+        // Motion -> lights on -> 30sec --> lights off
         if(device.mac === '18:fe:34:d3:29:0e') {
-            if(device.data.state === '1') {                
+            if(device.data.state === '1') {
+                
+                light.setBrightness({brightness: 10, id: "0x0000000003360d2c"})
+                light.setBrightness({brightness: 10, id: "0x00000000033601d3"})
+                
                 light.turnOn("0x0000000003360d2c")
                 light.turnOn("0x00000000033601d3")
-                sleep(5000)                
+                
+                sleep(30000)
+                
                 light.turnOff("0x0000000003360d2c")
                 light.turnOff("0x00000000033601d3")
             }
         }
     })
-}
-
-function sleep(milliseconds) {
-    var start = new Date().getTime()
-    for (var i = 0; i < 1e7; i++) {
-        console.log('Wait')
-        if ((new Date().getTime() - start) > milliseconds) {
-            break
-        }
-    }
 }

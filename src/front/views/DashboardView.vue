@@ -169,10 +169,11 @@
             })
             this.socket.emit('light.getAll')
             this.socket.on('light.getAll.result', (rst) => {
+                console.log(rst)
                 this.lights = rst 
             })
         },
     }
 </script>
 
-<style lang="sass"></style>
+<style lang="sass" scoped></style>
