@@ -48,6 +48,8 @@
                 break
                 case '0x0000000003360d2c': this.name = "Couloir" 
                 break
+                case '0x0000000003312a03': this.name = "Bureau"                 
+                break
             }
             this.turnOff()
         },
