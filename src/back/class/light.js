@@ -3,7 +3,7 @@ const yeelightSearch = new YeelightSearch()
 
 module.exports = class Light {
 
-    getAll(id) {
+    getAll() {
         const lights = yeelightSearch.getYeelights()
         let list = []
         lights.map((light) => {

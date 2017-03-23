@@ -9,8 +9,7 @@
             <img :src="bulb">
     </div>
         <span class="location">{{ name }}</span>
-        <range-slider
-                      class="slider"
+        <range-slider class="slider"
                       min="1"
                       max="100"
                       step="10"
