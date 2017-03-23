@@ -4,7 +4,7 @@ const Type = require('../models/type')
 const Location = require('../models/location')
 const Message = require('../models/message')
 
-module.exports = function(socket) {
+module.exports = (socket) => {
 
     socket.on('device.getAll', (data) => {
         let options = {
@@ -16,7 +16,7 @@ module.exports = function(socket) {
             .then((devices) => { 
             socket.emit('device.getAll.result', devices)
         }).catch((err) => {
-            socket.emit('device.getAll.error', new errorHandler(err))
+            socket.emit('device.getAll.error', errorHandler(err))
         })
     })
 
@@ -34,13 +34,13 @@ module.exports = function(socket) {
                     .then((count, device) => {
                     this.socket.emit('device.update.result', {count: count, device: device})
                 }).catch((err) => { 
-                    socket.emit('device.getAll.error', new errorHandler(err))
+                    socket.emit('device.getAll.error', errorHandler(err))
                 })
             }).catch((err) => { 
-                socket.emit('device.getAll.error', new errorHandler(err))
+                socket.emit('device.getAll.error', errorHandler(err))
             })
         }).catch((err) => { 
-            socket.emit('device.getAll.error', new errorHandler(err))
+            socket.emit('device.getAll.error', errorHandler(err))
         })
     })
 
@@ -49,7 +49,7 @@ module.exports = function(socket) {
             .then((rst) => {
             socket.emit('device.remove.result', {result: rst}) 
         }).catch((err) => { 
-            socket.emit('device.remove.error', new errorHandler(err))
+            socket.emit('device.remove.error', errorHandler(err))
         })
     })
 
@@ -58,7 +58,7 @@ module.exports = function(socket) {
             .then((rst) => {
             socket.emit('device.removeAll.result', {result: rst})
         }).catch((err) => { 
-            socket.emit('device.removeAll.error', new errorHandler(err))
+            socket.emit('device.removeAll.error', errorHandler(err))
         })
     })
 }

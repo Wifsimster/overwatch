@@ -30,7 +30,7 @@ module.exports = (io) => {
         }).then((devices) => {
             io.emit('device.getAll.result', devices)
         }).catch((err) => {
-            io.emit('device.getAll.error', new errorHandler(err))
+            io.emit('device.getAll.error', errorHandler(err))
         }) 
     }
 
@@ -41,7 +41,7 @@ module.exports = (io) => {
         }).then((messages) => {
             io.emit('message.getAll.result', messages)
         }).catch((err) => {
-            io.emit('message.getAll.error', new errorHandler(err))
+            io.emit('message.getAll.error', errorHandler(err))
         })
     }
 
@@ -53,7 +53,7 @@ module.exports = (io) => {
                 io.emit('message.add.result', rst)
             })
         }).catch((err) => {
-            io.emit('message.add.error', new errorHandler(err))
+            io.emit('message.add.error', errorHandler(err))
         })
     }
 
@@ -66,7 +66,7 @@ module.exports = (io) => {
             addMessage(data, device)
             io.emit('device.add.result', device)
         }).catch((err) => {
-            io.emit('device.add.error', new errorHandler(err))
+            io.emit('device.add.error', errorHandler(err))
         })
     }
 
@@ -78,7 +78,7 @@ module.exports = (io) => {
             d.data = data   
             emitter.emit('scenario.event', d)
         }).catch((err) => {
-            io.emit('device.update.error', new errorHandler(err))
+            io.emit('device.update.error', errorHandler(err))
         })
     }
 }
