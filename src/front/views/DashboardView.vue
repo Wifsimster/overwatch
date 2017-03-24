@@ -1,7 +1,5 @@
 <template>
 <div>
-    <alert></alert>
-
     <div class="pure-g">
         <div class="pure-u-1 pure-u-lg-1-1">
             <div class="pure-g" v-if="settings">        
@@ -54,7 +52,6 @@
 <script>
     import io from 'socket.io-client'
     import netatmo from 'netatmo'
-    import Alert from '../components/AlertComponent.vue'
     import DateTime from '../components/DateTimeComponent.vue'
     import DeviceType from '../components/DeviceTypeComponent.vue'   
     import Freebox from '../components/FreeboxComponent.vue'
@@ -81,7 +78,6 @@
             }
         },
         components: {
-            Alert,
             DeviceType,
             DateTime,
             Freebox,      
@@ -149,6 +145,10 @@
                 this.renderDevices(devices)
             })
 
+            this.socket.on('message.add.result', (message) => {
+                this.socket.emit('device.getAll')
+            })
+
             //            this.socket.on('device.get', (devices) => {
             //                this.renderDevices(devices)
             //                this.socket.emit('get.untype.device', (devices) => {
@@ -169,7 +169,7 @@
             })
             this.socket.emit('light.getAll')
             this.socket.on('light.getAll.result', (rst) => {
-                console.log(rst)
+                console.log('Lights', rst)
                 this.lights = rst 
             })
         },

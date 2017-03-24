@@ -36,7 +36,7 @@ module.exports = (socket) => {
     socket.on('message.removeAll', () => {
         Message.destroy({where: {}})
             .then((rst) => {
-            socket.emit('message.removeAll', rst)
+            socket.emit('message.removeAll.result', rst)
         }).catch((err) => {
             socket.emit('message.removeAll.error', new errorHandler(err))
         })

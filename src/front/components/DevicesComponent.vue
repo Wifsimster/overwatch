@@ -1,6 +1,6 @@
 <template>
 <div>
-    <h2>Devices detected ({{ devices.length }}) <a @click="removeAll" title="Remove all devices"><i class="material-icons">delete</i></a></h2>
+    <h2>Devices ({{ devices.length }}) <a @click="removeAll" title="Remove all devices"><i class="material-icons">delete</i></a></h2>
     <div class="devices" v-if="devices.length > 0">
         <table>
             <thead>
@@ -38,13 +38,13 @@
     </tr>
     </tbody>
     </table>
-      
+
         <edit-device-modal></edit-device-modal>
         <remove-device-modal></remove-device-modal>
-      
+
     </div>
     <div v-else>
-        <p>No device found.</p>
+        <p class="center">No device.</p>
     </div>
 
     </div>
@@ -54,7 +54,6 @@
     import io from 'socket.io-client'
     import EditDeviceModal from './EditDeviceModalComponent.vue'
     import RemoveDeviceModal from './RemoveDeviceModalComponent.vue'
-
     export default {
         components: {
             EditDeviceModal,
@@ -70,6 +69,12 @@
             this.socket.emit('device.getAll')
             this.socket.on('device.getAll.result', (devices) => {
                 this.devices = devices
+            })
+            this.socket.on('device.removeAll.result', (rst) => {
+                this.devices = []
+            })
+            this.socket.on('device.add.result', (rst) => {
+                this.socket.emit('device.getAll')
             })
         },
         methods: {

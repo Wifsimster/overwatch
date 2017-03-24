@@ -9,18 +9,24 @@ const errorHandler = require('../api/errorHandler')
 module.exports = (io) => {
 
     mqttClient.subscribe('/#')
+
     mqttClient.on('message', (topic, message) => {
-        let data = JSON.parse(message.toString())
-        if (data.mac) {
-            Device.findAll({
-                where: { mac: data.mac }
-            }).then((devices) => {
-                if (devices.length > 0) {
-                    updateDevice(data, devices[0])
-                } else {
-                    addDevice(data)
-                }
-            }).catch((err) => { console.error(err) })
+
+        console.log('==== TOPIC: ', topic)
+
+        if(topic.startsWith('/sensors/')) {
+
+            let data = JSON.parse(message.toString())
+
+            if (data.mac) {
+                Device.findOne({ where: { mac: data.mac } }).then((device) => {
+                    if (device) {
+                        updateDevice(data, device)
+                    } else {
+                        addDevice(data)
+                    }
+                }).catch((err) => { console.error(err) })
+            }
         }
     })
 
@@ -50,7 +56,7 @@ module.exports = (io) => {
             data: JSON.stringify(data)
         }).then((message) => {
             message.setDevice(device.id).then((rst) => {
-                io.emit('message.add.result', rst)
+                io.emit('message.add.result', message)
             })
         }).catch((err) => {
             io.emit('message.add.error', errorHandler(err))

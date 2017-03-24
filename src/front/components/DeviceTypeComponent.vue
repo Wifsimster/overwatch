@@ -78,13 +78,14 @@
     import gas from '../assets/gas.png'
     import rgbw from '../assets/led_strip.png'
     import moment from 'moment'
-
+    import io from 'socket.io-client'
     export default {
         props: {
             device: Object,
         },
         data() {
             return {
+                socket: io(),
                 data: {},
                 icons: { 
                     temperature: thermometer, 
@@ -102,17 +103,18 @@
         },
         created() {
             if(this.device.messages && this.device.messages.length > 0) {
-
+                this.getData()
+            }
+        },
+        methods: {
+            getData() {
                 this.device.messages.sort((a, b) => {
                     return new Date(a.createdAt) - new Date(b.createdAt)
                 })
-
                 this.data = JSON.parse(this.device.messages[this.device.messages.length - 1].data)
-
                 this.lastSeen = this.device.messages[this.device.messages.length - 1].createdAt
-                
                 if(moment().diff(this.lastSeen, 'days') > 0) { this.isDead = true }
-            }
+            },
         },
         watch: {
             device() {
@@ -123,7 +125,7 @@
                 this.data = JSON.parse(this.device.messages[this.device.messages.length - 1].data)
 
                 this.lastSeen = this.device.messages[this.device.messages.length - 1].createdAt
-                
+
                 if(moment().diff(this.lastSeen, 'days') > 0) { this.isDead = true }
             }
         },
@@ -131,5 +133,5 @@
 </script>
 
 <style lang="sass" scoped>
-@import '../sass/_device.scss';
+@import '../sass/device';
 </style>

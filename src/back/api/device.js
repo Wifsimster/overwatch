@@ -20,6 +20,16 @@ module.exports = (socket) => {
         })
     })
 
+    socket.on('device.getOne', (id) => {        
+        Device.findById(id, {
+            include: [ Type, Location, Message ],
+        }).then((device) => { 
+            socket.emit('device.getOne.result', device)
+        }).catch((err) => {
+            socket.emit('device.getOne.error', errorHandler(err))
+        })
+    })
+
     socket.on('device.update', (data) => {
         Device.findById(data.id).then((device) => {
             let types = []
@@ -47,7 +57,7 @@ module.exports = (socket) => {
     socket.on('device.remove', (data) => {
         Device.destroy({ where: { id: data.id }})
             .then((rst) => {
-            socket.emit('device.remove.result', {result: rst}) 
+            socket.emit('device.remove.result', rst) 
         }).catch((err) => { 
             socket.emit('device.remove.error', errorHandler(err))
         })
@@ -56,7 +66,7 @@ module.exports = (socket) => {
     socket.on('device.removeAll', () => {
         Device.destroy({where: {}})
             .then((rst) => {
-            socket.emit('device.removeAll.result', {result: rst})
+            socket.emit('device.removeAll.result', rst)
         }).catch((err) => { 
             socket.emit('device.removeAll.error', errorHandler(err))
         })

@@ -23,7 +23,7 @@
     </table>
     </div>
         <div v-else>
-            <p>No message found.</p>
+            <p class="center">No message.</p>
     </div>
     </transition>
     </div>
@@ -31,7 +31,6 @@
 
 <script>
     import io from 'socket.io-client'
-
     export default {
         data() {
             return {
@@ -44,13 +43,22 @@
             this.socket.on('message.getAll.result', (messages) => {
                 this.messages = messages
             })
+            this.socket.on('message.remove.result', (rst) => {
+                this.socket.emit('message.getAll')
+            })
+            this.socket.on('message.removeAll.result', (rst) => {
+                this.messages = []
+            })
+            this.socket.on('message.add.result', (rst) => {
+                this.socket.emit('message.getAll')
+            })
         },
         methods: {
             remove(message) { 
-                this.socket.emit('remove.message', message) 
+                this.socket.emit('message.remove', message) 
             },
             removeAll() { 
-                this.socket.emit('removeAll.message') 
+                this.socket.emit('message.removeAll') 
             },
         },
     }  
