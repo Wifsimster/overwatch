@@ -34,7 +34,7 @@ console.log('Server started at 127.0.0.1:8080')
 const io = require('socket.io').listen(server)
 
 require('./src/back/controllers/socket')(io)
-require('./src/back/controllers/mqtt')(io)
+require('./src/back/controllers/mqtt')(io, emitter)
 require('./src/back/controllers/scenario')(emitter)
 
 //require('./src/back/controllers/rtsp')

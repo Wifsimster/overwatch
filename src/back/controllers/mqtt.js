@@ -6,22 +6,21 @@ const mqtt = require('mqtt')
 const mqttClient = mqtt.connect('mqtt://192.168.0.35:1883')
 const errorHandler = require('../api/errorHandler')
 
-module.exports = (io) => {
+module.exports = (io, emitter) => {
 
     mqttClient.subscribe('/#')
 
     mqttClient.on('message', (topic, message) => {
 
-        console.log('==== TOPIC: ', topic)
-
         if(topic.startsWith('/sensors/')) {
 
             let data = JSON.parse(message.toString())
 
-            if (data.mac) {
+            if(data.mac) {
                 Device.findOne({ where: { mac: data.mac } }).then((device) => {
                     if (device) {
                         updateDevice(data, device)
+                        if(data.online) { io.emit('device.online', device) }
                     } else {
                         addDevice(data)
                     }
@@ -56,7 +55,11 @@ module.exports = (io) => {
             data: JSON.stringify(data)
         }).then((message) => {
             message.setDevice(device.id).then((rst) => {
-                io.emit('message.add.result', message)
+                io.emit('message.add.result', message)      
+
+                let d = JSON.parse(JSON.stringify(device))
+                d.message = message
+                emitter.emit('scenario.event', d)
             })
         }).catch((err) => {
             io.emit('message.add.error', errorHandler(err))
@@ -79,10 +82,7 @@ module.exports = (io) => {
     function updateDevice(data, device) {
         Device.update({ ip: device.ip }, { where: { id: device.id } }).then((count) => {
             addMessage(data, device)
-            io.emit('device.update.result', count)            
-            let d = JSON.parse(JSON.stringify(device))
-            d.data = data   
-            emitter.emit('scenario.event', d)
+            io.emit('device.update.result', count)
         }).catch((err) => {
             io.emit('device.update.error', errorHandler(err))
         })

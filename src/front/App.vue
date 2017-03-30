@@ -36,6 +36,10 @@
             this.socket.on('device.add.result', (device) => {
                 this.$store.commit('setAlert', {type: 'success', message: 'New device detected !'})
             })
+            
+            this.socket.on('device.online', (device) => {
+                console.log('Device connected', device)
+            })
         },
     }
 </script>
