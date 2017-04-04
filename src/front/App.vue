@@ -21,7 +21,7 @@
 
     export default {      
         components: {
-            ComHeader, 
+            ComHeader,
             ComSidebar,
             Alert,
         },
