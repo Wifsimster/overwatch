@@ -20,13 +20,24 @@ module.exports = (io, emitter) => {
                 Device.findOne({ where: { mac: data.mac } }).then((device) => {
                     if (device) {
                         updateDevice(data, device)
-                        if(data.online) { io.emit('device.online', device) }
+                        if(data.online) {
+                            io.emit('notify', {
+                                message: 'Device connected',
+                                type: 'success',
+                                time: 15,
+                                data: device
+                            }) 
+                        }
                     } else {
                         addDevice(data)
                     }
                 }).catch((err) => { console.error(err) })
             }
         }
+    })
+
+    emitter.on('notify', (notify) => {
+        io.emit('notify', notify)
     })
 
     function getDevices() {
@@ -55,11 +66,14 @@ module.exports = (io, emitter) => {
             data: JSON.stringify(data)
         }).then((message) => {
             message.setDevice(device.id).then((rst) => {
-                io.emit('message.add.result', message)      
-
+                io.emit('message.add.result', message)
+                
                 let d = JSON.parse(JSON.stringify(device))
+                message.data = JSON.parse(message.data)                
                 d.message = message
+
                 emitter.emit('scenario.event', d)
+
             })
         }).catch((err) => {
             io.emit('message.add.error', errorHandler(err))

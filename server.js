@@ -35,6 +35,6 @@ const io = require('socket.io').listen(server)
 
 require('./src/back/controllers/socket')(io)
 require('./src/back/controllers/mqtt')(io, emitter)
-require('./src/back/controllers/scenario')(emitter)
+require('./src/back/controllers/scenario')(io, emitter)
 
 //require('./src/back/controllers/rtsp')

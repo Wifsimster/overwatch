@@ -52,6 +52,7 @@
 <script>
     import io from 'socket.io-client'
     import netatmo from 'netatmo'
+    import alertify from 'alertifyjs'
     import DateTime from '../components/DateTimeComponent.vue'
     import DeviceType from '../components/DeviceTypeComponent.vue'   
     import Freebox from '../components/FreeboxComponent.vue'
@@ -114,9 +115,7 @@
             }, 
             renderAlert(devices) {
                 if(devices.length > 0) {
-                    this.$store.commit('setAlert', {type: 'info', message: devices.length + ' device(s) to configure !'})
-                } else {
-                    this.$store.commit('resetAlert')
+                    alertify.notify(devices.length + ' device(s) to configure !', 'info', 5)
                 }
             },    
             getNetatmoData() {
@@ -130,8 +129,6 @@
             },
         },
         created() {
-            this.$store.commit('resetAlert')
-
             this.socket.emit('setting.getAll')
             this.socket.on('setting.getAll.result', (settings) => {
                 this.settings = settings                
@@ -157,19 +154,22 @@
 
             //            this.socket.emit('get.untype.device', (devices) => {
             //                this.renderAlert(devices)
-            //            })      
+            //            })
 
             this.socket.on('light.found', (light) => {
                 let exist = this.lights.filter((li) => {
                     if(li.id === light.id) {
-                        return true    
+                        return true
                     }
                 })
                 if(exist.length === 0) { this.lights.push(light) }
             })
+            
             this.socket.emit('light.getAll')
+            
             this.socket.on('light.getAll.result', (rst) => {
                 console.log('Lights', rst)
+                alertify.notify(rst.length + ' light(s) detected', 'success', 10)
                 this.lights = rst 
             })
         },
