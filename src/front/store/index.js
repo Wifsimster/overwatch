@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import alert from './modules/alert'
 import device from './modules/device'
 import message from './modules/message'
+import socket from './modules/socket'
 
 Vue.use(Vuex)
 
@@ -13,5 +14,6 @@ export default new Vuex.Store({
         alert,
         device,
         message,
+        socket,
     },
 })

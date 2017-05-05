@@ -50,7 +50,6 @@
 </template>
 
 <script>
-    import io from 'socket.io-client'
     import netatmo from 'netatmo'
     import alertify from 'alertifyjs'
     import DateTime from '../components/DateTimeComponent.vue'
@@ -69,7 +68,7 @@
     export default {
         data() {
             return {
-                socket: io(),
+                socket: this.$store.state.socket.socket,
                 splitDevices: [],
                 lights: [],
                 settings: [],
@@ -146,30 +145,16 @@
                 this.socket.emit('device.getAll')
             })
 
-            //            this.socket.on('device.get', (devices) => {
-            //                this.renderDevices(devices)
-            //                this.socket.emit('get.untype.device', (devices) => {
-            //                    this.renderAlert(devices)
-            //                })
-
-            //            this.socket.emit('get.untype.device', (devices) => {
-            //                this.renderAlert(devices)
-            //            })
-
             this.socket.on('light.found', (light) => {
                 let exist = this.lights.filter((li) => {
-                    if(li.id === light.id) {
-                        return true
-                    }
+                    if(li.id === light.id) { return true }
                 })
                 if(exist.length === 0) { this.lights.push(light) }
             })
-            
+
             this.socket.emit('light.getAll')
-            
             this.socket.on('light.getAll.result', (rst) => {
-                console.log('Lights', rst)
-                alertify.notify(rst.length + ' light(s) detected', 'success', 10)
+                //alertify.notify(rst.length + ' light(s) detected', 'success', 10)
                 this.lights = rst 
             })
         },

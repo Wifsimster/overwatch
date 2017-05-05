@@ -23,15 +23,12 @@
             ComHeader,
             ComSidebar,
         },
-        data() {
-            return {
-                socket: io(),
-            }
-        },
         created() {
-            this.socket.on('notify', (alert) => {
-                console.log('Notify', alert.data)
-                alertify.notify(alert.message, alert.type, alert.time)
+            this.$store.commit('setSocket', io())
+            
+            this.$store.state.socket.socket.on('notify', (data) => {
+                console.log('Notify', data)
+                alertify.notify(data.message, data.type, data.time)
             })
         },
     }

@@ -6,39 +6,44 @@ const mqtt = require('mqtt')
 const mqttClient = mqtt.connect('mqtt://192.168.0.35:1883')
 const errorHandler = require('../api/errorHandler')
 
-module.exports = (io, emitter) => {
+module.exports = (io) => {
 
     mqttClient.subscribe('/#')
 
     mqttClient.on('message', (topic, message) => {
-
         if(topic.startsWith('/sensors/')) {
-
             let data = JSON.parse(message.toString())
-
             if(data.mac) {
                 Device.findOne({ where: { mac: data.mac } }).then((device) => {
-                    if (device) {
-                        updateDevice(data, device)
+                    if(device) {
                         if(data.online) {
-                            io.emit('notify', {
-                                message: 'Device connected',
-                                type: 'success',
-                                time: 15,
+                            notify({
+                                message: 'Existing device online !',
                                 data: device
-                            }) 
+                            })
+                        } else {
+                            updateDevice(data, device)
                         }
                     } else {
                         addDevice(data)
+                        notify({
+                            message: 'New device online detected !',
+                            data: data
+                        })
                     }
                 }).catch((err) => { console.error(err) })
             }
         }
     })
 
-    emitter.on('notify', (notify) => {
-        io.emit('notify', notify)
-    })
+    function notify(data) {
+        io.emit('notify', {
+            message: data.message,
+            type: 'success',
+            time: 10,
+            data: data.data
+        }) 
+    }
 
     function getDevices() {
         Device.findAll({
@@ -67,13 +72,10 @@ module.exports = (io, emitter) => {
         }).then((message) => {
             message.setDevice(device.id).then((rst) => {
                 io.emit('message.add.result', message)
-                
                 let d = JSON.parse(JSON.stringify(device))
                 message.data = JSON.parse(message.data)                
                 d.message = message
-
-                emitter.emit('scenario.event', d)
-
+                io.emit('scenario.event', d)
             })
         }).catch((err) => {
             io.emit('message.add.error', errorHandler(err))

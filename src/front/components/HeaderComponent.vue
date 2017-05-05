@@ -6,9 +6,6 @@
     </div>
 </template>
 
-<script>
-</script>
-
 <style lang="sass" scoped>
-@import '../sass/_header.scss';
+@import '../sass/header'
 </style>

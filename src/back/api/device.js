@@ -6,14 +6,15 @@ const Message = require('../models/message')
 
 module.exports = (socket) => {
 
-    socket.on('device.getAll', (data) => {
+    socket.on('device.getAll', (data) => {        
         let options = {
             include: [ Type, Location, Message ],
             where: {}
         }
         if(data && data.untype) { options.where = { type: null} }
+        
         Device.findAll(options)
-            .then((devices) => { 
+            .then((devices) => {            
             socket.emit('device.getAll.result', devices)
         }).catch((err) => {
             socket.emit('device.getAll.error', errorHandler(err))
