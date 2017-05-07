@@ -78,14 +78,13 @@
     import gas from '../assets/gas.png'
     import rgbw from '../assets/led_strip.png'
     import moment from 'moment'
-    import io from 'socket.io-client'
     export default {
         props: {
             device: Object,
         },
         data() {
-            return {
-                socket: io(),
+            return {                
+                socket: this.$store.state.socket.socket,
                 data: {},
                 icons: { 
                     temperature: thermometer, 

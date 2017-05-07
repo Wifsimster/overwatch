@@ -29,15 +29,13 @@
 </template>
 
 <script>
-    import io from 'socket.io-client'
     import { mapGetters, mapActions } from 'vuex'
-
     export default {
         components: {},
         data() {
             return {
                 locations: [],
-                socket: io(),
+                socket: this.$store.state.socket.socket,
                 edit: false,
             }
         },

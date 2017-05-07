@@ -51,7 +51,6 @@
 </template>
 
 <script>
-    import io from 'socket.io-client'
     import EditDeviceModal from './EditDeviceModalComponent.vue'
     import RemoveDeviceModal from './RemoveDeviceModalComponent.vue'
     export default {
@@ -61,8 +60,8 @@
         },
         data() {
             return {
-                devices: [],
-                socket: io(),
+                devices: [],                
+                socket: this.$store.state.socket.socket,
             }
         },
         created() {

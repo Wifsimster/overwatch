@@ -30,12 +30,11 @@
 </template>
 
 <script>
-    import io from 'socket.io-client'
     export default {
         data() {
             return {
-                messages: [],
-                socket: io(),
+                messages: [],                
+                socket: this.$store.state.socket.socket,
             }
         },
         created() {

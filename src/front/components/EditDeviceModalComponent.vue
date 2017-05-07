@@ -65,15 +65,13 @@
 </template>
 
 <script>
-    import io from 'socket.io-client'
     import { mapGetters, mapActions } from 'vuex'
     import Multiselect from 'vue-multiselect'
-
     export default {
         components: { Multiselect },
         data() { 
             return {
-                socket: io(),
+                socket: this.$store.state.socket.socket,
                 types: [],
                 locations: [],
                 selectedTypes: [],

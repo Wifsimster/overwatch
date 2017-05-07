@@ -1,11 +1,44 @@
 <template>
 <div class="sidebar">
-    <router-link to="/devices" class="link"><i class="material-icons">devices</i></router-link>
-    <router-link to="/messages" class="link"><i class="material-icons">message</i></router-link>
-    <router-link to="/types" class="link"><i class="material-icons">settings</i></router-link>
-    <router-link to="/locations" class="link"><i class="material-icons">location_on</i></router-link>
-    <router-link to="/backup" class="link"><i class="material-icons">backup</i></router-link>
-    <router-link to="/scenario" class="link"><i class="material-icons">alarm_on</i></router-link>
+<!--    <h1>Réglages</h1>-->
+    <ul>
+        <li>
+            <router-link to="/devices" class="link">
+                <i class="material-icons">devices</i>
+                <span>Devices</span>
+    </router-link>
+    </li>
+        <li>
+            <router-link to="/messages" class="link">
+                <i class="material-icons">message</i>
+                <span>Messages</span>
+    </router-link>
+    </li>
+        <li>
+            <router-link to="/types" class="link">
+                <i class="material-icons">settings</i>
+                <span>Types</span>
+    </router-link>
+    </li>
+        <li>
+            <router-link to="/locations" class="link">
+                <i class="material-icons">location_on</i>
+                <span>Locations</span>
+    </router-link>
+    </li>
+        <li>    
+            <router-link to="/backup" class="link">
+                <i class="material-icons">backup</i>
+                <span>Backup</span>
+    </router-link>
+    </li>
+        <li>
+            <router-link to="/scenario" class="link">
+                <i class="material-icons">alarm_on</i>
+                <span>Scenario</span>
+    </router-link>
+    </li>
+    </ul>
     </div>
 </template>
 

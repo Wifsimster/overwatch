@@ -22,7 +22,6 @@
 <script>
     import RangeSlider from 'vue-range-slider'
     import bulb from '../assets/bulb.png'
-    import io from 'socket.io-client'
     import 'vue-range-slider/dist/vue-range-slider.css'
     export default {
         components: {
@@ -33,7 +32,7 @@
         },
         data() {
             return {
-                socket: io(),
+                socket: this.$store.state.socket.socket,
                 state: false,
                 bulb: bulb,
                 name: null,

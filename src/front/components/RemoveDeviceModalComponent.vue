@@ -21,12 +21,11 @@
 </template>
 
 <script>
-    import io from 'socket.io-client'
     import { mapGetters, mapActions } from 'vuex'
     export default {
         data() { 
             return {
-                socket: io(),
+                socket: this.$store.state.socket.socket,
             }
         },
         computed: {

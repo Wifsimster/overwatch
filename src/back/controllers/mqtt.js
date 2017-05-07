@@ -5,6 +5,7 @@ const Location = require('../models/location')
 const mqtt = require('mqtt')
 const mqttClient = mqtt.connect('mqtt://192.168.0.35:1883')
 const errorHandler = require('../api/errorHandler')
+const scenario = require('../controllers/scenario')
 
 module.exports = (io) => {
 
@@ -18,7 +19,7 @@ module.exports = (io) => {
                     if(device) {
                         if(data.online) {
                             notify({
-                                message: 'Existing device online !',
+                                message: device.name + ' is online !',
                                 data: device
                             })
                         } else {
@@ -75,7 +76,7 @@ module.exports = (io) => {
                 let d = JSON.parse(JSON.stringify(device))
                 message.data = JSON.parse(message.data)                
                 d.message = message
-                io.emit('scenario.event', d)
+                scenario(d, io)
             })
         }).catch((err) => {
             io.emit('message.add.error', errorHandler(err))

@@ -10,11 +10,10 @@
 
 <script>
     import ComDevices from '../components/DevicesComponent.vue'
-    import io from 'socket.io-client'
     export default {
         data() {
             return {
-
+                socket: this.$store.state.socket.socket,
             }
         },
         components: {

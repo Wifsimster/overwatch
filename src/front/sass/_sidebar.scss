@@ -1,21 +1,56 @@
 @import 'colors';
 
+$top: 60px;
+$width: 180px;
+
 .sidebar {
     background-color: $cod-gray;
-    position: fixed;
-    top: 44px;
-    left: 0;
-    bottom: 0;
-    width: 50px;
-    z-index: 1000;
+    position: relative;
+    float: left;
+    width: $width;
+    height: 100%;
+    top: $top;
 
-    a {
-        text-align: center;
-        display: block;
-        margin: 0 auto;
-        width: 100%;
-        height: 40px;
-        position: relative;
-        line-height: 48px;
+    h1 {
+        padding: 5px 0;
+        margin: 0;
+        display: flex;
+        align-content: center;
+        padding-left: 25px;
+        height: 45px;text-transform: uppercase;
+        line-height: 45px;
+        color: hsla(0,0%,100%,.3);
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    ul {
+        li {
+            a {
+                display: block;
+                position: relative;
+                width: 100%;
+                height: 45px;
+                line-height: 48px;
+                padding: 0 0 0 25px;
+                i {
+                    width: 30px;
+                    height: 18px;
+                    font-size: 18px;
+                    vertical-align: middle;
+                }
+                span {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    vertical-align: middle;
+                    font-size: 14px;
+                    font-weight: 600;
+                }
+                &:hover {
+                    color: white;
+                    background-color: rgba(0,0,0,.15);
+                }
+            }       
+        }
     }
 }

@@ -8,13 +8,11 @@
     </div>
 </template>
 
-<script>
-    import io from 'socket.io-client'
-    
+<script>    
     export default {
         data() {
             return {
-                socket: io(),
+                socket: this.$store.state.socket.socket,
             }
         },
         components: {},
@@ -23,5 +21,4 @@
 </script>
 
 <style lang="sass" scoped>
-
 </style>

@@ -6,7 +6,6 @@
 </template>
 
 <script>
-  import io from 'socket.io-client'
   export default {
     props: {
       name: String,
@@ -14,7 +13,7 @@
     },
     data() {
       return {
-        socket: io(),
+        socket: this.$store.state.socket.socket,
         id: 'canvas_'+this.port
       }
     },

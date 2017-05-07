@@ -25,15 +25,13 @@
 </template>
 
 <script>
-    import io from 'socket.io-client'
     import { mapGetters, mapActions } from 'vuex'
-
     export default {
         components: {},
         data() {
             return {
                 types: [],
-                socket: io(),
+                socket: this.$store.state.socket.socket,
                 edit: false,
             }
         },
@@ -53,5 +51,5 @@
 </script>
 
 <style lang="sass" scoped>
-@import '../sass/transition';
+@import '../sass/transition'
 </style>

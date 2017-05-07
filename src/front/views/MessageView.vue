@@ -10,12 +10,10 @@
 
 <script>
     import ComMessages from '../components/MessagesComponent.vue'
-    import io from 'socket.io-client'
-
     export default {
         data() {
             return {
-
+                socket: this.$store.state.socket.socket,
             }
         },
         components: {
