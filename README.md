@@ -2,7 +2,7 @@
 
 Personal home automation with real time messaging for Raspberry Pi 3.
 
-## Alpha version
+## Alpha version :shit:
 
 > Work in progress...
 
