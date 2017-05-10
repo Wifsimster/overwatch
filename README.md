@@ -8,8 +8,8 @@ Work in progress... you can check out my work and ask for new feature leater.
 
 ## Functions
 
-- Date & time :watch:
-- Freebox :computer:
+- Date & time
+- Freebox
 - Netatmo
 - Custom ESP8266 sensors ([PIR](https://github.com/Wifsimster/pir-mqtt))
 - Xiaomi Camera (testing)
