@@ -11,8 +11,8 @@ Work in progress... you can check out my work and ask for new feature leater.
 - Date & time
 - Freebox
 - Netatmo
-- Custom ESP8266 sensors ([PIR](https://github.com/Wifsimster/pir-mqtt))
-- Xiaomi Camera (testing)
+- ESP8266 sensors ([PIR](https://github.com/Wifsimster/pir-mqtt), [BMP180](https://github.com/Wifsimster/bmp180-mqtt), [SW420](https://github.com/Wifsimster/sw420-mqtt), [TSL2561](https://github.com/Wifsimster/tsl2561-mqtt))
+- Xiaomi Camera with [RTSP stream](https://github.com/Wifsimster/node-rtsp-stream-es6)
 - Yeelight (in development)
 
 ## Powered with
