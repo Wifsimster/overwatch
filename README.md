@@ -14,6 +14,7 @@ Work in progress... you can check out my work and ask for new feature leater.
 - ESP8266 sensors ([PIR](https://github.com/Wifsimster/pir-mqtt), [BMP180](https://github.com/Wifsimster/bmp180-mqtt), [SW420](https://github.com/Wifsimster/sw420-mqtt), [TSL2561](https://github.com/Wifsimster/tsl2561-mqtt))
 - [Xiaomi Camera](http://www.gearbest.com/ip-cameras/pp_615275.html)
 - [Yeelight](https://github.com/pmdroid/yeelight-wifi)
+- Cron-like job for scenario
 
 ## Powered with
 
@@ -23,6 +24,7 @@ Work in progress... you can check out my work and ask for new feature leater.
 - [Socket.io](http://socket.io/)
 - [Sequelize](http://docs.sequelizejs.com/en/v3/)
 - [RTSP stream wrapper](https://github.com/Wifsimster/node-rtsp-stream-es6)
+- [Node-cron](https://github.com/merencia/node-cron)
 
 ## Dashboard
 
