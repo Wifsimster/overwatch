@@ -10,13 +10,14 @@ Personal home automation with real time messaging for Raspberry Pi 3.
 
 ## Functions
 
-- Date & time
-- [Freebox](https://dev.freebox.fr/sdk/)
-- [Netatmo](https://github.com/karbassi/netatmo)
-- ESP8266 sensors ([PIR](https://github.com/Wifsimster/pir-mqtt), [BMP180](https://github.com/Wifsimster/bmp180-mqtt), [SW420](https://github.com/Wifsimster/sw420-mqtt), [TSL2561](https://github.com/Wifsimster/tsl2561-mqtt))
-- [Xiaomi Camera](http://www.gearbest.com/ip-cameras/pp_615275.html)
-- [Yeelight](https://github.com/pmdroid/yeelight-wifi)
-- Cron-like job for scenario
+- [x] Date & time
+- [x] [Freebox](https://dev.freebox.fr/sdk/)
+- [x] [Netatmo](https://github.com/karbassi/netatmo)
+- [x] ESP8266 sensors ([PIR](https://github.com/Wifsimster/pir-mqtt), [BMP180](https://github.com/Wifsimster/bmp180-mqtt), [SW420](https://github.com/Wifsimster/sw420-mqtt), [TSL2561](https://github.com/Wifsimster/tsl2561-mqtt))
+- [x] [Xiaomi Camera](http://www.gearbest.com/ip-cameras/pp_615275.html)
+- [x] [Yeelight](https://github.com/pmdroid/yeelight-wifi)
+- [x] Display MQTT messages in real time
+- [] Enable/disabled scenario
 
 ## Powered with
 
