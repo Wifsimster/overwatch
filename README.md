@@ -25,6 +25,7 @@ Work in progress... you can check out my work and ask for new feature leater.
 - [Sequelize](http://docs.sequelizejs.com/en/v3/)
 - [RTSP stream wrapper](https://github.com/Wifsimster/node-rtsp-stream-es6)
 - [Node-cron](https://github.com/merencia/node-cron)
+- [Alertify](https://github.com/MohammadYounes/AlertifyJS)
 
 ## Dashboard
 
