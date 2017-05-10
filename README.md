@@ -4,7 +4,8 @@ Personal home automation with real time messaging for Raspberry Pi 3.
 
 ## Alpha version
 
-Work in progress... you can check out my work and ask for new feature leater.
+> Work in progress... 
+> You can check out my work and ask for new features any time.
 
 ## Functions
 
