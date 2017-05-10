@@ -23,6 +23,7 @@ Personal home automation with real time messaging for Raspberry Pi 3.
 - [ ] Netatmo meteo prevision
 - [ ] Yeelight status
 - [ ] [Sonoff switch](https://www.itead.cc/sonoff-wifi-wireless-switch.html)
+- [ ] RGB led strip with ESP8266
 
 ## Powered with
 
