@@ -20,6 +20,9 @@ Personal home automation with real time messaging for Raspberry Pi 3.
 - [ ] Enable/disabled scenario
 - [ ] Backup data
 - [ ] Display MQTT broker health
+- [ ] Netatmo meteo prevision
+- [ ] Yeelight status
+- [ ] [Sonoff switch](https://www.itead.cc/sonoff-wifi-wireless-switch.html)
 
 ## Powered with
 
