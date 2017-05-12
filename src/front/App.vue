@@ -18,6 +18,7 @@
     import io from 'socket.io-client'
     import '../../node_modules/purecss/build/grids-responsive.css'
     import '../../node_modules/alertifyjs/build/css/alertify.css'
+    import '../../node_modules/vue-multiselect/dist/vue-multiselect.min.css'
     export default {
         components: {
             ComHeader,

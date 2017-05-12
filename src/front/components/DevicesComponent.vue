@@ -32,14 +32,17 @@
     </td>
                     <td>{{ device.updatedAt | moment('DD/MM/YY HH:mm:ss') }}</td>
                     <td>
-                        <a @click="openModal(device)"><i class="material-icons" title="Edit device info">edit</i></a> 
+                        <a @click="openEditModal(device)"><i class="material-icons" title="Edit device info">edit</i></a> 
                         <a @click="openRemoveModal(device)" title="Remove the device"><i class="material-icons">remove</i></a>
     </td>
     </tr>
     </tbody>
     </table>
 
-        <edit-device-modal></edit-device-modal>
+        <edit-device-modal v-if="editShow" 
+                           :device="editDevice"
+                           @close="editShow = false"></edit-device-modal>
+        
         <remove-device-modal></remove-device-modal>
 
     </div>
@@ -62,6 +65,10 @@
             return {
                 devices: [],                
                 socket: this.$store.state.socket.socket,
+                editShow: false,
+                editDevice: null,
+                removeShow: false,
+                removeDevice: null,
             }
         },
         created() {
@@ -77,11 +84,13 @@
             })
         },
         methods: {
-            openModal(device) {
-                this.$store.commit('openModal', device)
+            openEditModal(device) {
+                this.editShow = true
+                this.editDevice = device
             },
             openRemoveModal(device) {
-                this.$store.commit('openRemoveModal', device)
+                this.showRemove = true
+                this.removeDevice = device
             },
             removeAll() { 
                 this.socket.emit('device.removeAll') 
@@ -89,5 +98,3 @@
         },
     }  
 </script>
-
-<style lang="sass" scoped></style>

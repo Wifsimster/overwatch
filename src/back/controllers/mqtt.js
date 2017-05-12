@@ -10,6 +10,18 @@ const scenario = require('../controllers/scenario')
 module.exports = (io) => {
 
     mqttClient.subscribe('/#')
+    
+    mqttClient.on('close', () => {
+        notify({
+            message: 'MQTT disconnection !'
+        })
+    })
+    
+    mqttClient.on('offline', () => {
+        notify({
+            message: 'MQTT client offline !'
+        })
+    })
 
     mqttClient.on('message', (topic, message) => {
         if(topic.startsWith('/sensors/')) {

@@ -1,10 +1,10 @@
 <template>
 <transition name="modal">
-    <div class="modal-mask" v-show="isOpenModal">
+    <div class="modal-mask">
         <div class="modal-wrapper">
             <div class="modal-container">
                 <div class="modal-header">
-                    <h2>Edit device <a @click="close" class="pull-right">x</a></h2>
+                    <h2>Edit device <a @click="hide" class="pull-right">x</a></h2>
     </div>        
                 <div class="modal-body modal-lg">
                     <form class="pure-form pure-form-aligned">
@@ -22,9 +22,17 @@
     </div>
                         <div class="pure-control-group">
                             <label for="location">Location</label>
-                            <select id="location" v-model="device.locationId">
-                                <option v-for="location in locations" :value="location.id">{{ location.name }}</option>
-    </select>
+                            <multiselect
+                                         :options="locations"
+                                         placeholder="Select one location"
+                                         label="name" 
+                                         selectLabel="" 
+                                         selectedLabel="" 
+                                         deselectLabel="" 
+                                         :value="selectedLocation"
+                                         @input="updateSelectedLocation"
+                                         v-model="device.location">
+    </multiselect>
     </div>
                         <div class="pure-control-group">
                             <label for="type">Type</label>
@@ -54,10 +62,9 @@
     </div>
                 <div class="modal-footer">
                     <button class="pure-button pure-button-primary" @click="edit">Edit</button>
-                    <button class="pure-button" @click="close">Cancel</button>
+                    <button class="pure-button" @click="hide()">Cancel</button>
                     <div class="clearfix"></div>
     </div>
-    </form>
     </div>
     </div>
     </div>
@@ -65,25 +72,24 @@
 </template>
 
 <script>
-    import { mapGetters, mapActions } from 'vuex'
     import Multiselect from 'vue-multiselect'
     export default {
         components: { Multiselect },
+        props: {
+            device: {
+                type: Object,
+            },
+        },
         data() { 
             return {
                 socket: this.$store.state.socket.socket,
                 types: [],
                 locations: [],
                 selectedTypes: [],
+                selectedLocation: null,
                 message: '',
                 refreshRate: null,
             }
-        },
-        computed: {
-            ...mapGetters({
-                isOpenModal: 'modal',
-                device: 'device',
-            })
         },
         created() {
             this.socket.emit('type.getAll')
@@ -97,21 +103,28 @@
         },
         watch: {
             device() {
-                this.selectedTypes = this.device.types
-                this.message = this.device.messages[this.device.messages.length - 1].data
-                this.refreshRate = parseInt(JSON.parse(this.device.messages[this.device.messages.length - 1].data).refresh) / 60000
+                this.selectedTypes = this.device.types                
+                this.selectedLocation = this.device.location
+                if(this.device.messages.length > 0) {
+                    this.message = this.device.messages[this.device.messages.length - 1].data
+                    this.refreshRate = parseInt(JSON.parse(this.device.messages[this.device.messages.length - 1].data).refresh) / 60000
+                }
             },
         },
         methods: {
+            hide() {
+                this.$emit('close')  
+            },
             updateSelectedTypes(types) {
                 this.device.types = types
             },
+            updateSelectedLocation(location) {
+                this.device.locationId = location.id
+                console.log('loc', this.device.locationId)
+            },
             edit() {
                 this.socket.emit('device.update', this.device)
-                this.$store.commit('closeModal')
-            },
-            close() {
-                this.$store.commit('closeModal')
+                this.hide()
             },
         }
     }

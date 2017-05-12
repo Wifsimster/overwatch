@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node server.js",
+    "dev": "nodemon server.js",
     "production": "set NODE_ENV=production&&node server.js"
   },
   "author": "",
@@ -50,7 +50,7 @@
     "tls": "0.0.1",
     "vue": "^2.1.6",
     "vue-moment": "^2.0.2",
-    "vue-multiselect": "^2.0.0-beta.13",
+    "vue-multiselect": "next",
     "vue-range-slider": "^0.2.4",
     "vue-resource": "^1.0.3",
     "vue-router": "^2.1.1",
