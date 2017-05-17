@@ -149,7 +149,9 @@
                 let exist = this.lights.filter((li) => {
                     if(li.id === light.id) { return true }
                 })
-                if(exist.length === 0) { this.lights.push(light) }
+                if(exist.length === 0) { 
+                    this.lights.push(light) 
+                }
             })
 
             this.socket.emit('light.getAll')

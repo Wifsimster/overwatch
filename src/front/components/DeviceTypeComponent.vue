@@ -1,5 +1,5 @@
 <template>
-<div v-if="device" class="device" :class="{ 'red': isDead }">
+<div v-if="device && data" class="device" :class="{ 'red': isDead }">
     <div v-if="device.type.name === 'Temperature'">
         <div class="image"><img :src="icons.temperature"></div>
         <span class="data">{{ data.temperature }}°C</span>

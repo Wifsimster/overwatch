@@ -5,7 +5,7 @@ $width: 180px;
 
 .sidebar {
     background-color: $cod-gray;
-    position: relative;
+    position: fixed;
     float: left;
     width: $width;
     height: 100%;

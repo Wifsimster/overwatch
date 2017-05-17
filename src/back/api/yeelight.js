@@ -7,11 +7,14 @@ const light = new Light()
 
 module.exports = (socket) => {
 
-    yeelightSearch.on('found', (light) => {
+    yeelightSearch.on('found', (light) => {        
         socket.broadcast.emit('light.found', {
-            id: light.getId(),
-            model: light.getModel(),
-            name: light.getName()
+            id: light.id,
+            name: light.name,
+            model: light.model,
+            port: light.port,
+            hostname: light.hostname,
+            supports: light.supports,
         })
     })
 
@@ -20,18 +23,9 @@ module.exports = (socket) => {
         socket.emit('light.getAll.result', list)
     })
 
-    socket.on('light.getValues', (id) => {
-        light.getValues(id).then((values) => {
-            console.log('Values', values)
-            socket.emit('light.getValues.result', values)
-        }).catch((err) => {
-            socket.emit('light.getValues.error', errorHandler(err))
-        })
-    })
-
     socket.on('light.toggle', (id) => {
-        light.toggle(id).then((rst) => {
-            socket.emit('light.toggle.result', rst)
+        light.toggle(id).then(() => {
+            socket.emit('light.toggle.result', id)
         }).catch((err) => {
             socket.emit('light.toggle.error', errorHandler(err))
         })
@@ -39,7 +33,7 @@ module.exports = (socket) => {
 
     socket.on('light.turnOn', (id) => {
         light.turnOn(id).then((rst) => {
-            socket.emit('light.turnOn.result', rst)
+            socket.emit('light.turnOn.result', id)
         }).catch((err) => {
             socket.emit('light.turnOn.error', errorHandler(err))
         })
@@ -47,9 +41,17 @@ module.exports = (socket) => {
 
     socket.on('light.turnOff', (id) => {
         light.turnOff(id).then((rst) => {
-            socket.emit('light.turnOff.result', rst)
+            socket.emit('light.turnOff.result', id)
         }).catch((err) => {
             socket.emit('light.turnOff.error', errorHandler(err))
+        })
+    })
+
+    socket.on('light.getValues', (options) => {
+        light.getValues(options).then((values) => {
+            socket.emit('light.getValues.result', values)
+        }).catch((err) => {
+            socket.emit('light.getValues.error', errorHandler(err))
         })
     })
 

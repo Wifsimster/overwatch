@@ -49,6 +49,7 @@
     "sqlite": "^2.2.4",
     "tls": "0.0.1",
     "vue": "^2.1.6",
+    "vue-color": "^2.0.9",
     "vue-moment": "^2.0.2",
     "vue-multiselect": "next",
     "vue-range-slider": "^0.2.4",
