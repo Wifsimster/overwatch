@@ -10,13 +10,13 @@ const scenario = require('../controllers/scenario')
 module.exports = (io) => {
 
     mqttClient.subscribe('/#')
-    
+
     mqttClient.on('close', () => {
         notify({
             message: 'MQTT disconnection !'
         })
     })
-    
+
     mqttClient.on('offline', () => {
         notify({
             message: 'MQTT client offline !'
@@ -24,11 +24,17 @@ module.exports = (io) => {
     })
 
     mqttClient.on('message', (topic, message) => {
-        if(topic.startsWith('/sensors/')) {
-            let data = JSON.parse(message.toString())
-            if(data.mac) {
-                Device.findOne({ where: { mac: data.mac } }).then((device) => {
-                    if(device) {
+        let data = JSON.parse(message.toString())
+        if(data.mac) {
+            Device.findOne({ where: { mac: data.mac } }).then((device) => {
+                if(device) {
+                    if(topic.startsWith('/online/')) {
+                        notify({
+                            message: device.name + ' is online !',
+                            data: device
+                        })
+                    }
+                    if(topic.startsWith('/sensors/')) {
                         if(data.online) {
                             notify({
                                 message: device.name + ' is online !',
@@ -37,15 +43,15 @@ module.exports = (io) => {
                         } else {
                             updateDevice(data, device)
                         }
-                    } else {
-                        addDevice(data)
-                        notify({
-                            message: 'New device online detected !',
-                            data: data
-                        })
                     }
-                }).catch((err) => { console.error(err) })
-            }
+                } else {
+                    addDevice(data)
+                    notify({
+                        message: 'New device online detected !',
+                        data: data
+                    })
+                }
+            }).catch((err) => { console.error(err) })
         }
     })
 

@@ -2,34 +2,58 @@
 
 $height: 116px;
 
-.yeelight {
-    position: relative;
-    background-color: $mine-shaft-app;
-    margin: 5px;
-    padding: 5px 10px;
-    height: $height;
-    .image {
-        position: absolute;
-        overflow: hidden;
-        height: $height - 10px;
-        left: calc(50% - 45px);
-        img {
-            height: calc(100% + 15px);
-            overflow: hidden;
-            cursor: pointer;
+div {
+
+    &.open {
+        position: fixed;
+        z-index: 9998;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, .5);
+        transition: all .3s ease;
+        display: flex;
+        align-items: center;
+        
+        .yeelight {
+            margin: 0 auto;
+            padding: 20px 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
+            width: 550px;
+            border-radius: 2px;
         }
     }
-    .led {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    }
-    .location {
-        color: $dusty-gray;
-        position: absolute;
-        bottom: 10px;
-    }
-    &.red {
-        border: 1px solid $red;
+
+    .yeelight {
+        position: relative;
+        background-color: $mine-shaft-app;
+        margin: 5px;
+        padding: 5px 10px;
+        height: $height;
+        .image {
+            position: absolute;
+            overflow: hidden;
+            height: $height - 10px;
+            left: calc(50% - 45px);
+            img {
+                height: calc(100% + 15px);
+                overflow: hidden;
+                cursor: pointer;
+            }
+        }
+        .led {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+        .location {
+            color: $dusty-gray;
+            position: absolute;
+            bottom: 10px;
+        }
+        &.red {
+            border: 1px solid $red;
+        }
     }
 }

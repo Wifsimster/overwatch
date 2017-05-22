@@ -1,6 +1,7 @@
 <template>
-<div>
-    <div class="yeelight" :class="{ 'red': error }">
+<div :class="{ 'red': error, 'open': opened }" >
+    <div class="yeelight"
+         @click="opened = true">
         <span class="led" v-if="state" title="On"></span>
         <div class="image" v-if="state" @click="turnOff()">
             <img :src="bulbImg" class="on">
@@ -15,21 +16,18 @@
                       step="10"
                       v-model="slider">
     </range-slider>
-        <color-picker v-model="colors"></color-picker>
     </div>
     </div>
 </template>
 
 <script>
     import RangeSlider from 'vue-range-slider'
-    import bulbImg from '../assets/bulb.png'
     import 'vue-range-slider/dist/vue-range-slider.css'
-    import { Slider } from 'vue-color'
+    import bulbImg from '../assets/bulb.png'
 
     export default {
         components: {
             RangeSlider,
-            'color-picker': Slider,
         },
         props: {
             light: Object,
@@ -40,32 +38,11 @@
                 bulbImg: bulbImg,
                 state: false,
                 error: false,
+                opened: false,
                 slider: 1,
-                colors: {
-                    hex: '#194d33',
-                    hsl: {
-                        h: 150,
-                        s: 0.5,
-                        l: 0.2,
-                        a: 1
-                    },
-                    hsv: {
-                        h: 150,
-                        s: 0.66,
-                        v: 0.30,
-                        a: 1
-                    },
-                    rgba: {
-                        r: 25,
-                        g: 77,
-                        b: 51,
-                        a: 1
-                    },
-                    a: 1
-                },
             }
         },
-        created() {            
+        created() {
             this.socket.emit('light.getValues', {
                 id: this.light.id,
                 props: ['power']
@@ -73,13 +50,15 @@
             this.socket.on('light.getValues.result', (result) => {
                 console.log(this.light.id, result)
             })
-
             this.turnOff()
         },
         watch: {
             slider(val) { this.setBrightness(val) },
         },
         methods: {
+            openDevice() {
+                this.$el.className = 'open'
+            },
             toggle() {
                 this.socket.emit('light.toggle', this.light.id)
                 this.socket.on('light.toggle.result', (id) => {
