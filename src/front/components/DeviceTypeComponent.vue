@@ -16,52 +16,60 @@
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
-    <div v-if="device.type.name == 'Luminosity'">
+    <div v-if="device.type.key == 'luminosity'">
         <div class="image"><img :src="icons.luminosity"></div>
         <span class="data">{{ data.luminosity }}LUX</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
-    <div v-if="device.type.name == 'Pressure'">
+    <div v-if="device.type.key == 'pressure'">
         <div class="image"><img :src="icons.pressure"></div>
         <span class="data">{{ data.pressure }}mB</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
-    <div v-if="device.type.name == 'Switch'">
+    <div v-if="device.type.key == 'motion'">
         <div class="image"><img :src="icons.switch"></div>    
         <span class="data">{{ data.state }}</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
-    <div v-if="device.type.name == 'Dimmer'">
+    <div v-if="device.type.key == 'dimmer'">
         <div class="image"><img :src="icons.dimmer"></div>
         <span class="data">{{ data.dimmer }}</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
-    <div v-if="device.type.name == 'Gas'">
+    <div v-if="device.type.key == 'gas'">
         <div class="image"><img :src="icons.gas"></div>
         <span class="data">{{ data.gas }}ppm</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
-    <div v-if="device.type.name == 'Water'">
+    <div v-if="device.type.key == 'water'">
         <div class="image"><img :src="icons.water"></div>
         <span class="data">{{ data.water }}</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
-    <div v-if="device.type.name == 'RGBW'">
+    <div v-if="device.type.key == 'rgbw'">
         <div class="image"><img :src="icons.rgbw"></div>
         <span class="data">{{ data.rgbw }}</span>
         <span class="name">{{ device.name }}</span>
+        <span class="location" v-if="device.location">{{ device.location.name }}</span>
+        <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
+    </div>
+    <div v-if="device.type.key == 'switch'">
+        <div class="image"><img :src="icons.switch"></div>    
+        <span class="data">{{ data.state }}</span>
+        <span class="name">{{ device.name }}</span>
+        <switche :state=state v-on:switch="changeState"></switche>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
@@ -78,10 +86,10 @@
     import gas from '../assets/gas.png'
     import rgbw from '../assets/led_strip.png'
     import moment from 'moment'
+    import Switche from './SwitchComponent.vue'
     export default {
-        props: {
-            device: Object,
-        },
+        components: { Switche },
+        props: { device: Object },
         data() {
             return {                
                 socket: this.$store.state.socket.socket,
@@ -96,6 +104,7 @@
                     gas: gas,
                     rgbw: rgbw,
                 },
+                state: false,
                 lastSeen: null,
                 isDead: false,
             }
@@ -106,6 +115,15 @@
             }
         },
         methods: {
+            changeState(val) {
+                this.state = val
+                let stateValue = this.state ? 1 : 0
+                let options = {
+                    topic: '/sensors/relay/',
+                    message: `{"mac":"${this.device.mac}", "state":"${stateValue}"}`
+                }
+                this.socket.emit('mqtt.publish', options)
+            },
             getData() {
                 this.device.messages.sort((a, b) => {
                     return new Date(a.createdAt) - new Date(b.createdAt)

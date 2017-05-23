@@ -13,7 +13,6 @@ import SettingsView from '../views/SettingsView.vue'
 import ScenarioView from '../views/ScenarioView.vue'
 
 export default new Router({
-    //  mode: 'history',
     scrollBehavior: () => ({ y: 0 }),
     routes: [
         { path: '/', component: DashboardView },

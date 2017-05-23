@@ -8,7 +8,7 @@ $width: 180px;
     position: fixed;
     float: left;
     width: $width;
-    height: 100%;
+    height: calc(100% - #{$top});
     top: $top;
 
     h1 {
@@ -51,6 +51,30 @@ $width: 180px;
                     background-color: rgba(0,0,0,.15);
                 }
             }       
+        }
+        &.bottom {
+            position: absolute;
+            text-align: center;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            font-size: 14px;
+            line-height: 14px;
+            font-weight: 600;
+            li {
+                span {
+                    &.red {
+                        color: $red;
+                    }
+                    &.green {
+                        color: $green;
+                    }                    
+                    .led {
+                        margin: 0 5px 0 0;
+                        vertical-align: middle;
+                    }
+                }
+            }
         }
     }
 }

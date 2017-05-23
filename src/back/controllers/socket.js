@@ -1,8 +1,6 @@
-module.exports = (io) => {
-    io.on('connection', (socket) => {        
-
+module.exports = (mqttClient, io) => {
+    io.on('connection', (socket) => {
         console.log('New client', socket.id)
-        
         require('../api/device')(socket)
         require('../api/message')(socket)
         require('../api/type')(socket)
@@ -10,5 +8,6 @@ module.exports = (io) => {
         require('../api/setting')(socket)
         require('../api/freebox')(socket)
         require('../api/yeelight')(socket)
+        require('../api/mqtt')(mqttClient, socket)
     })
 }

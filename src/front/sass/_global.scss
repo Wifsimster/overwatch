@@ -67,10 +67,6 @@ table {
     }
 }
 
-input[type=password], [type=email], [type=url], input[type=date], input[type=month], input[type=time], input[type=datetime], input[type=datetime-local], input[type=week], input[type=tel], input[type=color], input[type=number], input[type=search], input[type=text], select, textarea {
-    color: $black !important;
-}
-
 .center {
     text-align: center;
 }

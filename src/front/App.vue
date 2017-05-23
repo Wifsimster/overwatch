@@ -42,4 +42,5 @@
 @import './sass/card';
 @import './sass/checkbox';
 @import './sass/modal';
+@import './sass/form';
 </style>
