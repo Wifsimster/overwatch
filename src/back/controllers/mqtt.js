@@ -34,20 +34,13 @@ module.exports = (io) => {
                             data: device
                         })
                     }
-                    if(topic.startsWith('/sensors/')) {
-                        if(data.online) {
-                            notify({
-                                message: device.name + ' is online !',
-                                data: device
-                            })
-                        } else {
-                            updateDevice(data, device)
-                        }
+                    if(topic.startsWith('/sensors/')) {                        
+                        updateDevice(data, device)
                     }
                 } else {
                     addDevice(data)
                     notify({
-                        message: 'New device online detected !',
+                        message: 'New device detected !',
                         data: data
                     })
                 }
@@ -103,11 +96,24 @@ module.exports = (io) => {
 
     function addDevice(data) {
         Device.create({
-            name: data.name,
             mac: data.mac,
             ip: data.ip,
+            name: data.name,
         }).then((device) => {
+
+            Type.findOne({ where: { key: data.type } }).then(type => {              
+                if(type) {
+                    console.log('Type added', type.name)
+                    device.addType(type.id)
+                } else {
+                    console.log('No type found !')
+                }
+            }).catch(err => {
+                console.error(err)
+            })
+
             addMessage(data, device)
+
             io.emit('device.add.result', device)
         }).catch((err) => {
             io.emit('device.add.error', errorHandler(err))

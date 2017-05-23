@@ -10,7 +10,7 @@ sequelize.sync({ force: true }).then(() => {
     Type.create({name: 'Humidity'})
     Type.create({name: 'Luminosity'})
     Type.create({name: 'Pressure'})
-    Type.create({name: 'Switch'})
+    Type.create({name: 'Switch', key: 'switch'})
     Type.create({name: 'Dimmer'})
     Type.create({name: 'Gas'})
     Type.create({name: 'Water'})

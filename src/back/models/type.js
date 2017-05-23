@@ -2,9 +2,10 @@ var Sequelize = require('sequelize')
 var sequelize = require('../db/database')
 
 var Type = sequelize.define('type', {
-  name: Sequelize.STRING,  
+    name: Sequelize.STRING,  
+    key: Sequelize.STRING,
 }, {
-  freezeTableName: true,
+    freezeTableName: true,
 })
 
 module.exports = Type
