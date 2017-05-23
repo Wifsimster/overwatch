@@ -105,6 +105,7 @@ module.exports = (io) => {
                 }
 
                 function addDevice(data) {
+                    console.log('DATA', data)
                     Device.create({
                         mac: data.mac,
                         ip: data.ip,

@@ -4,7 +4,7 @@
         <div class="modal-wrapper">
             <div class="modal-container">
                 <div class="modal-header">
-                    <h2>Edit device <a @click="hide" class="pull-right">x</a></h2>
+                    <h2>Edit device <a @click="hide()" class="pull-right">x</a></h2>
     </div>        
                 <div class="modal-body modal-lg">
                     <form class="pure-form pure-form-aligned">

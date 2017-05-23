@@ -1,17 +1,17 @@
 <template>
 <transition name="modal">
-    <div class="modal-mask" v-show="isOpenModal">
+    <div class="modal-mask">
         <div class="modal-wrapper">
             <div class="modal-container">
                 <div class="modal-header">
-                    <h2>Remove device <a @click="close" class="pull-right">x</a></h2>
+                    <h2>Remove device <a @click="hide()" class="pull-right">x</a></h2>
     </div>            
                 <div class="modal-body modal-lg">
                     <p>Do you really want to delete this device ?</p>
     </div>  
                 <div class="modal-footer">
-                    <button class="pure-button pure-button-primary" @click="remove">Remove</button>
-                    <button class="pure-button" @click="close">Cancel</button>
+                    <button class="pure-button pure-button-primary" @click="remove()">Remove</button>
+                    <button class="pure-button" @click="hide()">Cancel</button>
                     <div class="clearfix"></div>
     </div>
     </div>
@@ -21,36 +21,31 @@
 </template>
 
 <script>
-    import { mapGetters, mapActions } from 'vuex'
     export default {
+        props: {
+            device: {
+                type: Object,
+            },
+        },
         data() { 
             return {
                 socket: this.$store.state.socket.socket,
             }
         },
-        computed: {
-            ...mapGetters({
-                isOpenModal: 'removeModal',
-                device: 'removeDevice',
-            })
-        },
-        created() {
-            this.socket.on('device.remove.result', (rst) => {
-                this.$store.commit('closeModal')
-                this.socket.emit('device.getAll')
-            })
-        },
         methods: {
-            remove() { 
+            remove() {
                 this.socket.emit('device.remove', this.device) 
+                this.socket.on('device.remove.result', () => {
+                    this.$emit('close')
+                })
             },
-            close() {
-                this.$store.commit('closeModal')
+            hide() {
+                this.$emit('close')
             },
         }
     }
 </script>
 
 <style lang="sass" scoped>
-@import '../sass/modal';
+@import '../sass/modal'
 </style>
