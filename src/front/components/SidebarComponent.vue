@@ -1,6 +1,5 @@
 <template>
 <div class="sidebar">
-    <!--    <h1>Réglages</h1>-->
     <ul>
         <li>
             <router-link to="/devices" class="link">
@@ -40,34 +39,17 @@
     </li>
     </ul>
 
-    <ul class="bottom">
-        <li>
-            <span v-if="online" class="green">
-                <span class="led green"></span>MQTT Online</span>
-            <span v-else class="red">
-                <span class="led red"></span>MQTT Offline</span>
-    </li>
-    </ul>
+    <div class="bottom">
+        <mqtt-health></mqtt-health>
+    </div>
 
     </div>
 </template>
 
 <script>
+    import MqttHealth from './MqttHealthComponent.vue'
     export default {
-        data() {
-            return {
-                socket: this.$store.state.socket.socket,
-                online: false,
-            }
-        },
-        created() {
-            this.socket.on('mqtt.connected', (result) => {
-                this.online = false
-            })
-            this.socket.on('mqtt.offline', (result) => {
-                this.online = false
-            })
-        },
+        components: { MqttHealth },
     }
 </script>
 

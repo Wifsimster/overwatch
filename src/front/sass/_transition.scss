@@ -4,3 +4,10 @@
 .expand-enter, .expand-leave-active {
     opacity: 0;
 }
+
+.opacity-enter-active, .opacity-leave-active {
+    transition: opacity .4s ease;
+}
+.opacity-enter, .opacity-leave-to {
+    opacity: 0;
+}

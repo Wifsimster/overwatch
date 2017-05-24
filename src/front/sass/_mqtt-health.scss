@@ -1,0 +1,16 @@
+@import 'colors';
+
+.mqtt {
+    span {
+        &.red {
+            color: $red;
+        }
+        &.green {
+            color: $green;
+        }                    
+        .led {
+            margin: 0 5px 0 0;
+            vertical-align: middle;
+        }
+    }
+}

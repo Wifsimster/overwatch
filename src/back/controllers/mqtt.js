@@ -16,7 +16,7 @@ module.exports = (io) => {
                 let settings = obj.settings.mqtt            
                 let mqttUrl = `mqtt://${settings.ip}:${settings.port}`
                 let mqttClient = mqtt.connect(mqttUrl)
-                
+
                 resolve(mqttClient)
 
                 mqttClient.subscribe('/#')
@@ -25,12 +25,22 @@ module.exports = (io) => {
                     io.emit('mqtt.connected') 
                 })
 
+                mqttClient.on('reconnecting', () => {
+                    console.log('Reconnecting...')
+                    io.emit('mqtt.reconnecting') 
+                })
+
                 mqttClient.on('close', () => {
                     io.emit('mqtt.close') 
                 })
 
                 mqttClient.on('offline', () => {
                     io.emit('mqtt.offline') 
+                })
+
+                mqttClient.on('error', () => {
+                    console.log('error')
+                    io.emit('mqtt.error') 
                 })
 
                 mqttClient.on('message', (topic, message) => {
