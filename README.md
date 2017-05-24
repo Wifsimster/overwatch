@@ -17,12 +17,12 @@ Personal home automation with real time messaging for Raspberry Pi 3.
 - [x] [Xiaomi Camera](http://www.gearbest.com/ip-cameras/pp_615275.html)
 - [x] [Yeelight](https://github.com/pmdroid/yeelight-wifi)
 - [x] Display MQTT messages in real time
+- [x] Display MQTT broker health
+- [x] [Sonoff switch](https://www.itead.cc/sonoff-wifi-wireless-switch.html)
 - [ ] Enable/disabled scenario
 - [ ] Backup data
-- [ ] Display MQTT broker health
 - [ ] Netatmo meteo prevision
 - [ ] Yeelight status
-- [ ] [Sonoff switch](https://www.itead.cc/sonoff-wifi-wireless-switch.html)
 - [ ] RGB led strip with ESP8266
 - [ ] Color picker for Yeelight devices
 
