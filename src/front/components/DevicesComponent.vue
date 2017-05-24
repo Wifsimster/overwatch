@@ -1,3 +1,4 @@
+
 <template>
 <div>
     <h2>Devices ({{ devices.length }}) <a @click="removeAll" title="Remove all devices"><i class="material-icons">delete</i></a></h2>

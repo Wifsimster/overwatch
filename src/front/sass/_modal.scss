@@ -13,17 +13,9 @@
     .modal-wrapper {
         display: table-cell;
         vertical-align: middle;
-        &.modal-red {
-            .modal-header {
-                background-color: $red !important;
-            }
-        }
         .modal-container {
-            &.modal-lg {
-                width: 860px;
-            }
-            &.modal-xl {
-                width: 1024px;
+            &.lg {
+                width: 90%;
             }
             width: 600px;
             margin: 0px auto;
@@ -40,29 +32,20 @@
                     color: $gallery;
                     margin: 0;
                     padding: 5px 0;
-                    a {
-                        font-size: 16px;
-                        color: inherit;
-                    }
                 }
-            }
-            .alert {
-                margin-top: 0;
-                border-radius: 0;
-                p {
-                    padding: 5px 10px;
+                .close {
+                    font-size: 22px;
+                    float: right;
+                    color: $gallery;
+                    padding: 5px 0;
                 }
             }
             .modal-body {
                 margin: 20px;
-                p {
-                    overflow: auto;
-                    padding: 0 0 10px;
-                    white-space: pre;
-                }
             }
             .modal-footer {
-                padding: 10px 20px;
+                min-height: 60px;
+                padding: 14px 20px;
                 background-color: $mine-shaft-light;
                 button {
                     margin-left: 10px;

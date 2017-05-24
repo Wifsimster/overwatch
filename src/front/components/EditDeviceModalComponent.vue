@@ -1,80 +1,75 @@
 <template>
-<transition name="modal">
-    <div class="modal-mask">
-        <div class="modal-wrapper">
-            <div class="modal-container">
-                <div class="modal-header">
-                    <h2>Edit device <a @click="hide()" class="pull-right">x</a></h2>
-    </div>        
-                <div class="modal-body modal-lg">
-                    <form class="pure-form pure-form-aligned">
-                        <div class="pure-control-group">
-                            <label for="name">Name</label>
-                            <input id="name" type="text" v-model="device.name">
+<modal size="lg" @close="hide()">
+    <div slot="header">Edit device</div>
+    <div slot="body">
+        <form class="pure-form pure-form-aligned">
+            <div class="pure-control-group">
+                <label for="name">Name</label>
+                <input id="name" type="text" v-model="device.name">
     </div>
-                        <div class="pure-control-group">
-                            <label for="mac">MAC</label>
-                            <input id="mac" type="text" v-model="device.mac" readonly>
+            <div class="pure-control-group">
+                <label for="mac">MAC</label>
+                <input id="mac" type="text" v-model="device.mac" readonly>
     </div>
-                        <div class="pure-control-group">
-                            <label for="ip">IP</label>
-                            <input id="ip" type="text" v-model="device.ip" readonly>
+            <div class="pure-control-group">
+                <label for="ip">IP</label>
+                <input id="ip" type="text" v-model="device.ip" readonly>
     </div>
-                        <div class="pure-control-group">
-                            <label for="location">Location</label>
-                            <multiselect
-                                         :options="locations"
-                                         placeholder="Select one location"
-                                         label="name" 
-                                         selectLabel="" 
-                                         selectedLabel="" 
-                                         deselectLabel="" 
-                                         :value="selectedLocation"
-                                         @input="updateSelectedLocation"
-                                         v-model="device.location">
+            <div class="pure-control-group">
+                <label for="location">Location</label>
+                <multiselect
+                             :options="locations"
+                             placeholder="Select one location"
+                             label="name" 
+                             selectLabel="" 
+                             selectedLabel="" 
+                             deselectLabel="" 
+                             :value="selectedLocation"
+                             @input="updateSelectedLocation"
+                             v-model="device.location">
     </multiselect>
     </div>
-                        <div class="pure-control-group">
-                            <label for="type">Type</label>
-                            <multiselect
-                                         :options="types"
-                                         :multiple="true"
-                                         placeholder="Select at least one type"
-                                         label="name" 
-                                         selectLabel="" 
-                                         selectedLabel="" 
-                                         deselectLabel="" 
-                                         :close-on-select="false"
-                                         :value="selectedTypes"
-                                         @input="updateSelectedTypes"
-                                         v-model="device.types">
+            <div class="pure-control-group">
+                <label for="type">Type</label>
+                <multiselect
+                             :options="types"
+                             :multiple="true"
+                             placeholder="Select at least one type"
+                             label="name" 
+                             selectLabel="" 
+                             selectedLabel="" 
+                             deselectLabel="" 
+                             :close-on-select="false"
+                             :value="selectedTypes"
+                             @input="updateSelectedTypes"
+                             v-model="device.types">
     </multiselect>
     </div>
-                        <div class="pure-control-group" v-if="refreshRate">
-                            <label for="message">Refresh rate</label>
-                            <p class="message">{{ refreshRate }} min</p>
+            <div class="pure-control-group" v-if="refreshRate">
+                <label for="message">Refresh rate</label>
+                <p class="message">{{ refreshRate }} min</p>
     </div>
-                        <div class="pure-control-group">
-                            <label for="message">Last message</label>
-                            <p class="message">{{ message }}</p>
+            <div class="pure-control-group">
+                <label for="message">Last message</label>
+                <p class="message">{{ message }}</p>
     </div>
     </form>
     </div>
-                <div class="modal-footer">
-                    <button class="pure-button pure-button-primary" @click="edit">Edit</button>
-                    <button class="pure-button" @click="hide()">Cancel</button>
-                    <div class="clearfix"></div>
+    <div slot="footer">
+        <button class="pure-button pure-button-primary" @click="edit">Edit</button>
+        <button class="pure-button" @click="hide()">Cancel</button>
     </div>
-    </div>
-    </div>
-    </div>
-    </transition>
+    </modal>
 </template>
 
 <script>
     import Multiselect from 'vue-multiselect'
+    import Modal from './ModalComponent.vue'
     export default {
-        components: { Multiselect },
+        components: { 
+            Multiselect,
+            Modal,
+        },
         props: {
             device: {
                 type: Object,
