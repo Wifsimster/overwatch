@@ -77,16 +77,16 @@
 </template>
 
 <script>
-    import thermometer from '../assets/thermometer.png'
-    import humidity from '../assets/humidity.png'
-    import pressure from '../assets/pressure.png'
-    import _switch from '../assets/switch.png'
-    import dimmer from '../assets/dimmer.png'
-    import luminosity from '../assets/luminosity.png'
-    import gas from '../assets/gas.png'
-    import rgbw from '../assets/led_strip.png'
+    import thermometer from '../../assets/thermometer.png'
+    import humidity from '../../assets/humidity.png'
+    import pressure from '../../assets/pressure.png'
+    import _switch from '../../assets/switch.png'
+    import dimmer from '../../assets/dimmer.png'
+    import luminosity from '../../assets/luminosity.png'
+    import gas from '../../assets/gas.png'
+    import rgbw from '../../assets/led_strip.png'
     import moment from 'moment'
-    import Switche from './SwitchComponent.vue'
+    import Switche from '../SwitchComponent.vue'
     export default {
         components: { Switche },
         props: { device: Object },
@@ -150,5 +150,5 @@
 </script>
 
 <style lang="sass" scoped>
-@import '../sass/device';
+@import '../../sass/device'
 </style>

@@ -53,7 +53,7 @@
     import netatmo from 'netatmo'
     import alertify from 'alertifyjs'
     import DateTime from '../components/DateTimeComponent.vue'
-    import DeviceType from '../components/DeviceTypeComponent.vue'   
+    import DeviceType from '../components/device/DeviceTypeComponent.vue'   
     import Freebox from '../components/FreeboxComponent.vue'
     import NetatmoHumidity from '../components/netatmo/HumidityComponent.vue'
     import NetatmoOutdoorHumidity from '../components/netatmo/ModuleHumidityComponent.vue'

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import ComMessages from '../components/MessagesComponent.vue'
+    import ComMessages from '../components/message/MessagesComponent.vue'
     export default {
         data() {
             return {

@@ -1,5 +1,5 @@
 <template>
-<modal size="lg" @close="hide()">
+<modal @close="hide()">
     <div slot="header">Edit device</div>
     <div slot="body">
         <form class="pure-form pure-form-aligned">
@@ -64,7 +64,7 @@
 
 <script>
     import Multiselect from 'vue-multiselect'
-    import Modal from './ModalComponent.vue'
+    import Modal from '../ModalComponent.vue'
     export default {
         components: { 
             Multiselect,

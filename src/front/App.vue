@@ -43,4 +43,5 @@
 @import './sass/checkbox';
 @import './sass/modal';
 @import './sass/form';
+@import './sass/btn';
 </style>

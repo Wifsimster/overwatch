@@ -9,7 +9,7 @@
 </template>
 
 <script>
-    import ComDevices from '../components/DevicesComponent.vue'
+    import ComDevices from '../components/device/DevicesComponent.vue'
     export default {
         data() {
             return {
