@@ -43,7 +43,6 @@ module.exports = (io) => {
 
                 mqttClient.on('message', (topic, message) => {
                     try {
-
                         let data = JSON.parse(message.toString())
                         if(data.mac) {
                             Device.findOne({ where: { mac: data.mac } }).then((device) => {
@@ -53,6 +52,9 @@ module.exports = (io) => {
                                             message: device.name + ' is online !',
                                             data: device
                                         })
+                                    }
+                                    if(topic.startsWith('/ping/')) {
+                                        updateDevice(data, device)                                        
                                     }
                                     if(topic.startsWith('/sensors/')) {
                                         updateDevice(data, device)
@@ -120,11 +122,11 @@ module.exports = (io) => {
                 }
 
                 function addDevice(data) {
-                    console.log('DATA', data)
                     Device.create({
                         mac: data.mac,
                         ip: data.ip,
                         name: data.name,
+                        ping: new Date(),
                     }).then((device) => {
 
                         Type.findOne({ where: { key: data.type } }).then(type => {              
@@ -147,7 +149,8 @@ module.exports = (io) => {
                 }
 
                 function updateDevice(data, device) {
-                    Device.update({ ip: device.ip }, { where: { id: device.id } }).then((count) => {
+                    Device.update({ ping: new Date() }, 
+                                  { where: { id: device.id } }).then((count) => {
                         addMessage(data, device)
                         io.emit('device.update.result', count)
                     }).catch((err) => {
