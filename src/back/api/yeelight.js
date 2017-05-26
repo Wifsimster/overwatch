@@ -1,7 +1,5 @@
-const errorHandler = require('./errorHandler')
 const YeelightSearch = require('yeelight-wifi')
 const yeelightSearch = new YeelightSearch()
-
 const Light = require('../class/light')
 const light = new Light()
 
@@ -27,7 +25,7 @@ module.exports = (socket) => {
         light.toggle(id).then(() => {
             socket.emit('light.toggle.result', id)
         }).catch((err) => {
-            socket.emit('light.toggle.error', errorHandler(err))
+            socket.emit('light.toggle.error', err)
         })
     })
 
@@ -35,7 +33,7 @@ module.exports = (socket) => {
         light.turnOn(id).then((rst) => {
             socket.emit('light.turnOn.result', id)
         }).catch((err) => {
-            socket.emit('light.turnOn.error', errorHandler(err))
+            socket.emit('light.turnOn.error', err)
         })
     })
 
@@ -43,7 +41,7 @@ module.exports = (socket) => {
         light.turnOff(id).then((rst) => {
             socket.emit('light.turnOff.result', id)
         }).catch((err) => {
-            socket.emit('light.turnOff.error', errorHandler(err))
+            socket.emit('light.turnOff.error', err)
         })
     })
 
@@ -51,7 +49,7 @@ module.exports = (socket) => {
         light.getValues(options).then((values) => {
             socket.emit('light.getValues.result', values)
         }).catch((err) => {
-            socket.emit('light.getValues.error', errorHandler(err))
+            socket.emit('light.getValues.error', err)
         })
     })
 
@@ -59,7 +57,7 @@ module.exports = (socket) => {
         light.setName(options).then((rst) => {
             socket.emit('light.setName.result', rst)
         }).catch((err) => { 
-            socket.emit('light.setName.error', errorHandler(err))
+            socket.emit('light.setName.error', err)
         })
     })
 
@@ -67,7 +65,7 @@ module.exports = (socket) => {
         light.setColorTemperature(options).then((rst) => {
             socket.emit('light.setColorTemperature.result', rst)
         }).catch((err) => { 
-            socket.emit('light.setColorTemperature.error', errorHandler(err))
+            socket.emit('light.setColorTemperature.error', err)
         })
     })
 
@@ -75,7 +73,7 @@ module.exports = (socket) => {
         light.setBrightness(options).then((rst) => {
             socket.emit('light.setBrightness.result', rst)
         }).catch((err) => { 
-            socket.emit('light.setBrightness.error', errorHandler(err))
+            socket.emit('light.setBrightness.error', err)
         })
     })
 
@@ -83,7 +81,7 @@ module.exports = (socket) => {
         light.setRGB(options).then((rst) => {
             socket.emit('light.setRGB.result', rst)
         }).catch((err) => { 
-            socket.emit('light.setRGB.error', errorHandler(err))
+            socket.emit('light.setRGB.error', err)
         })
     })
 

@@ -1,8 +1,8 @@
 <template>
 <div>
-    <h2>MQTT messages ({{ messages.length }}) <a @click="openRemoveAllModal()" title="Remove all messages"><i class="material-icons">delete</i></a></h2>
-    <transition name="expand">
-        <div class="messages" v-if="messages.length > 0">
+    <h2>Messages <a @click="openRemoveAllModal()" title="Remove all messages"><i class="material-icons">delete</i></a></h2>
+    <transition name="opacity">
+        <div class="messages" v-if="messages && messages.length > 0">
             <table>
                 <thead>
                     <tr>
@@ -23,7 +23,8 @@
     </table>
     </div>
         <div v-else>
-            <p class="center">No message.</p>
+            <br>
+            <p class="center">No message</p>
     </div>
     </transition>
 
@@ -45,12 +46,12 @@
             RemoveAllModal,
         },
         data() {
-            return {
-                messages: [],                
+            return {                
                 socket: this.$store.state.socket.socket,
+                messages: null,
+                removeMessage: null,
                 removeShow: false,
                 removeAllShow: false,
-                removeMessage: null,
             }
         },
         created() {

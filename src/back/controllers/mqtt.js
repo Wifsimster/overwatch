@@ -2,7 +2,6 @@ const Message = require('../models/message')
 const Device = require('../models/device')
 const Type = require('../models/type')
 const Location = require('../models/location')
-const errorHandler = require('../api/errorHandler')
 const scenario = require('../controllers/scenario')
 const mqtt = require('mqtt')
 const jsonfile = require('jsonfile')
@@ -90,7 +89,7 @@ module.exports = (io) => {
                     }).then((devices) => {
                         io.emit('device.getAll.result', devices)
                     }).catch((err) => {
-                        io.emit('device.getAll.error', errorHandler(err))
+                        io.emit('device.getAll.error', err)
                     }) 
                 }
 
@@ -101,7 +100,7 @@ module.exports = (io) => {
                     }).then((messages) => {
                         io.emit('message.getAll.result', messages)
                     }).catch((err) => {
-                        io.emit('message.getAll.error', errorHandler(err))
+                        io.emit('message.getAll.error', err)
                     })
                 }
 
@@ -117,7 +116,7 @@ module.exports = (io) => {
                             scenario(d, io)
                         })
                     }).catch((err) => {
-                        io.emit('message.add.error', errorHandler(err))
+                        io.emit('message.add.error', err)
                     })
                 }
 
@@ -144,7 +143,7 @@ module.exports = (io) => {
 
                         io.emit('device.add.result', device)
                     }).catch((err) => {
-                        io.emit('device.add.error', errorHandler(err))
+                        io.emit('device.add.error', err)
                     })
                 }
 
@@ -154,7 +153,7 @@ module.exports = (io) => {
                         addMessage(data, device)
                         io.emit('device.update.result', count)
                     }).catch((err) => {
-                        io.emit('device.update.error', errorHandler(err))
+                        io.emit('device.update.error', err)
                     })
 
                 }

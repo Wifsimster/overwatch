@@ -88,5 +88,5 @@
 </script>
 
 <style lang="sass" scoped>
-@import '../sass/mqtt-health'
+@import '../sass/components/mqtt-health'
 </style>

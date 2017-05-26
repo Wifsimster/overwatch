@@ -1,36 +1,44 @@
 <template>
-<div :class="{ 'red': error, 'open': opened }" >
-    <div class="yeelight"
-         @click="opened = true">
-        <span class="led" v-if="state" title="On"></span>
-        <div class="image" v-if="state" @click="turnOff()">
-            <img :src="bulbImg" class="on">
+<device :show="settings.netatmo.display">
+    <div slot="body">
+        <div :class="{ 'red': error }" >
+            <div class="yeelight">
+                <span class="led" v-if="state" title="On"></span>
+                <div class="image" v-if="state" @click="turnOff()">
+                    <img :src="bulbImg" class="on">
     </div>
-        <div class="image" v-if="!state" @click="turnOn()">
-            <img :src="bulbImg">
+                <div class="image" v-if="!state" @click="turnOn()">
+                    <img :src="bulbImg">
     </div>
-        <span class="location">{{ light.name }}</span>
-        <range-slider class="slider"
-                      min="1"
-                      max="100"
-                      step="10"
-                      v-model="slider">
+                <span class="location">{{ light.name }}</span>
+                <range-slider class="slider"
+                              min="1"
+                              max="100"
+                              step="10"
+                              v-model="slider">
     </range-slider>
     </div>
     </div>
+    </div>
+    </device>
 </template>
 
 <script>
+    import Device from './DeviceComponent.vue'
     import RangeSlider from 'vue-range-slider'
     import 'vue-range-slider/dist/vue-range-slider.css'
     import bulbImg from '../assets/bulb.png'
-
     export default {
-        components: {
-            RangeSlider,
-        },
+        components: { Device, RangeSlider },
         props: {
-            light: Object,
+            light: {
+                type: Object,
+                required: true,
+            },
+            settings: {
+                type: Object,
+                required: true,
+            },
         },
         data() {
             return {
@@ -38,7 +46,6 @@
                 bulbImg: bulbImg,
                 state: false,
                 error: false,
-                opened: false,
                 slider: 1,
             }
         },
@@ -56,9 +63,6 @@
             slider(val) { this.setBrightness(val) },
         },
         methods: {
-            openDevice() {
-                this.$el.className = 'open'
-            },
             toggle() {
                 this.socket.emit('light.toggle', this.light.id)
                 this.socket.on('light.toggle.result', (id) => {
@@ -119,5 +123,5 @@
 </script>
 
 <style lang="sass" scoped>
-@import '../sass/yeelight';
+@import '../sass/components/yeelight'
 </style>

@@ -1,4 +1,3 @@
-const errorHandler = require('./errorHandler')
 const Scenario = require('../models/scenario')
 const Device = require('../models/device')
 
@@ -9,7 +8,7 @@ module.exports = (socket) => {
             .then((scenarios) => { 
             socket.emit('scenario.getAll.result', scenarios)
         }).catch((err) => {
-            socket.emit('scenario.getAll.error', new errorHandler(err))
+            socket.emit('scenario.getAll.error', err)
         })
     })
 
@@ -17,7 +16,7 @@ module.exports = (socket) => {
         Scenario.findById(data.id).then((rst) => {
             socket.emit('scenario.update.result', rst)
         }).catch((err) => { 
-            socket.emit('scenario.update.error', new errorHandler(err))
+            socket.emit('scenario.update.error', err)
         })
     })
 
@@ -26,7 +25,7 @@ module.exports = (socket) => {
             .then((rst) => {
             socket.emit('scenario.remove.result', rst)
         }).catch((err) => {
-            socket.emit('scenario.remove.error', new errorHandler(err))
+            socket.emit('scenario.remove.error', err)
         })
     })
 }

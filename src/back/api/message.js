@@ -1,6 +1,5 @@
-var errorHandler = require('./errorHandler')
-var Message = require('../models/message')
-var Device = require('../models/device')
+const Message = require('../models/message')
+const Device = require('../models/device')
 
 module.exports = (socket) => {
 
@@ -11,7 +10,7 @@ module.exports = (socket) => {
         }).then((messages) => { 
             socket.emit('message.getAll.result', messages)
         }).catch((err) => {
-            socket.emit('message.getAll.error', new errorHandler(err))
+            socket.emit('message.getAll.error', err)
         })
     })
 
@@ -20,7 +19,7 @@ module.exports = (socket) => {
             .then((rst) => {
             socket.emit('message.update.result', rst)
         }).catch((err) => {
-            socket.emit('message.update.error', new errorHandler(err))
+            socket.emit('message.update.error', err)
         })
     })
 
@@ -29,7 +28,7 @@ module.exports = (socket) => {
             .then((rst) => {
             socket.emit('message.remove.result', rst)
         }).catch((err) => {
-            socket.emit('message.remove.error', new errorHandler(err))
+            socket.emit('message.remove.error', err)
         })
     })
 
@@ -38,7 +37,7 @@ module.exports = (socket) => {
             .then((rst) => {
             socket.emit('message.removeAll.result', rst)
         }).catch((err) => {
-            socket.emit('message.removeAll.error', new errorHandler(err))
+            socket.emit('message.removeAll.error', err)
         })
     })
 }

@@ -1,4 +1,3 @@
-const errorHandler = require('./errorHandler')
 const Device = require('../models/device')
 const Type = require('../models/type')
 const Location = require('../models/location')
@@ -17,7 +16,7 @@ module.exports = (socket) => {
             .then((devices) => {            
             socket.emit('device.getAll.result', devices)
         }).catch((err) => {
-            socket.emit('device.getAll.error', errorHandler(err))
+            socket.emit('device.getAll.error', err)
         })
     })
 
@@ -27,7 +26,7 @@ module.exports = (socket) => {
         }).then((device) => { 
             socket.emit('device.getOne.result', device)
         }).catch((err) => {
-            socket.emit('device.getOne.error', errorHandler(err))
+            socket.emit('device.getOne.error', err)
         })
     })
 
@@ -45,13 +44,13 @@ module.exports = (socket) => {
                     .then((count, device) => {
                     this.socket.emit('device.update.result', {count: count, device: device})
                 }).catch((err) => { 
-                    socket.emit('device.getAll.error', errorHandler(err))
+                    socket.emit('device.getAll.error', err)
                 })
             }).catch((err) => { 
-                socket.emit('device.getAll.error', errorHandler(err))
+                socket.emit('device.getAll.error', err)
             })
         }).catch((err) => { 
-            socket.emit('device.getAll.error', errorHandler(err))
+            socket.emit('device.getAll.error', err)
         })
     })
 
@@ -60,7 +59,7 @@ module.exports = (socket) => {
             .then((rst) => {
             socket.emit('device.remove.result', rst) 
         }).catch((err) => { 
-            socket.emit('device.remove.error', errorHandler(err))
+            socket.emit('device.remove.error', err)
         })
     })
 
@@ -69,7 +68,7 @@ module.exports = (socket) => {
             .then((rst) => {
             socket.emit('device.removeAll.result', rst)
         }).catch((err) => { 
-            socket.emit('device.removeAll.error', errorHandler(err))
+            socket.emit('device.removeAll.error', err)
         })
     })
 }

@@ -1,4 +1,3 @@
-const errorHandler = require('./errorHandler')
 const request = require('request')
 const crypto = require('crypto')
 
@@ -14,7 +13,7 @@ module.exports = (socket) => {
             if(!err && res.statusCode === 200) {
                 socket.emit('freebox.getOne.result', JSON.parse(body))
             } else {
-                socket.emit('freebox.getOne.error', errorHandler(err))
+                socket.emit('freebox.getOne.error', err)
             }
         })
     })
@@ -39,7 +38,7 @@ module.exports = (socket) => {
             if(!err && res.statusCode === 200) {
                 socket.emit('freebox.setAutorize.result', JSON.parse(body))
             } else {
-                socket.emit('freebox.setAutorize.error', errorHandler(err))
+                socket.emit('freebox.setAutorize.error', err)
             }
         })
     })
@@ -49,7 +48,7 @@ module.exports = (socket) => {
             if(!err && res.statusCode === 200) {
                 socket.emit('freebox.getAutorize.result', JSON.parse(body))
             } else {
-                socket.emit('freebox.getAutorize.error', errorHandler(err))
+                socket.emit('freebox.getAutorize.error', err)
             }
         })
     })
@@ -59,7 +58,7 @@ module.exports = (socket) => {
             if(!err && res.statusCode === 200) {
                 socket.emit('freebox.login.result', JSON.parse(body))
             } else {
-                socket.emit('freebox.login.error', errorHandler(err))
+                socket.emit('freebox.login.error', err)
             }
         })
     })
@@ -77,7 +76,7 @@ module.exports = (socket) => {
             if(!err && res.statusCode === 200) {
                 socket.emit('freebox.openSession.result', JSON.parse(body))
             } else {
-                socket.emit('freebox.openSession.error', errorHandler(err))
+                socket.emit('freebox.openSession.error', err)
             }
         })
     })
@@ -90,7 +89,7 @@ module.exports = (socket) => {
             if(!err && res.statusCode === 200) {
                 socket.emit('freebox.connection.result', JSON.parse(body))
             } else {
-                socket.emit('freebox.connection.error', errorHandler(err))
+                socket.emit('freebox.connection.error', err)
             }
         })
     })

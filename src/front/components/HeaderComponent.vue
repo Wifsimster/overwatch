@@ -14,5 +14,5 @@
 </template>
 
 <style lang="sass" scoped>
-@import '../sass/header'
+@import '../sass/components/header'
 </style>

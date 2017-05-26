@@ -1,15 +1,25 @@
 <template>
-<div class="device freebox" v-if="connection">
-    <span>Freebox: {{ connection.state.toUpperCase() }}</span>
-    <!--  <span>Down: {{ convert(connection.bandwidth_down) }}</span>-->
-    <!--  <span>UP: {{ convert(connection.bandwidth_up) }}</span>-->
-    <span>&#8595; {{ convert(connection.rate_down) }}</span>
-    <span>&#8593; {{ convert(connection.rate_up) }}</span>
+<device :show="settings.freebox.display" v-if="connection">
+    <div slot="body">
+        <span>Freebox: {{ connection.state.toUpperCase() }}</span>
+        <!--  <span>Down: {{ convert(connection.bandwidth_down) }}</span>-->
+        <!--  <span>UP: {{ convert(connection.bandwidth_up) }}</span>-->
+        <span>&#8595; {{ convert(connection.rate_down) }}</span>
+        <span>&#8593; {{ convert(connection.rate_up) }}</span>
     </div>
+    </device>
 </template>
 
 <script>
+    import Device from './DeviceComponent.vue'
     export default {
+        components: { Device },
+        props: {
+            settings: {
+                type: Object,
+                required: true,
+            }
+        },
         data() {
             return {
                 socket: this.$store.state.socket.socket,
@@ -85,11 +95,5 @@
 </script>
 
 <style lang="sass" scoped>
-@import '../sass/_device.scss';
-
-.freebox {
-    span {
-        font-size: 22px;
-        }
-    }
+@import '../sass/components/freebox'
 </style>

@@ -1,45 +1,48 @@
 <template>
 <div class="flex-container" v-if="settings">
-    <div v-if="settings.datetime && settings.datetime.display !== 'false'">
-        <date-time></date-time>
-    </div>
-    <div v-if="settings.freebox && settings.freebox.display !== 'false'">
-        <freebox></freebox>
-    </div>
-    <div v-if="settings.netatmo && settings.netatmo.display !== 'false'">
-        <netatmo-temperature :device="netatmoDevice"></netatmo-temperature>
-    </div> 
-    <div v-if="settings.netatmo && settings.netatmo.display !== 'false'">
-        <netatmo-outdoor-temperature :device="netatmoDevice"></netatmo-outdoor-temperature>
-    </div>
-    <div v-if="settings.netatmo && settings.netatmo.display !== 'false'">
-        <netatmo-humidity :device="netatmoDevice"></netatmo-humidity>
-    </div>
-    <div v-if="settings.netatmo && settings.netatmo.display !== 'false'">
-        <netatmo-outdoor-humidity :device="netatmoDevice"></netatmo-outdoor-humidity>
-    </div>
-    <div v-if="settings.netatmo && settings.netatmo.display !== 'false'">
-        <netatmo-noise :device="netatmoDevice"></netatmo-noise>
-    </div>
-    <div v-if="settings.netatmo && settings.netatmo.display !== 'false'">
-        <netatmo-co2 :device="netatmoDevice"></netatmo-co2>
-    </div>
-    <div v-if="settings.netatmo && settings.netatmo.display !== 'false'">
-        <netatmo-pressure :device="netatmoDevice"></netatmo-pressure>
-    </div>
+
+    <date-time :settings="settings"></date-time>
+
+    <freebox :settings="settings"></freebox>
+
+    <netatmo-temperature :settings="settings"
+                         :device="netatmoDevice"></netatmo-temperature>
+
+    <netatmo-outdoor-temperature :settings="settings" 
+                                 :device="netatmoDevice"></netatmo-outdoor-temperature>
+
+    <netatmo-humidity :settings="settings" 
+                      :device="netatmoDevice"></netatmo-humidity>
+
+
+    <netatmo-outdoor-humidity :settings="settings" 
+                              :device="netatmoDevice"></netatmo-outdoor-humidity>
+
+    <netatmo-noise :settings="settings" 
+                   :device="netatmoDevice"></netatmo-noise>
+
+    <netatmo-co2 :settings="settings" 
+                 :device="netatmoDevice"></netatmo-co2>
+
+    <netatmo-pressure :settings="settings" 
+                      :device="netatmoDevice"></netatmo-pressure>
+
     <div v-for="light in lights">
         <yeelight :light="light"></yeelight>
+    </div>
+
+    <div v-for="sd in splitDevices" v-if="settings.esp8266 && settings.esp8266.display !== 'false'">
+        <device-type :device="sd"></device-type>
     </div>
 
     <div v-if="settings.cameras && settings.cameras.display !== 'false'">
         <camera port="9962"></camera>
     </div>
+
     <div v-if="settings.cameras && settings.cameras.display !== 'false'">
         <camera port="9963"></camera>
     </div>
-    <div v-for="sd in splitDevices" v-if="settings.esp8266 && settings.esp8266.display !== 'false'">
-        <device-type :device="sd"></device-type>
-    </div>
+
     </div>
 </template>
 
@@ -65,7 +68,7 @@
                 socket: this.$store.state.socket.socket,
                 splitDevices: [],
                 lights: [],
-                settings: [],
+                settings: null,
                 netatmoDevice: {},
                 netatmoApi: {},
                 camera: null,

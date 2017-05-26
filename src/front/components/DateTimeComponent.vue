@@ -1,12 +1,22 @@
 <template>
-<div class="device">
-    <span>{{ date | moment('ddd DD MMM YYYY') }}</span>
-    <span>{{ date | moment('HH:mm:ss') }}</span>
+<device :show="settings.datetime.display">
+    <div slot="body">
+        <span>{{ date | moment('ddd DD MMM YYYY') }}</span>
+        <span>{{ date | moment('HH:mm:ss') }}</span>
     </div>
+    </device>
 </template>
 
 <script>
+    import Device from './DeviceComponent.vue'
     export default {
+        components: { Device },
+        props: {
+            settings: {
+                type: Object,
+                required: true,
+            }
+        },
         data() {
             return {
                 date: new Date(),
@@ -16,23 +26,10 @@
             setInterval(() => {
                 this.date = new Date()
             }, 1000)
-        }
+        },
     }
 </script>
 
 <style lang="sass" scoped>
-@import '../sass/colors';
-
-span {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    position: relative;
-    padding: 2px 0;
-    font-size: 24px;
-    &:nth-child(2) {
-    font-size: 34px;
-    }
-}
+@import '../sass/components/date-time'
 </style>

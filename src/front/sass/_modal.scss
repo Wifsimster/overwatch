@@ -14,15 +14,16 @@
         display: table-cell;
         vertical-align: middle;
         .modal-container {
-            &.lg {
-                width: 90%;
-            }
-            width: 600px;
             margin: 0px auto;
             background-color: $mine-shaft-app;
             box-shadow: 0 2px 8px rgba(0, 0, 0, .33);
             transition: all .3s ease;
             border-radius: 4px;
+
+            @media(min-width: 600px) {
+                width: 600px;
+            }
+
             .modal-header {
                 border-radius: 3px 3px 0 0;
                 padding: 10px 20px;

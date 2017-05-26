@@ -1,4 +1,3 @@
-const errorHandler = require('./errorHandler')
 const jsonfile = require('jsonfile')
 jsonfile.spaces = 2
 const file = 'config/default.json'
@@ -10,7 +9,7 @@ module.exports = (socket) => {
             if(!err) {
             socket.emit('setting.getAll.result', obj.settings)
             } else {
-                socket.emit('setting.getAll.error', new errorHandler(err))
+                socket.emit('setting.getAll.error', err)
             }
         })
     })

@@ -1,8 +1,9 @@
 <template>
 <div>
-    <h2>Devices ({{ devices.length }}) <a @click="openRemoveAllModal()" title="Remove all devices"><i class="material-icons">delete</i></a></h2>
-    <transition name="expand">
-        <div class="devices" v-if="devices.length > 0">
+    <h2>Devices <a @click="openRemoveAllModal()" title="Remove all devices"><i class="material-icons">delete</i></a>
+    </h2>
+    <transition name="opacity">
+        <div class="devices" v-if="devices && devices.length > 0">
             <table>
                 <thead>
                     <tr>
@@ -45,19 +46,20 @@
     </table>
 
             <edit-modal v-if="editShow" 
-                               :device="editDevice"
-                               @close="editShow = false"></edit-modal>
+                        :device="editDevice"
+                        @close="editShow = false"></edit-modal>
 
             <remove-modal v-if="removeShow" 
-                                 :device="removeDevice"
-                                 @close="removeShow = false"></remove-modal>
+                          :device="removeDevice"
+                          @close="removeShow = false"></remove-modal>
 
             <remove-all-modal v-if="removeAllShow"
-                                     @close="removeAllShow = false"></remove-all-modal>
+                              @close="removeAllShow = false"></remove-all-modal>
 
     </div>
         <div v-else>
-            <p class="center">No device.</p>
+            <br>
+            <p class="center">No device</p>
     </div>
     </transition>
     </div>
@@ -74,14 +76,14 @@
             RemoveAllModal,
         },
         data() {
-            return {
-                devices: [],                
+            return {              
                 socket: this.$store.state.socket.socket,
-                editShow: false,
+                devices: null,
                 editDevice: null,
+                removeDevice: null,
+                editShow: false,
                 removeShow: false,
                 removeAllShow: false,
-                removeDevice: null,
             }
         },
         created() {
@@ -90,7 +92,7 @@
                 this.devices = devices
             })
             this.socket.on('device.removeAll.result', (rst) => {
-                this.devices = []
+                this.devices = null
             })
             this.socket.on('device.add.result', (rst) => {
                 this.socket.emit('device.getAll')

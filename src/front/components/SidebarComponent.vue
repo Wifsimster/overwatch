@@ -54,5 +54,5 @@
 </script>
 
 <style lang="sass" scoped>
-@import '../sass/sidebar'
+@import '../sass/components/sidebar'
 </style>

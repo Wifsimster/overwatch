@@ -1,4 +1,4 @@
-@import 'colors';
+@import '../colors';
 
 $height: 60px;
 
@@ -7,9 +7,8 @@ $height: 60px;
     top: 0;
     left: 0;
     height: $height;
-    //    padding: 8px 10px;
     background-color: $black;
-    z-index: 1000;
+    z-index: 10;
     width: 100%;
 
     ul {
@@ -36,15 +35,4 @@ $height: 60px;
             }
         }
     }
-
-    //    .settings {
-    //        float: right;    
-    //    }
-    //
-    //    .title {
-    //        font-size: 24px;
-    //        font-weight: 600;
-    //        padding: 0 10px;
-    //        cursor: pointer;
-    //    }
 }

@@ -1,4 +1,3 @@
-const errorHandler = require('./errorHandler')
 const Type = require('../models/type')
 
 module.exports = (socket) => {
@@ -8,7 +7,7 @@ module.exports = (socket) => {
             .then((types) => { 
             socket.emit('type.getAll.result', types)
         }).catch((err) => { 
-            socket.emit('type.getAll.error', new errorHandler(err))
+            socket.emit('type.getAll.error', err)
         })
     })
 
@@ -17,7 +16,7 @@ module.exports = (socket) => {
             .then((rst) => {
             socket.emit('type.update.result', rst)
         }).catch((err) => {
-            socket.emit('type.update.error', new errorHandler(err))
+            socket.emit('type.update.error', err)
         })
     })
 
@@ -26,7 +25,7 @@ module.exports = (socket) => {
             .then((rst) => {
             socket.emit('type.remove.result', rst)
         }).catch((err) => { 
-            socket.emit('type.remove.error', new errorHandler(err))
+            socket.emit('type.remove.error', err)
         })
     })
 
@@ -35,7 +34,7 @@ module.exports = (socket) => {
             .then((rst) => {
             socket.emit('type.removeAll.result', rst)
         }).catch((err) => { 
-            socket.emit('type.removeAll.error', new errorHandler(err))
+            socket.emit('type.removeAll.error', err)
         })
     })
 
@@ -46,7 +45,7 @@ module.exports = (socket) => {
                     socket.emit('type.updateAll.result', count)
                 }
             }).catch((err) => {
-                socket.emit('type.getAll.error', new errorHandler(err))
+                socket.emit('type.getAll.error', err)
             })
         })
     })

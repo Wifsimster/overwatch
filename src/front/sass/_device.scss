@@ -5,10 +5,41 @@ $height: 116px;
 .device {
     position: relative;
     background-color: $mine-shaft-app;
-    margin: 0;
+    margin: 5px;
     padding: 5px 10px;
     height: $height;
     width: 100%;
+    transition: all 1s easy-in-out;
+
+    @media(min-width: 650px) {
+        max-width: 200px;
+    }
+
+    .close {
+        top: 10px;
+        right: 10px;
+        font-size: 42px;
+        line-height: 42px;
+        color: $gallery;
+        position: absolute;
+        display: none;
+        padding: 10px;
+        z-index: 101;
+    }
+
+    &.expand {
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 20px;
+        z-index: 100;
+        height: 100%;
+        max-width: 100%;
+        position: fixed;
+        .close {
+            display: block;
+        }
+    }
 
     .image {
         position: absolute;

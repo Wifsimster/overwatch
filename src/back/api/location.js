@@ -1,5 +1,4 @@
-var errorHandler = require('./errorHandler')
-var Location = require('../models/location')
+const Location = require('../models/location')
 
 module.exports = (socket) => {
 
@@ -7,7 +6,7 @@ module.exports = (socket) => {
         Location.findAll(options).then((locations) => {
             socket.emit('location.getAll.result', locations)
         }).catch((err) => { 
-            socket.emit('location.getAll.error', new errorHandler(err))
+            socket.emit('location.getAll.error', err)
         })
     })
 
@@ -15,7 +14,7 @@ module.exports = (socket) => {
         Location.destroy({ where: { id: options.id }}).then((rst) => {
             socket.emit('location.remove.result', rst)
         }).catch((err) => { 
-            socket.emit('location.remove.error', new errorHandler(err))
+            socket.emit('location.remove.error', err)
         })
     })
 
@@ -23,7 +22,7 @@ module.exports = (socket) => {
         Location.destroy({where: {}}).then((rst) => {
             socket.emit('location.removeAll.result', rst)
         }).catch((err) => { 
-            socket.emit('location.removeAll.error', new errorHandler(err))
+            socket.emit('location.removeAll.error', err)
         })
     })
 
@@ -32,7 +31,7 @@ module.exports = (socket) => {
             .then((rst) => {
             socket.emit('location.update.result', rst)
         }).catch((err) => { 
-            socket.emit('location.update.error', new errorHandler(err))
+            socket.emit('location.update.error', err)
         })
     })
 
@@ -47,7 +46,7 @@ module.exports = (socket) => {
                             }    
                         }
                     }).catch((err) => { 
-                        socket.emit('location.updateAll.error', new errorHandler(err))
+                        socket.emit('location.updateAll.error', err)
                     })
                 } else {
                     Location.create({name: location.name})
@@ -56,7 +55,7 @@ module.exports = (socket) => {
                             socket.emit('location.updateAll.result', count)
                         }
                     }).catch((err) => { 
-                        socket.emit('location.updateAll.error', new errorHandler(err))
+                        socket.emit('location.updateAll.error', err)
                     })
                 }
             })
