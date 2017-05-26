@@ -1,8 +1,9 @@
-var sequelize = require('../db/database')
-var Type = require('./type')
-var Location = require('./location')
-var Device = require('./device')
-var Message = require('./message')
+const sequelize = require('../db/database')
+const Type = require('./type')
+const Location = require('./location')
+const Device = require('./device')
+const Message = require('./message')
+const Scenario = require('./scenario')
 
 sequelize.sync({ force: true }).then(() => {
 
@@ -16,6 +17,8 @@ sequelize.sync({ force: true }).then(() => {
     Type.create({name: 'Water', key: 'water'})
     Type.create({name: 'RGBW', key: 'rgbw'})
     Type.create({name: 'Motion', key: 'motion'})
+    
+    console.log('==== Add 10 types into DB')
 
     Location.create({name: 'Office'})
     Location.create({name: 'Living room'})
@@ -23,6 +26,10 @@ sequelize.sync({ force: true }).then(() => {
     Location.create({name: 'Kitchen'})
     Location.create({name: 'Cellar'})
 
-    console.log('Create models into DB')
+    console.log('==== Add 5 locations into DB')
+    
+    Scenario.create({name: 'Laundry', description: 'When laundry is done, let me know', state: false})
+    
+    console.log('==== Add 1 scenarii into DB')
 
-}, (err) => { console.error(err) })
+}, err => { console.error(err) })

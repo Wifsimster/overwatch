@@ -36,8 +36,16 @@ $height: 116px;
         height: 100%;
         max-width: 100%;
         position: fixed;
+        
         .close {
             display: block;
+        }
+        
+        @media(min-width: 720px) {
+            top: 10%;
+            left: 10%;
+            width: 80%;
+            height: 80%;
         }
     }
 

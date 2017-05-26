@@ -88,13 +88,13 @@
         },
         created() {
             this.socket.emit('device.getAll')
-            this.socket.on('device.getAll.result', (devices) => {
+            this.socket.on('device.getAll.result', devices => {
                 this.devices = devices
             })
-            this.socket.on('device.removeAll.result', (rst) => {
+            this.socket.on('device.removeAll.result', rst => {
                 this.devices = null
             })
-            this.socket.on('device.add.result', (rst) => {
+            this.socket.on('device.add.result', rst => {
                 this.socket.emit('device.getAll')
             })
         },

@@ -8,6 +8,7 @@ module.exports = (mqttClient, io) => {
         require('../api/setting')(socket)
         require('../api/freebox')(socket)
         require('../api/yeelight')(socket)
+        require('../api/scenario')(socket)
         require('../api/mqtt')(mqttClient, socket)
     })
 }
