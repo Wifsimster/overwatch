@@ -26,7 +26,6 @@ module.exports = (io) => {
                 })
 
                 mqttClient.on('reconnecting', () => {
-                    console.log('Reconnecting...')
                     io.emit('mqtt.reconnecting') 
                 })
 
@@ -39,32 +38,38 @@ module.exports = (io) => {
                 })
 
                 mqttClient.on('error', () => {
-                    console.log('error')
                     io.emit('mqtt.error') 
                 })
 
                 mqttClient.on('message', (topic, message) => {
-                    let data = JSON.parse(message.toString())
-                    if(data.mac) {
-                        Device.findOne({ where: { mac: data.mac } }).then((device) => {
-                            if(device) {
-                                if(topic.startsWith('/online/')) {
+                    try {
+
+                        let data = JSON.parse(message.toString())
+                        if(data.mac) {
+                            Device.findOne({ where: { mac: data.mac } }).then((device) => {
+                                if(device) {
+                                    if(topic.startsWith('/online/')) {
+                                        notify({
+                                            message: device.name + ' is online !',
+                                            data: device
+                                        })
+                                    }
+                                    if(topic.startsWith('/sensors/')) {
+                                        updateDevice(data, device)
+                                    }
+                                } else {
+                                    addDevice(data)
                                     notify({
-                                        message: device.name + ' is online !',
-                                        data: device
+                                        message: 'New device detected !',
+                                        data: data
                                     })
                                 }
-                                if(topic.startsWith('/sensors/')) {
-                                    updateDevice(data, device)
-                                }
-                            } else {
-                                addDevice(data)
-                                notify({
-                                    message: 'New device detected !',
-                                    data: data
-                                })
-                            }
-                        }).catch((err) => { console.error(err) })
+                            }).catch((err) => { console.error(err) })
+                        } else {
+                            console.warn('MQTT - Message without mac adress')
+                        }
+                    } catch(SyntaxError) {
+                        console.error('MQTT - Message can\'t be parse to object !')
                     }
                 })
 
