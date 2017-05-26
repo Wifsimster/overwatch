@@ -1,40 +1,34 @@
 @import 'colors';
 
 $top: 60px;
-$width: 180px;
 
 .sidebar {
     background-color: $cod-gray;
     position: fixed;
     float: left;
-    width: $width;
+    width: 60px;
     height: calc(100% - #{$top});
     top: $top;
+    transition: all .4s ease-in-out;
+    overflow: hidden;
 
-    h1 {
-        padding: 5px 0;
-        margin: 0;
-        display: flex;
-        align-content: center;
-        padding-left: 25px;
-        height: 45px;text-transform: uppercase;
-        line-height: 45px;
-        color: hsla(0,0%,100%,.3);
-        font-size: 14px;
-        font-weight: 600;
+    @media(min-width: 720px) {
+        width: 150px;
     }
 
     ul {
         li {
+            padding: 5px 20px;
             a {
                 display: block;
                 position: relative;
                 width: 100%;
                 height: 45px;
                 line-height: 48px;
-                padding: 0 0 0 25px;
+                padding: 0;
+                white-space: nowrap;
                 i {
-                    width: 30px;
+                    width: 40px;
                     height: 18px;
                     font-size: 18px;
                     vertical-align: middle;

@@ -26,7 +26,7 @@
         },
         created() {
             this.$store.commit('setSocket', io())
-            
+
             this.$store.state.socket.socket.on('notify', (data) => {
                 console.log('Notify', data)
                 alertify.notify(data.message, data.type, data.time)
@@ -44,4 +44,5 @@
 @import './sass/modal';
 @import './sass/form';
 @import './sass/btn';
+@import './sass/device';
 </style>

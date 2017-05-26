@@ -40,8 +40,14 @@ ul {
 }
 
 .wrapper {
-    margin-left: 180px;
+    margin-left: 60px;
     padding-top: 60px;
+    transition: all .4s ease-in-out;
+
+    @media(min-width: 720px) {
+        margin-left: 150px;
+    }
+    
     .container {
         margin: 0 auto;
         padding: 20px;

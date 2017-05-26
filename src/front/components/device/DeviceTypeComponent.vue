@@ -150,5 +150,4 @@
 </script>
 
 <style lang="sass" scoped>
-@import '../../sass/device'
 </style>

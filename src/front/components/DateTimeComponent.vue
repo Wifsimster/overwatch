@@ -23,26 +23,16 @@
 <style lang="sass" scoped>
 @import '../sass/colors';
 
-$height: 116px;
-
-.device {
+span {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     position: relative;
-    background-color: $mine-shaft-app;
-    margin: 5px;
-    padding: 5px 10px;
-    height: $height;
-    text-align: center;
-    span {
-        display: block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        position: relative;
-        padding: 2px 0;
-        font-size: 24px;
-        &:nth-child(2) {
-        font-size: 34px;
-        }
+    padding: 2px 0;
+    font-size: 24px;
+    &:nth-child(2) {
+    font-size: 34px;
     }
 }
 </style>

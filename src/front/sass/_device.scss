@@ -5,9 +5,11 @@ $height: 116px;
 .device {
     position: relative;
     background-color: $mine-shaft-app;
-    margin: 5px;
+    margin: 0;
     padding: 5px 10px;
     height: $height;
+    width: 100%;
+
     .image {
         position: absolute;
         overflow: hidden;

@@ -2,27 +2,32 @@
 <div class="mqtt">
     <transition name="opacity">
         <span v-if="online" class="green">
-            <span class="led green"></span>MQTT Online
+            <span class="led green"></span>
+            <span>MQTT Online</span>
     </span>
     </transition>
     <transition name="opacity">
         <span v-if="offline" class="red">
-            <span class="led red"></span>MQTT Offline
+            <span class="led red"></span>
+            <span>MQTT Offline</span>
     </span>
     </transition>
     <transition name="opacity">
         <span v-if="close" class="red">
-            <span class="led red"></span>MQTT Disconnected
+            <span class="led red"></span>
+            <span>MQTT Disconnected</span>
     </span>
     </transition>
     <transition name="opacity">
         <span v-if="reconnecting">
-            <span class="led"></span>MQTT Reconnecting...
+            <span class="led"></span>
+            <span>MQTT Reconnecting...</span>
     </span>
     </transition>
     <transition name="opacity">
         <span v-if="error">
-            <span class="led red"></span>MQTT Error !
+            <span class="led red"></span>
+            <span>MQTT Error !</span>
     </span>
     </transition>
     </div>
