@@ -46,6 +46,8 @@
             }
         },
         created() {
+            this.socket.emit('mqtt.status')
+            
             this.socket.on('mqtt.connected', result => {
                 this.online = true
                 this.offline = false
