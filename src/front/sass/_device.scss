@@ -26,6 +26,10 @@ $height: 116px;
         padding: 10px;
         z-index: 101;
     }
+    
+    .more {
+        display: none;
+    }
 
     &.expand {
         top: 0;
@@ -38,6 +42,10 @@ $height: 116px;
         position: fixed;
         
         .close {
+            display: block;
+        }
+        
+        .more {
             display: block;
         }
         

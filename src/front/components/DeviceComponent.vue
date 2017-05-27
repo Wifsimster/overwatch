@@ -5,7 +5,7 @@
      v-if="display">
     <a class="close" @click="hide()">x</a>
     <slot name="body"></slot>
-    <slot name="more"></slot>
+    <div class="more"><slot name="more"></slot></div>
     </div>
 </template>
 

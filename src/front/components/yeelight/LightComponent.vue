@@ -1,34 +1,37 @@
 <template>
-<device :show="settings.netatmo.display">
+<device :show="settings.yeelight.display">
     <div slot="body">
         <div :class="{ 'red': error }" >
             <div class="yeelight">
                 <span class="led" v-if="state" title="On"></span>
-                <div class="image" v-if="state" @click="turnOff()">
+                <div class="image" v-if="state">
                     <img :src="bulbImg" class="on">
     </div>
-                <div class="image" v-if="!state" @click="turnOn()">
+                <div class="image" v-if="!state">
                     <img :src="bulbImg">
     </div>
                 <span class="location">{{ light.name }}</span>
-                <range-slider class="slider"
-                              min="1"
-                              max="100"
-                              step="10"
-                              v-model="slider">
+    </div>
+    </div>
+    </div>
+    <div slot="more">
+        <range-slider class="slider"
+                      min="1"
+                      max="100"
+                      step="10"
+                      v-model="slider">
     </range-slider>
-    </div>
-    </div>
     </div>
     </device>
 </template>
 
 <script>
-    import Device from './DeviceComponent.vue'
+    import Device from '../DeviceComponent.vue'
     import RangeSlider from 'vue-range-slider'
     import 'vue-range-slider/dist/vue-range-slider.css'
-    import bulbImg from '../assets/bulb.png'
+    import bulbImg from '../../assets/bulb.png'
     export default {
+        name: 'light',
         components: { Device, RangeSlider },
         props: {
             light: {
@@ -123,5 +126,5 @@
 </script>
 
 <style lang="sass" scoped>
-@import '../sass/components/yeelight'
+@import '../../sass/components/yeelight'
 </style>
