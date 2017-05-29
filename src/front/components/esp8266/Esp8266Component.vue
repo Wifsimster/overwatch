@@ -1,14 +1,13 @@
 <template>
 <div class="flex-container">
-    <div v-for="device in devices">
-        <p>{{ device }}</p>
+    <div v-for="device in splittedDevices">
         <type :settings="settings" :device="device"></type>
     </div>
     </div>
 </template>
 
 <script>
-    import Type from './DeviceTypeComponent.vue' 
+    import Type from './Esp8266TypeComponent.vue' 
     export default {
         components: {            
             Type,
@@ -20,23 +19,30 @@
             }
         },
         data() {
-            return {                
+            return {
                 socket: this.$store.state.socket.socket,
-                devices: [],
+                splittedDevices: [],
             }
         },
         methods: {
-            renderDevices(devices) {
-                this.splitDevices = []
+            split(devices) {
+                this.splittedDevices = []
                 if(devices) {
-                    devices.forEach((device, i) => {
+                    devices.map(device => {
                         if(device.types) {
-                            device.types.forEach((type, j) => {
+                            if(device.types.length > 0) {
+                                device.types.forEach((type, j) => {
+                                    let sd = JSON.parse(JSON.stringify(device))
+                                    sd.type = type
+                                    delete sd.types
+                                    this.splittedDevices.push(sd)
+                                })
+                            } else {
                                 let sd = JSON.parse(JSON.stringify(device))
-                                sd.type = type
+                                sd.type = null
                                 delete sd.types
-                                this.splitDevices.push(sd)
-                            })
+                                this.splittedDevices.push(sd)
+                            }
                         }
                     })
                 }
@@ -44,8 +50,9 @@
         },
         created() {
             this.socket.emit('device.getAll')
-            this.socket.on('device.getAll.result', (devices) => {
-                this.renderDevices(devices)
+            this.socket.on('device.getAll.result', (devices) => {                
+                console.log('Devices', devices)
+                this.split(devices)
             })
 
             this.socket.on('message.add.result', (message) => {

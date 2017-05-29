@@ -32,7 +32,7 @@
     import Freebox from '../components/FreeboxComponent.vue'
     import Camera from '../components/CameraComponent.vue'
     import Yeelight from '../components/yeelight/YeelightComponent.vue'
-    import Esp8266 from '../components/device/DeviceComponent.vue'
+    import Esp8266 from '../components/esp8266/Esp8266Component.vue'
     import Netatmo from '../components/netatmo/NetatmoComponent.vue'
     export default {
         data() {

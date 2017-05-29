@@ -47,25 +47,28 @@ module.exports = (io) => {
                             Device.findOne({ where: { mac: data.mac } }).then((device) => {
                                 if(device) {
                                     if(topic.startsWith('/online/')) {
+                                        addMessage(data, device, 'online')
                                         notify({
                                             message: device.name + ' is online !',
                                             data: device
                                         })
                                     }
                                     if(topic.startsWith('/ping/')) {
-                                        updateDevice(data, device)                                        
+                                        updateDevice(data, device, 'ping')
                                     }
                                     if(topic.startsWith('/sensors/')) {
-                                        updateDevice(data, device)
+                                        updateDevice(data, device, 'data')
                                     }
                                 } else {
-                                    addDevice(data)
+                                    addDevice(data, 'new')
                                     notify({
                                         message: 'New device detected !',
                                         data: data
                                     })
                                 }
-                            }).catch((err) => { console.error(err) })
+                            }).catch((err) => { 
+                                console.error(err) 
+                            })
                         } else {
                             console.warn('MQTT - Message without mac adress')
                         }
@@ -90,23 +93,13 @@ module.exports = (io) => {
                         io.emit('device.getAll.result', devices)
                     }).catch((err) => {
                         io.emit('device.getAll.error', err)
-                    }) 
-                }
-
-                function getMessages() {
-                    Message.findAll({
-                        order: 'message.createdAt DESC',
-                        include: [Device]
-                    }).then((messages) => {
-                        io.emit('message.getAll.result', messages)
-                    }).catch((err) => {
-                        io.emit('message.getAll.error', err)
                     })
                 }
 
-                function addMessage(data, device) {
+                function addMessage(data, device, type) {
                     Message.create({
-                        data: JSON.stringify(data)
+                        data: JSON.stringify(data),
+                        type: type
                     }).then((message) => {
                         message.setDevice(device.id).then((rst) => {
                             io.emit('message.add.result', message)
@@ -120,15 +113,14 @@ module.exports = (io) => {
                     })
                 }
 
-                function addDevice(data) {
+                function addDevice(data, type) {
                     Device.create({
                         mac: data.mac,
                         ip: data.ip,
                         name: data.name,
                         ping: new Date(),
                     }).then((device) => {
-
-                        Type.findOne({ where: { key: data.type } }).then(type => {              
+                        Type.findOne({ where: { key: data.type } }).then(type => {
                             if(type) {
                                 console.log('Type added', type.name)
                                 device.addType(type.id)
@@ -138,25 +130,23 @@ module.exports = (io) => {
                         }).catch(err => {
                             console.error(err)
                         })
-
-                        addMessage(data, device)
-
+                        addMessage(data, device, type)
                         io.emit('device.add.result', device)
                     }).catch((err) => {
                         io.emit('device.add.error', err)
                     })
                 }
 
-                function updateDevice(data, device) {
+                function updateDevice(data, device, type) {
                     Device.update({ ping: new Date() }, 
                                   { where: { id: device.id } }).then((count) => {
-                        addMessage(data, device)
+                        addMessage(data, device, type)
                         io.emit('device.update.result', count)
                     }).catch((err) => {
                         io.emit('device.update.error', err)
                     })
-
                 }
+                
             } else {
                 console.error(err)
                 reject(err)

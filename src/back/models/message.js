@@ -7,7 +7,8 @@ const Message = sequelize.define('message', {
         autoIncrement: true,
         primaryKey: true
     },
-    data: Sequelize.STRING
+    type: Sequelize.STRING,
+    data: Sequelize.STRING,
 }, { freezeTableName: true })
 
 module.exports = Message

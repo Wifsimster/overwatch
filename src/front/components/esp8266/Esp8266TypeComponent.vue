@@ -1,6 +1,7 @@
 <template>
-<div v-if="device && data" class="device" :class="{ 'red': isDead }">
-    <div v-if="device.type.name === 'Temperature'">
+<div class="device" :class="{ 'red': isDead }">
+
+    <div v-if="device.type && device.type.key === 'temperature'">
         <div class="image"><img :src="icons.temperature"></div>
         <span class="data">{{ data.temperature }}°C</span>
         <span class="name">{{ device.name }}</span>
@@ -8,7 +9,7 @@
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
-    <div v-if="device.type.name === 'Humidity'">
+    <div v-if="device.type && device.type.key === 'humidity'">
         <div class="image"><img :src="icons.humidity"></div>
         <span class="data">{{ data.humidity }}%</span>
         <span class="name">{{ device.name }}</span>
@@ -16,56 +17,63 @@
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
-    <div v-if="device.type.key == 'luminosity'">
+    <div v-if="device.type && device.type.key == 'luminosity'">
         <div class="image"><img :src="icons.luminosity"></div>
         <span class="data">{{ data.luminosity }}LUX</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
-    <div v-if="device.type.key == 'pressure'">
+
+    <div v-if="device.type && device.type.key == 'pressure'">
         <div class="image"><img :src="icons.pressure"></div>
         <span class="data">{{ data.pressure }}mB</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
-    <div v-if="device.type.key == 'motion'">
+
+    <div v-if="device.type && device.type.key == 'motion'">
         <div class="image"><img :src="icons.switch"></div>    
         <span class="data">{{ data.state }}</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
-    <div v-if="device.type.key == 'dimmer'">
+
+    <div v-if="device.type && device.type.key == 'dimmer'">
         <div class="image"><img :src="icons.dimmer"></div>
         <span class="data">{{ data.dimmer }}</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
-    <div v-if="device.type.key == 'gas'">
+
+    <div v-if="device.type && device.type.key == 'gas'">
         <div class="image"><img :src="icons.gas"></div>
         <span class="data">{{ data.gas }}ppm</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
-    <div v-if="device.type.key == 'water'">
+
+    <div v-if="device.type && device.type.key == 'water'">
         <div class="image"><img :src="icons.water"></div>
         <span class="data">{{ data.water }}</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
-    <div v-if="device.type.key == 'rgbw'">
+
+    <div v-if="device.type && device.type.key == 'rgbw'">
         <div class="image"><img :src="icons.rgbw"></div>
         <span class="data">{{ data.rgbw }}</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
-    <div v-if="device.type.key == 'switch'">
+
+    <div v-if="device.type && device.type.key == 'switch'">
         <div class="image"><img :src="icons.switch"></div>    
         <span class="data">{{ data.state }}</span>
         <span class="name">{{ device.name }}</span>
@@ -73,6 +81,13 @@
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
+
+    <div v-if="device.type === null">
+        <span class="name" v-if="device.name">{{ device.name }}</span>
+        <span class="name" v-else>Unknow</span>
+        <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
+    </div>
+
     </div>
 </template>
 
@@ -89,12 +104,17 @@
     import Switche from '../SwitchComponent.vue'
     export default {
         components: { Switche },
-        props: { device: Object },
+        props: { 
+            device: {
+                type: Object,
+                required: true,
+            },
+        },
         data() {
-            return {                
+            return {
                 socket: this.$store.state.socket.socket,
                 data: {},
-                icons: { 
+                icons: {
                     temperature: thermometer, 
                     humidity: humidity,
                     pressure: pressure,
@@ -113,6 +133,8 @@
             if(this.device.messages && this.device.messages.length > 0) {
                 this.getData()
             }
+
+            console.log('Device', this.device)
         },
         methods: {
             changeState(val) {
