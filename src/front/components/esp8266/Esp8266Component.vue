@@ -51,7 +51,6 @@
         created() {
             this.socket.emit('device.getAll')
             this.socket.on('device.getAll.result', (devices) => {                
-                console.log('Devices', devices)
                 this.split(devices)
             })
 

@@ -133,8 +133,6 @@
             if(this.device.messages && this.device.messages.length > 0) {
                 this.getData()
             }
-
-            console.log('Device', this.device)
         },
         methods: {
             changeState(val) {
@@ -161,11 +159,25 @@
                     return new Date(a.createdAt) - new Date(b.createdAt)
                 })
 
-                this.data = JSON.parse(this.device.messages[this.device.messages.length - 1].data)
+                let messages = this.device.messages.filter(message => {
+                    return message.type === 'data'
+                })
 
-                this.lastSeen = this.device.messages[this.device.messages.length - 1].createdAt
-
-                if(moment().diff(this.lastSeen, 'days') > 0) { this.isDead = true }
+                if(messages.length > 0) {
+                    this.data = JSON.parse(messages[messages.length - 1].data)
+                }                
+                
+                let pingMessages = this.device.messages.filter(message => {
+                    return message.type === 'ping'
+                })
+                
+                this.lastSeen = pingMessages[pingMessages.length - 1].createdAt
+                
+                if(moment().diff(this.lastSeen, 'minutes') > 1) { 
+                    this.isDead = true 
+                } else {
+                    this.isDead = false
+                }
             }
         },
     }
