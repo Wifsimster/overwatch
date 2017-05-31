@@ -1,9 +1,11 @@
 <template>
 <div class="flex-container" v-if="settings">
 
-    <date-time :settings="settings"></date-time>
-
-    <freebox :settings="settings"></freebox>
+    <h1>Others</h1>
+    <div class="flex-container others">
+        <date-time :settings="settings"></date-time>
+        <freebox :settings="settings"></freebox>
+    </div>
 
     <h1>Netatmo</h1>
     <netatmo :settings="settings"></netatmo>

@@ -2,11 +2,12 @@
 <div>
     <h2>Messages <a @click="openRemoveAllModal()" title="Remove all messages"><i class="material-icons">delete</i></a></h2>
 
-    <a @click="type = 'data'">Data</a>
-    <a @click="type = 'online'">Online</a>
-    <a @click="type = 'new'">New</a>
-    <a @click="type = 'ping'">Ping</a>
-
+    <div class="tabs">
+        <a @click="type = 'data'" :class="{ 'active':type === 'data' }">Data</a>
+        <a @click="type = 'online'" :class="{ 'active':type === 'data' }">Online</a>
+        <a @click="type = 'new'" :class="{ 'active':type === 'data' }">New</a>
+        <a @click="type = 'ping'" :class="{ 'active':type === 'data' }">Ping</a>
+    </div>
 
     <transition name="opacity">
         <div class="messages" v-if="messages && messages.length > 0">
@@ -66,19 +67,19 @@
         },
         created() {
             this.socket.emit('message.getAll', { type: this.type })
-          
+
             this.socket.on('message.getAll.result', (messages) => {
                 this.messages = messages
             })
-            
+
             this.socket.on('message.remove.result', (rst) => {
                 this.socket.emit('message.getAll')
             })
-            
+
             this.socket.on('message.removeAll.result', (rst) => {
                 this.messages = []
             })
-            
+
             this.socket.on('message.add.result', (rst) => {
                 this.socket.emit('message.getAll', { type: this.type })
             })

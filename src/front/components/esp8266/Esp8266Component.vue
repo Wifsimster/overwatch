@@ -16,7 +16,7 @@
             settings: {
                 type: Object,
                 required: true,
-            }
+            },
         },
         data() {
             return {
@@ -63,4 +63,5 @@
 </script>
 
 <style lang="sass" scoped>
+@import '../../sass/components/esp8266'
 </style>
