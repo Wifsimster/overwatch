@@ -26,14 +26,14 @@
             }
         },
         methods: {
+            hide() {
+                this.$emit('close')
+            },
             remove() {
                 this.socket.emit('message.remove', this.message) 
                 this.socket.on('message.remove.result', () => {
                     this.$emit('close')
                 })
-            },
-            hide() {
-                this.$emit('close')
             },
         }
     }

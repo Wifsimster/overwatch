@@ -1,8 +1,7 @@
 module.exports = (mqttClient, socket) => {
 
     socket.on('mqtt.publish', options => {
-        console.log('MQTT - Publish message...')
-        mqttClient.publish(options.topic, options.message)
+        mqttClient.publish(options.topic, JSON.stringify(options.message))
     })
 
     socket.on('mqtt.status', options => {

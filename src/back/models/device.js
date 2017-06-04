@@ -8,7 +8,6 @@ const Device = sequelize.define('device', {
     mac: Sequelize.STRING,
     name: Sequelize.STRING,
     ip: Sequelize.STRING,
-    ping: Sequelize.DATE,
 }, {
     freezeTableName: true,
 })

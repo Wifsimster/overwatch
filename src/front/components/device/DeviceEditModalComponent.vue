@@ -45,14 +45,6 @@
                              v-model="device.types">
     </multiselect>
     </div>
-            <div class="pure-control-group" v-if="refreshRate">
-                <label for="message">Refresh rate</label>
-                <p class="message">{{ refreshRate }} min</p>
-    </div>
-            <div class="pure-control-group">
-                <label for="message">Last message</label>
-                <p class="message">{{ message }}</p>
-    </div>
     </form>
     </div>
     <div slot="footer">
@@ -82,7 +74,6 @@
                 locations: [],
                 selectedTypes: [],
                 selectedLocation: null,
-                message: '',
                 refreshRate: null,
             }
         },
@@ -100,10 +91,6 @@
             device() {
                 this.selectedTypes = this.device.types                
                 this.selectedLocation = this.device.location
-                if(this.device.messages.length > 0) {
-                    this.message = this.device.messages[this.device.messages.length - 1].data
-                    this.refreshRate = parseInt(JSON.parse(this.device.messages[this.device.messages.length - 1].data).refresh) / 60000
-                }
             },
         },
         methods: {
@@ -115,11 +102,12 @@
             },
             updateSelectedLocation(location) {
                 this.device.locationId = location.id
-                console.log('loc', this.device.locationId)
             },
             edit() {
                 this.socket.emit('device.update', this.device)
-                this.hide()
+                this.socket.on('device.update.result', data => {
+                    this.hide()
+                })
             },
         }
     }

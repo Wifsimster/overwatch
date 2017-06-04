@@ -5,13 +5,10 @@ const Message = require('../models/message')
 
 module.exports = (socket) => {
 
-    socket.on('device.getAll', (data) => {        
+    socket.on('device.getAll', data => {        
         let options = {
-            include: [ Type, Location, Message ],
-            where: {}
+            include: [ Type, Location ],
         }
-        if(data && data.untype) { options.where = { type: null} }
-
         Device.findAll(options)
             .then((devices) => {            
             socket.emit('device.getAll.result', devices)
@@ -33,27 +30,26 @@ module.exports = (socket) => {
     })
 
     socket.on('device.update', (data) => {
-        Device.findById(data.id).then((device) => {
+        Device.findById(data.id).then(device => {
             let types = []
-            data.types.forEach((type) => { types.push(type.id) })
-            device.setTypes(types).then(() => {                
+            data.types.forEach(type => { types.push(type.id) })
+            device.setTypes(types).then(() => {
                 device.setLocation(data.locationId)
                 Device.update({
                     name: data.name,
                     mac: data.mac,
                     ip: data.ip,
-                }, { where: { id: data.id } })
-                    .then((count, device) => {
-                    this.socket.emit('device.update.result', {count: count, device: device})
-                }).catch((err) => { 
+                }, { where: { id: data.id } }).then((count, rows) => {
+                    socket.emit('device.update.result', {count: count, rows: rows})
+                }).catch(err => { 
                     console.error(err)
                     socket.emit('device.getAll.error', err)
                 })
-            }).catch((err) => { 
+            }).catch(err => { 
                 console.error(err)
                 socket.emit('device.getAll.error', err)
             })
-        }).catch((err) => { 
+        }).catch(err => { 
             console.error(err)
             socket.emit('device.getAll.error', err)
         })

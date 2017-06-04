@@ -6,8 +6,10 @@ module.exports = (socket) => {
     socket.on('message.getAll', (options) => {
         Message.findAll({
             order: 'message.createdAt DESC',
-            include: [ Device ],
-            where: options,
+            include: [ { model: Device, where: { id: options.deviceId } } ],
+            limit: options.limit,
+            offset: options.offset,
+            where: { type: options.type }
         }).then((messages) => { 
             socket.emit('message.getAll.result', messages)
         }).catch((err) => {

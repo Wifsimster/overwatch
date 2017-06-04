@@ -17,7 +17,7 @@
     </tr>
     </thead>
                 <tbody>
-                    <tr v-for="device in devices">
+                    <tr v-for="device in devices" :key="device.id">
                         <td>{{ device.name }}</td>
                         <td>{{ device.mac }}</td>
                         <td>{{ device.ip }}</td>

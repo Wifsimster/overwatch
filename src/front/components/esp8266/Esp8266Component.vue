@@ -1,15 +1,15 @@
 <template>
-<div class="flex-container">
-    <div v-for="device in splittedDevices">
+<transition-group name="opacity" tag="div" class="flex-container">
+    <div v-for="device in splittedDevices" :key="device.id">
         <type :settings="settings" :device="device"></type>
     </div>
-    </div>
+    </transition-group>
 </template>
 
 <script>
     import Type from './Esp8266TypeComponent.vue' 
     export default {
-        components: {            
+        components: {
             Type,
         },
         props: {
@@ -20,9 +20,13 @@
         },
         data() {
             return {
-                socket: this.$store.state.socket.socket,
                 splittedDevices: [],
             }
+        },
+        computed: {
+            socket() {
+                return this.$store.getters.socket
+            },
         },
         methods: {
             split(devices) {
@@ -50,12 +54,8 @@
         },
         created() {
             this.socket.emit('device.getAll')
-            this.socket.on('device.getAll.result', (devices) => {                
+            this.socket.on('device.getAll.result', devices => {                
                 this.split(devices)
-            })
-
-            this.socket.on('message.add.result', (message) => {
-                this.socket.emit('device.getAll')
             })
         }
     }

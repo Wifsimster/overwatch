@@ -6,7 +6,7 @@
         <span class="data">{{ data.temperature }}°C</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
-        <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
+        <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
     <div v-if="device.type && device.type.key === 'humidity'">
@@ -14,7 +14,7 @@
         <span class="data">{{ data.humidity }}%</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
-        <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
+        <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
     <div v-if="device.type && device.type.key == 'luminosity'">
@@ -22,7 +22,7 @@
         <span class="data">{{ data.luminosity }}LUX</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
-        <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
+        <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
     <div v-if="device.type && device.type.key == 'pressure'">
@@ -30,7 +30,7 @@
         <span class="data">{{ data.pressure }}mB</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
-        <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
+        <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
     <div v-if="device.type && device.type.key == 'motion'">
@@ -38,7 +38,7 @@
         <span class="data">{{ data.state }}</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
-        <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
+        <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
     <div v-if="device.type && device.type.key == 'dimmer'">
@@ -54,7 +54,7 @@
         <span class="data">{{ data.gas }}ppm</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
-        <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
+        <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
     <div v-if="device.type && device.type.key == 'water'">
@@ -62,7 +62,7 @@
         <span class="data">{{ data.water }}</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
-        <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
+        <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
     <div v-if="device.type && device.type.key == 'rgbw'">
@@ -70,21 +70,16 @@
         <span class="data">{{ data.rgbw }}</span>
         <span class="name">{{ device.name }}</span>
         <span class="location" v-if="device.location">{{ device.location.name }}</span>
-        <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
+        <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
     <div v-if="device.type && device.type.key == 'switch'">
-        <div class="image"><img :src="icons.switch"></div>    
-        <span class="data">{{ data.state }}</span>
-        <span class="name">{{ device.name }}</span>
-        <switche :state=state v-on:switch="changeState"></switche>
-        <span class="location" v-if="device.location">{{ device.location.name }}</span>
-        <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
+        <esp8266-switch :device="device"></esp8266-switch>
     </div>
 
     <div v-if="device.type === null">
         <span class="name" v-if="device.name">{{ device.name }}</span>
-        <span class="name" v-else>Unknow</span>
+        <span class="name" v-else>Unknow</span>.
         <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
@@ -95,15 +90,14 @@
     import thermometer from '../../assets/thermometer.png'
     import humidity from '../../assets/humidity.png'
     import pressure from '../../assets/pressure.png'
-    import _switch from '../../assets/switch.png'
     import dimmer from '../../assets/dimmer.png'
     import luminosity from '../../assets/luminosity.png'
     import gas from '../../assets/gas.png'
     import rgbw from '../../assets/led_strip.png'
-    import moment from 'moment'
-    import Switche from '../SwitchComponent.vue'
+    import Esp8266Switch from './Esp8266SwitchComponent.vue'
     export default {
-        components: { Switche },
+        name: 'Esp8266Type',
+        components: { Esp8266Switch },
         props: { 
             device: {
                 type: Object,
@@ -112,76 +106,72 @@
         },
         data() {
             return {
-                socket: this.$store.state.socket.socket,
                 data: {},
                 icons: {
                     temperature: thermometer, 
                     humidity: humidity,
                     pressure: pressure,
-                    switch: _switch,
                     dimmer: dimmer,
                     luminosity: luminosity,
                     gas: gas,
                     rgbw: rgbw,
                 },
-                state: false,
                 lastSeen: null,
                 isDead: false,
             }
         },
+        computed: {
+            socket() {
+                return this.$store.getters.socket
+            },
+        },
         created() {
-            if(this.device.messages && this.device.messages.length > 0) {
-                this.getData()
-            }
+            this.getData(this.device)
+            this.checkHealth(this.device)
+            this.ping()
+            this.socket.on('device.update.result', device => {
+                if(device.id === this.device.id) {
+                    this.getData(device)
+                    this.checkHealth(device)
+                }
+            })
         },
         methods: {
-            changeState(val) {
-                this.state = val
-                let stateValue = this.state ? 1 : 0
-                let options = {
-                    topic: '/sensors/relay/',
-                    message: `{"mac":"${this.device.mac}", "state":"${stateValue}"}`
-                }
-                this.socket.emit('mqtt.publish', options)
+            ping() {
+                this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'PING' }})
             },
-            getData() {
-                this.device.messages.sort((a, b) => {
-                    return new Date(a.createdAt) - new Date(b.createdAt)
-                })
-                this.data = JSON.parse(this.device.messages[this.device.messages.length - 1].data)
-                this.lastSeen = this.device.messages[this.device.messages.length - 1].createdAt
-                if(moment().diff(this.lastSeen, 'days') > 0) { this.isDead = true }
-            },
-        },
-        watch: {
-            device() {
-                this.device.messages.sort((a, b) => {
-                    return new Date(a.createdAt) - new Date(b.createdAt)
-                })
-
-                let messages = this.device.messages.filter(message => {
-                    return message.type === 'data'
-                })
-
-                if(messages.length > 0) {
-                    this.data = JSON.parse(messages[messages.length - 1].data)
-                }                
-                
-                let pingMessages = this.device.messages.filter(message => {
-                    return message.type === 'ping'
-                })
-                
-                this.lastSeen = pingMessages[pingMessages.length - 1].createdAt
-                
-                if(moment().diff(this.lastSeen, 'minutes') > 1) { 
+            checkHealth(device) {
+                this.lastSeen = device.updatedAt
+                if(moment().diff(this.lastSeen, 'minutes') > 2) { 
                     this.isDead = true 
                 } else {
                     this.isDead = false
                 }
-            }
+            },
+            getState(device) {
+                this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'STATE' }})
+            },
+            getType(device) {
+                this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'TYPE' }})
+            },
+            getIp(device) {
+                this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'IP' }})
+            },
+            restart(device) {
+                this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'RESTART' }})
+            },
+            getData(device) {
+                this.socket.emit('message.getAll', { deviceId: this.device.id, limit: 1, offset: 0, type: 'data' })
+                this.socket.on('message.getAll.result', messages => {
+                    if(messages && messages.length > 0) {
+                        this.data = JSON.parse(messages[0].data)
+                    } else {
+                        this.getState(device)
+                    }
+                })
+            },
         },
     }
 </script>
 
-<style lang="sass" scoped>
-</style>
+<style lang="sass" scoped></style>

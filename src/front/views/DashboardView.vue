@@ -7,14 +7,14 @@
         <freebox :settings="settings"></freebox>
     </div>
 
+    <h1>ESP8266</h1>
+    <esp8266 :settings="settings"></esp8266>
+
     <h1>Netatmo</h1>
     <netatmo :settings="settings"></netatmo>
 
     <h1>Lights</h1>
     <yeelight :settings="settings"></yeelight>
-
-    <h1>ESP8266</h1>
-    <esp8266 :settings="settings"></esp8266>
 
     <h1>Cameras</h1>
     <div v-if="settings.cameras && settings.cameras.display !== 'false'">

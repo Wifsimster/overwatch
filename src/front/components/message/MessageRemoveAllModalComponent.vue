@@ -31,6 +31,9 @@
             },
             removeAll() { 
                 this.socket.emit('message.removeAll') 
+                this.socket.on('message.removeAll.result', () => {
+                    this.$emit('close')
+                })
             },
         }
     }
