@@ -95,6 +95,7 @@
     import gas from '../../assets/gas.png'
     import rgbw from '../../assets/led_strip.png'
     import Esp8266Switch from './Esp8266SwitchComponent.vue'
+    import moment from 'moment'
     export default {
         name: 'Esp8266Type',
         components: { Esp8266Switch },

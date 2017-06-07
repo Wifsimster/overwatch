@@ -4,9 +4,9 @@
 
     <div class="tabs">
         <a @click="type = 'data'" :class="{ 'active':type === 'data' }">Data</a>
-        <a @click="type = 'online'" :class="{ 'active':type === 'data' }">Online</a>
-        <a @click="type = 'new'" :class="{ 'active':type === 'data' }">New</a>
-        <a @click="type = 'ping'" :class="{ 'active':type === 'data' }">Ping</a>
+        <a @click="type = 'online'" :class="{ 'active':type === 'online' }">Online</a>
+        <a @click="type = 'new'" :class="{ 'active':type === 'new' }">New</a>
+        <a @click="type = 'ping'" :class="{ 'active':type === 'ping' }">Ping</a>
     </div>
 
     <transition name="opacity">
@@ -15,8 +15,6 @@
                 <thead>
                     <tr>
                         <th>Date</th>
-                        <th>Type</th>
-                        <th>Mac</th>
                         <th>Message</th>
                         <th></th>
     </tr>
@@ -24,8 +22,6 @@
                 <tbody>
                     <tr v-for="message in messages">
                         <td>{{ message.createdAt | moment('DD/MM/YY HH:mm:ss') }}</td>
-                        <td>{{ message.type }}</td>
-                        <td><span v-if="message.device && message.device.mac">{{ message.device.mac }}</span></td>
                         <td>{{ message.data }}</td>
                         <td><a @click="openRemoveModal(message)" title="Remove the message"><i class="material-icons">remove</i></a></td>
     </tr>
@@ -56,35 +52,51 @@
             RemoveAllModal,
         },
         data() {
-            return {                
-                socket: this.$store.state.socket.socket,
-                messages: null,
+            return {
                 removeMessage: null,
                 removeShow: false,
                 removeAllShow: false,
                 type: 'data',
             }
         },
+        computed: {
+            socket() {
+                return this.$store.getters.socket
+            },
+            messages() {
+                return this.$store.getters.messages
+            },
+            filters() {
+                return this.$store.getters.filters
+            },
+        },
         created() {
-            this.socket.emit('message.getAll', { type: this.type })
-
-            this.socket.on('message.getAll.result', (messages) => {
-                this.messages = messages
+            this.socket.on('message.remove.result', data => {
+                this.getMessages()
             })
 
-            this.socket.on('message.remove.result', (rst) => {
-                this.socket.emit('message.getAll')
+            this.socket.on('message.removeAll.result', data => {
+                this.getMessages()
             })
 
-            this.socket.on('message.removeAll.result', (rst) => {
-                this.messages = []
+            this.socket.on('message.add.result', data => {
+                this.getMessages()
             })
 
-            this.socket.on('message.add.result', (rst) => {
-                this.socket.emit('message.getAll', { type: this.type })
+            this.socket.on('message.getAll.result', data => {
+                this.$store.dispatch('setMessages', data)
             })
+
+            this.getMessages()
         },
         methods: {
+            getMessages() {
+                this.socket.emit('message.getAll', { 
+                    type: this.type, 
+                    limit: 22, 
+                    offset: 0 
+                })
+            },
             openRemoveModal(message) {
                 this.removeShow = true
                 this.removeMessage = message
@@ -95,13 +107,13 @@
         },
         watch: {
             type(val) {
-                this.socket.emit('message.getAll', { type: this.type })
+                this.getMessages()
             },
             removeShow(val) {
-                this.socket.emit('message.getAll', { type: this.type })
+                this.getMessages()
             },
             removeAllShow(val) {
-                this.socket.emit('message.getAll', { type: this.type })
+                this.getMessages()
             },
         },
     }  
@@ -110,7 +122,5 @@
 <style lang="sass" scoped>
 .messages {
     width: 100%;
-    max-height: 650px;
-    overflow: auto;
     }
 </style>

@@ -24,20 +24,24 @@
             ComHeader,
             ComSidebar,
         },
+        computed: {
+            socket() {
+                return this.$store.getters.socket
+            },
+        },
         created() {
-            this.$store.commit('setSocket', io())
-
-            this.$store.state.socket.socket.on('notify', (data) => {
-                console.log('Notify', data)
-                alertify.notify(data.message, data.type, data.time)
-            })
+            this.$store.dispatch('setSocket', io())
+            if(this.socket) {
+                this.socket.on('notify', data => {
+                    alertify.notify(data.message, data.type, data.time)
+                })
+            }
         },
     }
 </script>
 
 <style lang="sass">
 @import './sass/global';
-@import './sass/transition';
 @import './sass/led';
 @import './sass/card';
 @import './sass/checkbox';
@@ -45,4 +49,6 @@
 @import './sass/form';
 @import './sass/btn';
 @import './sass/device';
+@import './sass/tabs';
+@import './sass/transition';
 </style>

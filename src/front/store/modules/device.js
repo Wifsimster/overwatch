@@ -1,39 +1,26 @@
 const state = {
-  device: {},
-  modal: false,
-  removeDevice: {},
-  removeModal: false,
+    device: null,
+    devices: null,
 }
 
 const getters = {
-  device: state => state.device,
-  modal: state => state.modal,
-  removeDevice: state => state.removeDevice,
-  removeModal: state => state.removeModal,
+    device: state => state.device,
+    devices: state => state.devices,
 }
 
-const actions = {}
-
 const mutations = {    
-  openModal (state, data) {
-    state.device = data
-    state.modal = true
-  },
+    setDevice (state, data) { state.device = data },
+    setDevices (state, data) { state.devices = data },
+}
 
-  openRemoveModal (state, data) {
-    state.removeDevice = data
-    state.removeModal = true
-  },
-
-  closeModal (state) {
-    state.modal = false
-    state.removeModal = false
-  },
+const actions = {
+    setDevice({ commit, state }, data) { commit('setDevice', data) },
+    setDevices({ commit, state }, data) { commit('setDevices', data) },
 }
 
 export default {
-  state,
-  getters,
-  actions,
-  mutations
+    state,
+    getters,
+    actions,
+    mutations
 }

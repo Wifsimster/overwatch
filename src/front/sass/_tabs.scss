@@ -1,0 +1,13 @@
+@import 'colors';
+
+.tabs {
+    margin: 20px 0;
+    font-weight: 600;
+    a {
+        padding: 5px 20px;
+        color: $gallery;
+        &.active {
+            color: $amber;
+        }
+    }
+}

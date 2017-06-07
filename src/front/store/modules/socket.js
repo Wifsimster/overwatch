@@ -6,12 +6,12 @@ const getters = {
   socket: state => state.socket,
 }
 
-const actions = {}
-
 const mutations = {
-  setSocket (state, data) {
-    state.socket = data
-  },
+  setSocket (state, data) { state.socket = data },
+}
+
+const actions = {
+    setSocket({ commit, state }, data) { commit('setSocket', data) },
 }
 
 export default {
