@@ -1,0 +1,17 @@
+@import '../colors';
+
+.switch {
+    cursor: pointer;
+    transition: all .5s linear;
+    
+    &.expand {
+        cursor: default;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 10;
+        background-color: $mine-shaft-app;
+    }
+}

@@ -74,7 +74,7 @@
     </div>
 
     <div v-if="device.type && device.type.key == 'switch'">
-        <esp8266-switch :device="device"></esp8266-switch>
+        <esp8266-switch :id="device.id"></esp8266-switch>
     </div>
 
     <div v-if="device.type === null">

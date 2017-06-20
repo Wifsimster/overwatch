@@ -14,7 +14,7 @@
         props: {
             state: {
                 type: Boolean,
-                default: false
+                required: true,
             }
         }
     }

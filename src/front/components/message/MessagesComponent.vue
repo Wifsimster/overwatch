@@ -30,7 +30,7 @@
     </div>
         <div v-else>
             <br>
-            <p class="center">No message</p>
+            <p class="center">No {{ type }} message</p>
     </div>
     </transition>
 

@@ -1,5 +1,5 @@
-module.exports = (device, io) => {
-//    require('../scenario/motion')(device, io)
-    require('../scenario/morning')(device, io)
-    require('../scenario/night')(device, io)
+module.exports = (mqttClient, io) => {
+    require('../scenario/morning')(mqttClient, io)
+    require('../scenario/night')(mqttClient, io)
+    require('../scenario/ping')(mqttClient, io)
 }
