@@ -1,16 +1,22 @@
 <template>
-<transition name="opacity">
-    <div v-if="device" @click="expand = true" :class="{ 'expand':expand }" class="switch">
-        <div class="image"><img :src="icon"></div>
-        <span class="data" v-if="device.state !== null">{{ device.state }}</span>
-        <span class="name">{{ device.name }}</span>
-        <span class="location" v-if="device.location">{{ device.location.name }}</span>
+<div>
+    <transition name="opacity">
+        <div v-if="device" 
+             @click="modalShow = true" 
+             class="switch">
+            <div class="image"><img :src="icon"></div>
+            <span class="data" v-if="device.state !== null">{{ device.state }}</span>
+            <span class="name">{{ device.name }}</span>
+            <span class="location" v-if="device.location">{{ device.location.name }}</span>
+    </div>
+    </transition>
 
-        <div v-if="expand">
-            <a @click="expand = false">Close modal</a>
+    <modal v-if="modalShow"
+           @close="onClose">
+        <div slot="header">{{ device.name }}</div>
+        <div slot="body">
             <ul>
                 <li>Id: {{ device.id }}</li>
-                <li>Name: {{ device.name }}</li>
                 <li>MAC: {{ device.mac }}</li>
                 <li>IP: {{ device.ip }}</li>
                 <li>Created at: {{ device.createdAt | moment('DD.MM.YYYY HH:mm:ss') }}</li>
@@ -21,21 +27,20 @@
     </ul>
             <a @click="ping">Ping device</a> | <a @click="restart">Restart device</a> | <a @click="getOnline">Get online</a>
 
-            <switche v-if="expand" :state=device.state @switch="onState"></switche>
-
+            <switche :state=device.state @switch="onState"></switche>
     </div>
-
+    </modal>
     </div>
-    </transition>
 </template>
 
 <script>
     import icon from '../../assets/switch.png'
     import Switche from '../SwitchComponent.vue'
     import moment from 'moment'
+    import Modal from '../ModalComponent.vue'
     export default {
         name: 'Esp8266Switch',
-        components: { Switche },
+        components: { Switche, Modal },
         props: {
             id: {
                 type: Number,
@@ -47,7 +52,7 @@
                 device: null,
                 icon: icon,
                 isDead: false,
-                expand: false,
+                modalShow: false,
             }
         },
         computed: {
@@ -72,6 +77,9 @@
             })
         },
         methods: {
+            onClose() {
+                this.modalShow = false  
+            },
             onState(val) {
                 this.device.state = val
                 let value = val ? 'ON' : 'OFF'                

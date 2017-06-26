@@ -1,7 +1,6 @@
 <template>
 <transition name="opacity" mode="out-in">
-    <div class="modal-mask" 
-         @keyup.left="$emit('close')">
+    <div class="modal-mask">
         <div class="modal-wrapper">
             <div class="modal-container" :class="size">
                 <div class="modal-header">

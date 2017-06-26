@@ -1,15 +1,13 @@
 <template>
-<div class="device" :class="{ 'red': isDead }">
+<div>
 
-    <div v-if="device.type && device.type.key === 'temperature'">
-        <div class="image"><img :src="icons.temperature"></div>
-        <span class="data">{{ data.temperature }}°C</span>
-        <span class="name">{{ device.name }}</span>
-        <span class="location" v-if="device.location">{{ device.location.name }}</span>
-        <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
+    <div v-if="device.type && device.type.key === 'temperature'" 
+         class="device" 
+         :class="{ 'red': isDead }">
+        <esp8266-temperature :id="device.id"></esp8266-temperature>
     </div>
 
-    <div v-if="device.type && device.type.key === 'humidity'">
+    <div v-if="device.type && device.type.key === 'humidity'" class="device" :class="{ 'red': isDead }">
         <div class="image"><img :src="icons.humidity"></div>
         <span class="data">{{ data.humidity }}%</span>
         <span class="name">{{ device.name }}</span>
@@ -17,7 +15,7 @@
         <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
-    <div v-if="device.type && device.type.key == 'luminosity'">
+    <div v-if="device.type && device.type.key == 'luminosity'" class="device" :class="{ 'red': isDead }">
         <div class="image"><img :src="icons.luminosity"></div>
         <span class="data">{{ data.luminosity }}LUX</span>
         <span class="name">{{ device.name }}</span>
@@ -25,7 +23,7 @@
         <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
-    <div v-if="device.type && device.type.key == 'pressure'">
+    <div v-if="device.type && device.type.key == 'pressure'" class="device" :class="{ 'red': isDead }">
         <div class="image"><img :src="icons.pressure"></div>
         <span class="data">{{ data.pressure }}mB</span>
         <span class="name">{{ device.name }}</span>
@@ -33,7 +31,7 @@
         <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
-    <div v-if="device.type && device.type.key == 'motion'">
+    <div v-if="device.type && device.type.key == 'motion'" class="device" :class="{ 'red': isDead }">
         <div class="image"><img :src="icons.switch"></div>    
         <span class="data">{{ data.state }}</span>
         <span class="name">{{ device.name }}</span>
@@ -41,7 +39,7 @@
         <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
-    <div v-if="device.type && device.type.key == 'dimmer'">
+    <div v-if="device.type && device.type.key == 'dimmer'" class="device" :class="{ 'red': isDead }">
         <div class="image"><img :src="icons.dimmer"></div>
         <span class="data">{{ data.dimmer }}</span>
         <span class="name">{{ device.name }}</span>
@@ -49,7 +47,7 @@
         <span class="date">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
-    <div v-if="device.type && device.type.key == 'gas'">
+    <div v-if="device.type && device.type.key == 'gas'" class="device" :class="{ 'red': isDead }">
         <div class="image"><img :src="icons.gas"></div>
         <span class="data">{{ data.gas }}ppm</span>
         <span class="name">{{ device.name }}</span>
@@ -57,7 +55,7 @@
         <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
-    <div v-if="device.type && device.type.key == 'water'">
+    <div v-if="device.type && device.type.key == 'water'" class="device" :class="{ 'red': isDead }">
         <div class="image"><img :src="icons.water"></div>
         <span class="data">{{ data.water }}</span>
         <span class="name">{{ device.name }}</span>
@@ -65,7 +63,7 @@
         <span class="date" v-if="lastSeen">{{ lastSeen | moment('HH:mm') }}</span>
     </div>
 
-    <div v-if="device.type && device.type.key == 'rgbw'">
+    <div v-if="device.type && device.type.key == 'rgbw'" class="device" :class="{ 'red': isDead }">
         <div class="image"><img :src="icons.rgbw"></div>
         <span class="data">{{ data.rgbw }}</span>
         <span class="name">{{ device.name }}</span>
@@ -87,7 +85,6 @@
 </template>
 
 <script>
-    import thermometer from '../../assets/thermometer.png'
     import humidity from '../../assets/humidity.png'
     import pressure from '../../assets/pressure.png'
     import dimmer from '../../assets/dimmer.png'
@@ -109,7 +106,6 @@
             return {
                 data: {},
                 icons: {
-                    temperature: thermometer, 
                     humidity: humidity,
                     pressure: pressure,
                     dimmer: dimmer,

@@ -1,14 +1,31 @@
 @import '../colors';
 
-span {
-    display: block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+$height: 116px;
+
+.datetime {
     position: relative;
-    padding: 2px 0;
-    font-size: 24px;
-    &:nth-child(2) {
-    font-size: 34px;
+    background-color: $mine-shaft-app;
+    margin: 5px;
+    padding: 5px 10px;
+    height: $height;
+    transition: all 1s easy-in-out;
+    cursor: pointer;
+
+    @media(min-width: 650px) {
+        min-width: 160px;
+    }
+
+    span {
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: relative;
+        padding: 2px 0;
+        font-size: 24px;
+
+        &:nth-child(2) {
+            font-size: 34px;
+        }
     }
 }

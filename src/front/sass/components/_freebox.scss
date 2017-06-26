@@ -1,5 +1,29 @@
+@import '../colors';
+
+$height: 116px;
+
 .freebox {
+    position: relative;
+    background-color: $mine-shaft-app;
+    margin: 5px;
+    padding: 5px 10px;
+    height: $height;
+    transition: all 1s easy-in-out;
+    cursor: pointer;
+
+    @media(min-width: 650px) {
+        min-width: 160px;
+    }
+
     span {
-        font-size: 22px;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        position: relative;
+        padding: 2px 0;
+    }
+    &.red {
+        border: 1px solid $red;
     }
 }

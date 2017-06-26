@@ -2,14 +2,19 @@
 
 $height: 116px;
 
-.switch {
-    cursor: pointer;
+.netatmo-device {
     position: relative;
     background-color: $mine-shaft-app;
     margin: 5px;
     padding: 5px 10px;
     height: $height;
-    max-width: 200px;
+    //    width: 100%;
+    transition: all 1s easy-in-out;
+    cursor: pointer;
+
+    @media(min-width: 650px) {
+        min-width: 160px;
+    }
 
     .image {
         position: absolute;
@@ -21,27 +26,28 @@ $height: 116px;
             overflow: hidden;
         }
     }
-
-    .data, .name, .location {
+    span {
         display: block;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
         position: relative;
         padding: 2px 0;
-
     }
-    .data {        
+    .data {
         color: $gallery;
         font-size: 38px;
         top: 0;
         right: 0;
     }
-    .name {
-
-    }
     .location {
         color: $dusty-gray;
+    }
+    .date {   
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        font-size: 12px;
     }
     &.red {
         border: 1px solid $red;

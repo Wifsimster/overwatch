@@ -1,19 +1,43 @@
 <template>
-<device :show="settings.freebox.display" v-if="connection">
-    <div slot="body">
-        <span>Freebox: {{ connection.state.toUpperCase() }}</span>
-        <!--  <span>Down: {{ convert(connection.bandwidth_down) }}</span>-->
-        <!--  <span>UP: {{ convert(connection.bandwidth_up) }}</span>-->
-        <span>&#8595; {{ convert(connection.rate_down) }}</span>
-        <span>&#8593; {{ convert(connection.rate_up) }}</span>
+<div>
+    <transition name="opacity">
+        <div class="freebox"
+             v-if="connection"
+             @click="modalShow = true">
+            <span>Freebox: {{ connection.state.toUpperCase() }}</span>
+            <span>&#8595; {{ convert(connection.rate_down) }}</span>
+            <span>&#8593; {{ convert(connection.rate_up) }}</span>
     </div>
-    </device>
+    </transition>
+
+    <modal v-if="modalShow"
+           @close="onClose">
+        <div slot="header">Freebox</div>
+        <div slot="body">
+            <ul>
+                <li>Rate down: {{ convert(connection.rate_down) }}</li>
+                <li>Rate up: {{ convert(connection.rate_up) }}</li>
+                <li>Bandwidth down: {{ convert(connection.bandwidth_down) }}</li>
+                <li>Bandwidth up: {{ convert(connection.bandwidth_up) }}</li>
+                <li>Bytes down: {{ convert(connection.bytes_down) }}</li>
+                <li>Bytes up: {{ convert(connection.bytes_up) }}</li>
+                <li>IPv4: {{ connection.ipv4 }}</li>
+                <li>Port range: {{ connection.ipv4_port_range[0] }} - {{ connection.ipv4_port_range[1] }}</li>
+                <li>IPv6: {{ connection.ipv6 }}</li>
+                <li>Media: {{ connection.media }}</li>
+                <li>State: {{ connection.state }}</li>
+                <li>Type: {{ connection.type }}</li>
+    </ul>
+    </div>
+    </modal>
+
+    </div>
 </template>
 
 <script>
-    import Device from './DeviceComponent.vue'
+    import Modal from './ModalComponent.vue'
     export default {
-        components: { Device },
+        components: { Modal },
         props: {
             settings: {
                 type: Object,
@@ -27,6 +51,7 @@
                 login: {},
                 session: {},
                 connection: null,
+                modalShow: false,
             }
         },
         created() {
@@ -34,6 +59,9 @@
             setInterval(() => { this.getData() }, 5000)
         },
         methods: {
+            onClose() {
+                this.modalShow = false  
+            },
             init() {
                 this.socket.emit('freebox.getAutorize')
                 this.socket.on('freebox.getAutorize.result', (data) => {

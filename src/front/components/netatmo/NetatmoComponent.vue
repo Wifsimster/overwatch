@@ -1,13 +1,16 @@
 <template>
-<div class="flex-container">
-    <temperature :settings="settings" :device="netatmoDevice"></temperature>
-    <outdoor-temperature :settings="settings" :device="netatmoDevice"></outdoor-temperature>
-    <humidity :settings="settings" :device="netatmoDevice"></humidity>
-    <outdoor-humidity :settings="settings" :device="netatmoDevice"></outdoor-humidity>
-    <noise :settings="settings" :device="netatmoDevice"></noise>
-    <co2 :settings="settings" :device="netatmoDevice"></co2>
-    <pressure :settings="settings" :device="netatmoDevice"></pressure>
+<transition name="opacity">
+    <div class="flex-container" 
+         v-if="settings.netatmo.display">
+        <temperature :device="netatmoDevice"></temperature>
+        <outdoor-temperature :device="netatmoDevice"></outdoor-temperature>
+        <humidity :device="netatmoDevice"></humidity>
+        <outdoor-humidity :device="netatmoDevice"></outdoor-humidity>
+        <noise :device="netatmoDevice"></noise>
+        <co2 :device="netatmoDevice"></co2>
+        <pressure :device="netatmoDevice"></pressure>
     </div>
+    </transition>
 </template>
 
 <script>
