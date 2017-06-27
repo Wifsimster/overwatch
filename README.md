@@ -40,3 +40,5 @@ Personal home automation with real time messaging for Raspberry Pi 3.
 ## Dashboard
 
 ![scheme](https://github.com/Wifsimster/overwatch/blob/master/cover.png)
+![scheme](https://github.com/Wifsimster/overwatch/blob/master/cover_02.png)
+![scheme](https://github.com/Wifsimster/overwatch/blob/master/cover_03.png)
