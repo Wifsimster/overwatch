@@ -1,7 +1,7 @@
 <template>
-<div class="flex-container">
-    <div v-for="light in lights" class="light">
-        <light :settings="settings" :light="light"></light>
+<div class="flex-container" v-if="settings.yeelight.display">
+    <div v-for="light in lights">
+        <light :device="light"></light>
     </div>
     </div>
 </template>
@@ -23,18 +23,19 @@
             }
         },
         created() {
-            this.socket.on('light.found', (light) => {
-                let exist = this.lights.filter((li) => {
+            this.socket.on('light.found', light => {
+                let exist = this.lights.filter(li => {
                     if(li.id === light.id) { return true }
                 })
-                if(exist.length === 0) { 
+                if(exist.length === 0) {
+                    console.log('New light found :', light)
                     this.lights.push(light) 
                 }
             })
 
             this.socket.emit('light.getAll')
-            this.socket.on('light.getAll.result', (lights) => {
-                console.log('lights', lights)
+            this.socket.on('light.getAll.result', lights => {
+                console.log('Get all lights :', lights)
                 this.lights = lights 
             })
         },
@@ -42,5 +43,5 @@
 </script>
 
 <style lang="sass" scoped>
-@import '../../sass/components/yeelight'
+@import '../../sass/components/lights'
 </style>

@@ -14,7 +14,7 @@
     <netatmo :settings="settings"></netatmo>
 
     <h1>Lights</h1>
-    <yeelight :settings="settings"></yeelight>
+    <lights :settings="settings"></lights>
 
     <h1>Cameras</h1>
     <div v-if="settings.cameras && settings.cameras.display !== 'false'">
@@ -33,24 +33,24 @@
     import DateTime from '../components/DateTimeComponent.vue'
     import Freebox from '../components/FreeboxComponent.vue'
     import Camera from '../components/CameraComponent.vue'
-    import Yeelight from '../components/yeelight/YeelightComponent.vue'
+    import Lights from '../components/yeelight/LightsComponent.vue'
     import Esp8266 from '../components/esp8266/Esp8266Component.vue'
     import Netatmo from '../components/netatmo/NetatmoComponent.vue'
     export default {
+        components: {
+            DateTime,
+            Freebox,
+            Camera,
+            Lights,
+            Netatmo,
+            Esp8266,
+        },
         data() {
             return {
                 socket: this.$store.state.socket.socket,
                 settings: null,
                 camera: null,
             }
-        },
-        components: {
-            DateTime,
-            Freebox,
-            Camera,
-            Yeelight,
-            Netatmo,
-            Esp8266,
         },
         methods: {
             display(name) {
