@@ -3,12 +3,4 @@
     flex-flow: row wrap;
     align-content: flex-start;
     justify-content: flex-start;
-
-    > * {
-        width: 100%;
-
-        @media(min-width: 650px) {
-            max-width: 210px;
-        }
-    }
 }

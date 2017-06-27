@@ -34,8 +34,13 @@
             })
 
             this.socket.emit('light.getAll')
+
+            setInterval(() => { 
+                this.socket.emit('light.getAll') 
+            }, 5000)
+
             this.socket.on('light.getAll.result', lights => {
-                console.log('Get all lights :', lights)
+                //                console.log('Get all lights :', lights)
                 this.lights = lights 
             })
         },

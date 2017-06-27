@@ -57,11 +57,9 @@ module.exports = class Light {
     }
 
     getValues(options) {
-        const light = yeelightSearch.getYeelightById(options.id)
+        const light = yeelightSearch.getYeelightById(options.id)        
         if(light) {
-            return light.getValues(options.props).then((values) => {
-                return res
-            }) 
+            return light.getValues(options.props)
         }
     }
 

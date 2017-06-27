@@ -5,24 +5,31 @@
              class="light"
              v-if="device"
              @click="modalShow = true">
-            <span class="led" v-if="state" title="On"></span>
-            <div class="image" v-if="state">
-                <img :src="bulbImg" class="on"></div>
-            <div class="image" v-if="!state">
-                <img :src="bulbImg"></div>
+            <div class="image"><img :src="bulbImg"></div>
+            <span v-if="state" class="led pull-right"></span>
             <span class="location">{{ device.name }}</span>
     </div>
     </transition>
 
     <modal v-if="modalShow"
            @close="onClose">
-        <div slot="header">{{ device.id }}</div>
+        <div slot="header">Light - {{ device.name }}</div>
         <div slot="body">
-            <range-slider class="slider"
-                          min="1"
-                          max="100"
-                          step="10"
-                          v-model="slider"></range-slider>
+            <ul>
+                <li>Name: {{ device.name }}</li>
+                <li>Id: {{ device.id }}</li>
+                <li>Hostname: {{ device.hostname }}</li>
+                <li>Port: {{ device.port }}</li>
+                <li>Model: {{ device.model }}</li>
+                <li>Brightness: <range-slider class="slider"
+                                              min="1"
+                                              max="100"
+                                              step="10"
+                                              v-model="slider"></range-slider></li>
+                <li>State: {{ state }}</li>
+                <switchy :state=state @switch="onState"></switchy>
+
+    </ul>
     </div>
     </modal>
 
@@ -34,10 +41,12 @@
     import RangeSlider from 'vue-range-slider'
     import 'vue-range-slider/dist/vue-range-slider.css'
     import bulbImg from '../../assets/bulb.png'
+    import Switchy from '../SwitchComponent.vue'
     export default {
         components: { 
             Modal,
             RangeSlider,
+            Switchy,
         },
         props: {
             device: {
@@ -56,19 +65,30 @@
             }
         },
         created() {
+            console.log('Get values :', this.device.id)
             this.socket.emit('light.getValues', {
                 id: this.device.id,
-                props: ['power']
+                props: ['power'],
             })
+
             this.socket.on('light.getValues.result', data => {
-                console.log(this.device.id, data)
+                console.log('Get values result :', data)
             })
-            this.turnOff()
+
+            //this.turnOff()
         },
         watch: {
             slider(val) { this.setBrightness(val) },
         },
         methods: {
+            onState(val) {
+                if(!this.state) { 
+                    this.turnOn() 
+                }
+                else {
+                    this.turnOff() 
+                }
+            },
             toggle() {
                 this.socket.emit('light.toggle', this.device.id)
                 this.socket.on('light.toggle.result', id => {
@@ -127,6 +147,9 @@
                     this.$store.dispatch('setAlert', { type: 'error', message: err })
                     this.error = true
                 })
+            },
+            onClose() {
+                this.modalShow = false  
             },
         },
     }
