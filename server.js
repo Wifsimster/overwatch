@@ -14,10 +14,10 @@ app.use(favicon(__dirname + '/src/front/assets/favicon.png'))
 var port = process.env.PORT || 8080
 var env = process.env.NODE_ENV
 
-if('development' == env) {
-    app.use(errorHandler({dumpExceptions: true, showStack: true}))
+if ('development' == env) {
+    app.use(errorHandler({ dumpExceptions: true, showStack: true }))
 }
-if('production' == app.get('env')) { app.use(errorHandler()) }
+if ('production' == app.get('env')) { app.use(errorHandler()) }
 
 // Drop & create tables in DB
 //require('./src/back/models/createDatabase')
