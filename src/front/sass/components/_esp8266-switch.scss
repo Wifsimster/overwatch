@@ -9,7 +9,7 @@ $height: 116px;
     margin: 5px;
     padding: 5px 10px;
     height: $height;
-    max-width: 200px;
+    min-width: 150px;
 
     .image {
         position: absolute;
@@ -36,9 +36,6 @@ $height: 116px;
         font-size: 38px;
         top: 0;
         right: 0;
-    }
-    .name {
-
     }
     .location {
         color: $dusty-gray;

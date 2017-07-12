@@ -1,8 +1,8 @@
-@import 'colors';
+@import '../colors';
 
-$radius: 14px;
+$radius: 20px;
 
-.switch {
+.switchy {
     position: relative;
     display: inline-block;
     margin: 0;
@@ -13,9 +13,9 @@ $radius: 14px;
         background-color: white;
         border-radius: $radius;
         cursor: pointer;
-        padding: 5px 15px;
-        font-size: 14px;
-        line-height: 14px;
+        padding: 16px 32px;
+        font-size: 20px;
+        line-height: 20px;
         &.active {
             background-color: white;
             color: $amber;

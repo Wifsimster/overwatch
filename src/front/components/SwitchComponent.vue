@@ -1,5 +1,5 @@
 <template>
-    <div class="switch">
+    <div class="switchy">
         <div @click="$emit('switch', false)" v-if="state" class="">OFF</div>
         <div @click="$emit('switch', true)" v-else class="active">ON</div>
     </div>
@@ -17,5 +17,5 @@ export default {
 </script>
 
 <style lang="sass" scoped>
-@import '../sass/switch'
+@import '../sass/components/switchy'
 </style>

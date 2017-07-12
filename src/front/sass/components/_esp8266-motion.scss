@@ -9,7 +9,7 @@ $height: 116px;
     margin: 5px;
     padding: 5px 10px;
     height: $height;
-    max-width: 200px;
+    min-width: 150px;
 
     .image {
         position: absolute;
