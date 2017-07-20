@@ -1,10 +1,10 @@
-var Sequelize = require('sequelize')
-var sequelize = require('../db/database')
+const Sequelize = require('sequelize')
+const sequelize = require('../db/database')
 
-var Location = sequelize.define('location', {
+const Location = sequelize.define('location', {
   name: Sequelize.STRING,
 }, {
-  freezeTableName: true,
-})
+    freezeTableName: true,
+  })
 
 module.exports = Location

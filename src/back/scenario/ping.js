@@ -5,7 +5,7 @@ const cron = require('node-cron')
 const light = new Light()
 
 module.exports = (mqttClient, io) => {
-    if(mqttClient && io) {
+    if (mqttClient && io) {
 
         //        cron.schedule('* * * * * *', () => {
         //

@@ -5,7 +5,7 @@ const light = new Light()
 
 module.exports = (socket) => {
 
-    yeelightSearch.on('found', (light) => {        
+    yeelightSearch.on('found', (light) => {
         socket.broadcast.emit('light.found', {
             id: light.id,
             name: light.name,
@@ -45,8 +45,8 @@ module.exports = (socket) => {
         })
     })
 
-    socket.on('light.getValues', options => {        
-        let promise = light.getValues(options)        
+    socket.on('light.getValues', options => {
+        let promise = light.getValues(options)
         promise.then(data => {
             socket.emit('light.getValues.result', data)
         }).catch(err => {
@@ -57,7 +57,7 @@ module.exports = (socket) => {
     socket.on('light.setName', options => {
         light.setName(options).then(data => {
             socket.emit('light.setName.result', data)
-        }).catch(err => { 
+        }).catch(err => {
             socket.emit('light.setName.error', err)
         })
     })
@@ -65,7 +65,7 @@ module.exports = (socket) => {
     socket.on('light.setColorTemperature', options => {
         light.setColorTemperature(options).then(data => {
             socket.emit('light.setColorTemperature.result', data)
-        }).catch(err => { 
+        }).catch(err => {
             socket.emit('light.setColorTemperature.error', err)
         })
     })
@@ -73,7 +73,7 @@ module.exports = (socket) => {
     socket.on('light.setBrightness', options => {
         light.setBrightness(options).then(data => {
             socket.emit('light.setBrightness.result', data)
-        }).catch(err => { 
+        }).catch(err => {
             socket.emit('light.setBrightness.error', err)
         })
     })
@@ -81,7 +81,7 @@ module.exports = (socket) => {
     socket.on('light.setRGB', options => {
         light.setRGB(options).then(data => {
             socket.emit('light.setRGB.result', data)
-        }).catch(err => { 
+        }).catch(err => {
             socket.emit('light.setRGB.error', err)
         })
     })
@@ -89,7 +89,7 @@ module.exports = (socket) => {
     socket.on('light.setHSV', options => {
         light.setHSV(options).then(data => {
             socket.emit('light.setHSV.result', data)
-        }).catch(err => { 
+        }).catch(err => {
             socket.emit('light.setHSV.error', errorHandler(err))
         })
     })

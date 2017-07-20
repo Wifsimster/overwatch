@@ -5,7 +5,7 @@ module.exports = (socket) => {
 
     socket.on('message.getAll', data => {
         let options = {
-            order: 'message.createdAt DESC',
+            order: [['createdAt', 'DESC']],
             limit: data.limit,
             offset: data.offset,
             include: [],
@@ -22,6 +22,7 @@ module.exports = (socket) => {
         Message.findAll(options).then(rst => {
             socket.emit('message.getAll.result.' + data.uuid, rst)
         }).catch(err => {
+            console.error(err)
             socket.emit('message.getAll.error.' + data.uuid, err)
         })
     })

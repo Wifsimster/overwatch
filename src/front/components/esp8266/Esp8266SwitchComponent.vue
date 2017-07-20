@@ -7,7 +7,6 @@
                 </div>
                 <span class="data" v-if="device.state === true">On</span>
                 <span class="data" v-if="device.state === false">Off</span>
-                <span class="data" v-if="device.state === undefined">Undefined</span>
                 <span class="name">{{ device.name }}</span>
                 <span class="location" v-if="device.location">{{ device.location.name }}</span>
             </div>
@@ -16,7 +15,7 @@
         <modal v-if="modalShow" @close="onClose">
             <div slot="header">{{ device.name }}</div>
             <div slot="body">
-                <switche :state=device.state @switch="onState"></switche>
+                <switchy v-if="device.state !== undefined" :state=device.state @switch="onState"></switchy>
                 <ul>
                     <li>Id: {{ device.id }}</li>
                     <li>MAC: {{ device.mac }}</li>
@@ -39,13 +38,13 @@
 
 <script>
 import icon from '../../assets/switch.png'
-import Switche from '../SwitchComponent.vue'
+import Switchy from '../SwitchComponent.vue'
 import moment from 'moment'
 import Modal from '../ModalComponent.vue'
 import UUID from '../../mixins/uuid'
 export default {
     name: 'Esp8266Switch',
-    components: { Switche, Modal },
+    components: { Switchy, Modal },
     props: {
         id: {
             type: Number,
@@ -71,14 +70,41 @@ export default {
 
         this.socket.emit('device.getOne', { id: this.id, uuid: this.uuid })
         this.socket.on('device.getOne.result.' + this.uuid, device => {
-            this.device = device
+            this.getState().then(state => {
+                device.state = state
+                this.device = device
+            }).catch(err => {
+                console.error(err)
+            })
         })
 
-        this.socket.on('device.update.result.' + this.uuid, device => {
-            Object.assign(this.device, device)
+        this.socket.on('device.update.result', device => {
+            if (device.id === this.device.id) {
+                Object.assign(this.device, device)
+            }
         })
     },
     methods: {
+        getState() {
+            return new Promise((resolve, reject) => {
+                this.socket.emit('message.getAll', {
+                    uuid: this.uuid,
+                    deviceId: this.id,
+                    limit: 1,
+                    offset: 0,
+                    type: 'data'
+                })
+                this.socket.on('message.getAll.result.' + this.uuid, messages => {
+                    if (messages && messages.length > 0) {
+                        let state = JSON.parse(messages[0].data).state
+                        if (state) {
+                            resolve(state === "1" ? true : false)
+                        }
+                        resolve()
+                    }
+                })
+            })
+        },
         onClose() {
             this.modalShow = false
         },
@@ -123,39 +149,19 @@ export default {
         //     this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'STATE' } })
         //     this.parseLastDataMessage()
         // },
-        getState() {
-            return new Promise((resolve, reject) => {
-                this.socket.emit('message.getAll', {
-                    uuid: this.uuid,
-                    deviceId: this.id,
-                    limit: 1,
-                    offset: 0,
-                    type: 'data'
-                })
-                this.socket.on('message.getAll.result.' + this.uuid, messages => {
-                    if (messages && messages.length > 0) {
-                        let state = JSON.parse(messages[0].data).state
-                        if (state) {
-                            resolve(state === "1" ? true : false)
-                        }
-                        resolve()
-                    }
-                })
-            })
-        },
     },
-    watch: {
-        device() {
-            this.getState().then(data => {
-                this.device.state = data
-            }).catch(err => {
-                console.error('- State :', err)
-            })
-        }
-    },
+    // watch: {
+    //     device() {
+    //         this.getState().then(data => {
+    //             this.device.state = data
+    //         }).catch(err => {
+    //             console.error('- State :', err)
+    //         })
+    //     }
+    // },
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 @import '../../sass/components/esp8266-switch'
 </style>

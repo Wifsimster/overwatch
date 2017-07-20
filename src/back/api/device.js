@@ -9,16 +9,38 @@ module.exports = (socket) => {
         let options = {
             include: [Type, Location],
         }
-        Device.findAll(options)
-            .then((devices) => {
+
+        Device.findAll(options).then(devices => {
+            let p0 = []
+
+            devices.map(device => {
+                p0.push(Message.findAll({
+                    offset: 0,
+                    limit: 1,
+                    where: {
+                        deviceId: device.id,
+                        type: 'data',
+                    }
+                }))
+            })
+
+            Promise.all(p0).then(results => {
+                let states = results.map((messages, index) => {
+                    return JSON.parse(messages[0].data)
+                })
                 socket.emit('device.getAll.result.' + data.uuid, devices)
-            }).catch((err) => {
+
+            }).catch(err => {
                 console.error(err)
                 socket.emit('device.getAll.error.' + data.uuid, err)
             })
+        }).catch((err) => {
+            console.error(err)
+            socket.emit('device.getAll.error.' + data.uuid, err)
+        })
     })
 
-    socket.on('device.getOne', (data) => {
+    socket.on('device.getOne', data => {
         Device.findById(data.id, {
             include: [Type, Location, Message],
         }).then((device) => {
@@ -29,7 +51,7 @@ module.exports = (socket) => {
         })
     })
 
-    socket.on('device.update', (data) => {
+    socket.on('device.update', data => {
         Device.findById(data.id).then(device => {
             let types = []
             data.types.forEach(type => { types.push(type.id) })
@@ -40,22 +62,22 @@ module.exports = (socket) => {
                     mac: data.mac,
                     ip: data.ip,
                 }, { where: { id: data.id } }).then((count, rows) => {
-                    socket.emit('device.update.result.' + data.uuid, { count: count, rows: rows })
+                    socket.emit('device.update.result', { count: count, rows: rows })
                 }).catch(err => {
                     console.error(err)
-                    socket.emit('device.getAll.error.' + data.uuid, err)
+                    socket.emit('device.getAll.error', err)
                 })
             }).catch(err => {
                 console.error(err)
-                socket.emit('device.getAll.error.' + data.uuid, err)
+                socket.emit('device.getAll.error', err)
             })
         }).catch(err => {
             console.error(err)
-            socket.emit('device.getAll.error.' + data.uuid, err)
+            socket.emit('device.getAll.error', err)
         })
     })
 
-    socket.on('device.remove', (data) => {
+    socket.on('device.remove', data => {
         Device.destroy({ where: { id: data.id } })
             .then((rst) => {
                 socket.emit('device.remove.result.' + data.uuid, rst)

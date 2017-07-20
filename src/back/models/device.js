@@ -9,8 +9,8 @@ const Device = sequelize.define('device', {
     name: Sequelize.STRING,
     ip: Sequelize.STRING,
 }, {
-    freezeTableName: true,
-})
+        freezeTableName: true,
+    })
 
 Device.belongsToMany(Type, { through: 'DeviceType' })
 Type.belongsToMany(Device, { through: 'DeviceType' })

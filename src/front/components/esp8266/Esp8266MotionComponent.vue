@@ -38,6 +38,7 @@
 import icon from '../../assets/motion.png'
 import moment from 'moment'
 import Modal from '../ModalComponent.vue'
+import UUID from '../../mixins/uuid'
 export default {
     name: 'Esp8266Motion',
     components: { Modal },
@@ -49,7 +50,8 @@ export default {
     },
     data() {
         return {
-            device: null,
+            device: {},
+            uuid: null,
             icon: icon,
             isDead: false,
             modalShow: false,
@@ -61,22 +63,45 @@ export default {
         },
     },
     created() {
-        this.socket.emit('device.getOne', this.id)
-        this.socket.on('device.getOne.result', device => {
-            if (device.id === this.id) {
+        this.uuid = UUID.getOne()
+
+        this.socket.emit('device.getOne', { id: this.id, uuid: this.uuid })
+        this.socket.on('device.getOne.result.' + this.uuid, device => {
+            this.getState().then(state => {
+                device.state = state
                 this.device = device
-                this.parseLastDataMessage()
-            }
+            }).catch(err => {
+                console.error(err)
+            })
         })
 
         this.socket.on('device.update.result', device => {
-            if (device.id === this.id) {
+            if (device.id === this.device.id) {
                 Object.assign(this.device, device)
-                this.parseLastDataMessage()
             }
         })
     },
     methods: {
+        getState() {
+            return new Promise((resolve, reject) => {
+                this.socket.emit('message.getAll', {
+                    uuid: this.uuid,
+                    deviceId: this.id,
+                    limit: 1,
+                    offset: 0,
+                    type: 'data'
+                })
+                this.socket.on('message.getAll.result.' + this.uuid, messages => {
+                    if (messages && messages.length > 0) {
+                        let state = JSON.parse(messages[0].data).state
+                        if (state) {
+                            resolve(state === "1" ? true : false)
+                        }
+                        resolve()
+                    }
+                })
+            })
+        },
         onClose() {
             this.modalShow = false
         },
@@ -111,31 +136,31 @@ export default {
             console.log('Restart device')
             this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'RESET' } })
         },
-        getState() {
-            console.log('Get state')
-            this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'STATE' } })
-            this.parseLastDataMessage()
-        },
-        parseLastDataMessage() {
-            this.socket.emit('message.getAll', {
-                deviceId: this.id,
-                limit: 1,
-                offset: 0,
-                type: 'data'
-            })
-            this.socket.on('message.getAll.result', messages => {
-                if (messages && messages.length > 0) {
-                    let state = JSON.parse(messages[0].data).state
-                    if (state) {
-                        this.device.state = state === "1" ? true : false
-                    }
-                }
-            })
-        },
+        // getState() {
+        //     console.log('Get state')
+        //     this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'STATE' } })
+        //     this.parseLastDataMessage()
+        // },
+        // parseLastDataMessage() {
+        //     this.socket.emit('message.getAll', {
+        //         deviceId: this.id,
+        //         limit: 1,
+        //         offset: 0,
+        //         type: 'data'
+        //     })
+        //     this.socket.on('message.getAll.result', messages => {
+        //         if (messages && messages.length > 0) {
+        //             let state = JSON.parse(messages[0].data).state
+        //             if (state) {
+        //                 this.device.state = state === "1" ? true : false
+        //             }
+        //         }
+        //     })
+        // },
     },
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 @import '../../sass/components/esp8266-motion'
 </style>

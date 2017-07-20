@@ -9,8 +9,8 @@ const Scenario = sequelize.define('Scenario', {
     if: Sequelize.STRING,
     then: Sequelize.STRING,
 }, {
-    freezeTableName: true,
-})
+        freezeTableName: true,
+    })
 
 //Device.belongsToMany(Scenario)
 //Scenario.hasOne(Device, {as: 'listener'})

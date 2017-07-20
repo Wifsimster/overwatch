@@ -1,17 +1,27 @@
 <template>
     <transition-group name="opacity" tag="div" class="flex-container">
-        <div v-for="device in splittedDevices" :key="device.id">
-            <type :settings="settings" :device="device"></type>
+        <div v-for="device in devices" :key="device.id">
+    
+            <div v-if="device.types[0].key === 'motion'">
+                <esp8266-motion :id="device.id"></esp8266-motion>
+            </div>
+    
+            <div v-if="device.types[0].key === 'switch'">
+                <esp8266-switch :id="device.id"></esp8266-switch>
+            </div>
+    
         </div>
     </transition-group>
 </template>
 
 <script>
-import Type from './Esp8266TypeComponent.vue'
+import Esp8266Switch from './Esp8266SwitchComponent.vue'
+import Esp8266Motion from './Esp8266MotionComponent.vue'
 import UUID from '../../mixins/uuid'
 export default {
     components: {
-        Type,
+        Esp8266Switch,
+        Esp8266Motion,
     },
     props: {
         settings: {
@@ -21,7 +31,7 @@ export default {
     },
     data() {
         return {
-            splittedDevices: [],
+            devices: [],
             uuid: null,
         }
     },
@@ -32,12 +42,23 @@ export default {
     },
     created() {
         this.uuid = UUID.getOne()
+
         this.socket.emit('device.getAll', { uuid: this.uuid })
+
         this.socket.on('device.getAll.result.' + this.uuid, devices => {
-            this.split(devices)
+            console.log('Devices', devices)
+            this.devices = devices
+            //this.split(devices)
         })
     },
     methods: {
+        isType(device, name) {
+            return device.types.map(type => {
+                if (type.key === name) {
+                    return true
+                }
+            })
+        },
         split(devices) {
             this.splittedDevices = []
             if (devices) {
@@ -64,6 +85,6 @@ export default {
 }
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 @import '../../sass/components/esp8266'
 </style>

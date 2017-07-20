@@ -11,8 +11,8 @@ const Promise = require('promise')
 module.exports = (io) => {
     return new Promise((resolve, reject) => {
         jsonfile.readFile(file, (err, obj) => {
-            if(!err) {
-                let settings = obj.settings.mqtt            
+            if (!err) {
+                let settings = obj.settings.mqtt
                 let mqttUrl = `mqtt://${settings.ip}:${settings.port}`
                 let mqttClient = mqtt.connect(mqttUrl)
 
@@ -21,77 +21,77 @@ module.exports = (io) => {
                 mqttClient.subscribe('/#')
 
                 mqttClient.on('connected', () => {
-                    io.emit('mqtt.connected') 
+                    io.emit('mqtt.connected')
                 })
 
                 mqttClient.on('reconnecting', () => {
-                    io.emit('mqtt.reconnecting') 
+                    io.emit('mqtt.reconnecting')
                 })
 
                 mqttClient.on('close', () => {
-                    io.emit('mqtt.close') 
+                    io.emit('mqtt.close')
                 })
 
                 mqttClient.on('offline', () => {
-                    io.emit('mqtt.offline') 
+                    io.emit('mqtt.offline')
                 })
 
                 mqttClient.on('error', () => {
-                    io.emit('mqtt.error') 
+                    io.emit('mqtt.error')
                 })
 
                 mqttClient.on('message', (topic, message) => {
                     try {
                         let data = JSON.parse(message.toString())
-                        if(data.mac) {
+                        if (data.mac) {
                             Device.findOne({ where: { mac: data.mac } }).then((device) => {
-                                if(device) {
-                                    if(topic.startsWith('/online/')) {
+                                if (device) {
+                                    if (topic.startsWith('/online/')) {
                                         addMessage(data, device, 'online')
                                         notify({
                                             message: device.name + ' is online !',
                                             data: device
                                         })
                                     }
-                                    if(topic.startsWith('/ping/')) {
-                                        console.log('MQTT - Ping : '+JSON.stringify(data))
+                                    if (topic.startsWith('/ping/')) {
+                                        console.log('MQTT - Ping : ' + JSON.stringify(data))
                                         updateDevice(data, device, 'ping')
                                     }
-                                    if(topic.startsWith('/data/')) {
-                                        console.log('MQTT - Data : '+JSON.stringify(data))
+                                    if (topic.startsWith('/data/')) {
+                                        console.log('MQTT - Data : ' + JSON.stringify(data))
                                         updateDevice(data, device, 'data')
                                     }
-                                    if(topic.startsWith('/ip/')) {
-                                        console.log('MQTT - IP : '+JSON.stringify(data))
+                                    if (topic.startsWith('/ip/')) {
+                                        console.log('MQTT - IP : ' + JSON.stringify(data))
                                         updateDevice(data, device, 'ip')
                                     }
-                                    if(topic.startsWith('/name/')) {
-                                        console.log('MQTT - Name : '+JSON.stringify(data))
+                                    if (topic.startsWith('/name/')) {
+                                        console.log('MQTT - Name : ' + JSON.stringify(data))
                                         updateDevice(data, device, 'name')
                                     }
-                                    if(topic.startsWith('/type/')) {
-                                        console.log('MQTT - Type : '+JSON.stringify(data))
+                                    if (topic.startsWith('/type/')) {
+                                        console.log('MQTT - Type : ' + JSON.stringify(data))
                                         updateDevice(data, device, 'type')
                                     }
-                                    if(topic.startsWith('/lwt/')) {
+                                    if (topic.startsWith('/lwt/')) {
                                         console.log('MQTT - Offline : ', device.name)
                                         updateDevice(data, device, 'offline')
                                     }
                                 } else {
                                     addDevice(data, 'new')
-                                    console.log('MQTT - New device : '+JSON.stringify(data))
+                                    console.log('MQTT - New device : ' + JSON.stringify(data))
                                     notify({
                                         message: 'New device detected !',
                                         data: data
                                     })
                                 }
-                            }).catch((err) => { 
-                                console.error(err) 
+                            }).catch((err) => {
+                                console.error(err)
                             })
                         } else {
-                            console.log('MQTT - Unknow : '+JSON.stringify(data))
+                            console.log('MQTT - Unknow : ' + JSON.stringify(data))
                         }
-                    } catch(SyntaxError) {
+                    } catch (SyntaxError) {
                         console.error('MQTT - Message can\'t be parse to object !')
                     }
                 })
@@ -102,7 +102,7 @@ module.exports = (io) => {
                         type: 'success',
                         time: 10,
                         data: data.data
-                    }) 
+                    })
                 }
 
                 function getDevices() {
@@ -123,7 +123,7 @@ module.exports = (io) => {
                         message.setDevice(device.id).then((rst) => {
                             io.emit('message.add.result', message)
                             let d = JSON.parse(JSON.stringify(device))
-                            message.data = JSON.parse(message.data)                
+                            message.data = JSON.parse(message.data)
                             d.message = message
                             scenario(d, io)
                         })
@@ -133,14 +133,14 @@ module.exports = (io) => {
                 }
 
                 function addDevice(data, type) {
-                    if(data.mac && data.ip && data.name && data.type) {
+                    if (data.mac && data.ip && data.name && data.type) {
                         Device.create({
                             mac: data.mac,
                             ip: data.ip,
                             name: data.name,
                         }).then((device) => {
                             Type.findOne({ where: { key: data.type } }).then(type => {
-                                if(type) {
+                                if (type) {
                                     console.log('MQTT - Type added :', type.name)
                                     device.addType(type.id)
                                 } else {
@@ -159,12 +159,12 @@ module.exports = (io) => {
 
                 function updateDevice(data, device, type) {
                     let updateObject = {}
-                    if(data.ip) { updateObject.ip = data.ip }
-                    if(data.name) { updateObject.name = data.name }
+                    if (data.ip) { updateObject.ip = data.ip }
+                    if (data.name) { updateObject.name = data.name }
                     Device.update(updateObject, { where: { id: device.id } }).then((count, rows) => {
-                        if(data.type) {
+                        if (data.type) {
                             Type.findOne({ where: { key: data.type } }).then(type => {
-                                if(type) {
+                                if (type) {
                                     console.log('MQTT - Type added :', type.name)
                                     device.addType(type.id)
                                 } else {
@@ -174,9 +174,9 @@ module.exports = (io) => {
                                 console.error(err)
                             })
                         }
-                        Device.findById(device.id, { include: [ Type, Location ]}).then(device => {
+                        Device.findById(device.id, { include: [Type, Location] }).then(device => {
                             addMessage(data, device, type)
-                            io.emit('device.update.result', device)    
+                            io.emit('device.update.result', device)
                         }).catch((err) => {
                             io.emit('device.update.error', err)
                         })
