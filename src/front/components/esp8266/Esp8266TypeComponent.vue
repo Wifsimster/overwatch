@@ -101,6 +101,7 @@ import gas from '../../assets/gas.png'
 import rgbw from '../../assets/led_strip.png'
 import Esp8266Switch from './Esp8266SwitchComponent.vue'
 import Esp8266Motion from './Esp8266MotionComponent.vue'
+import UUID from '../../mixins/uuid'
 import moment from 'moment'
 export default {
     name: 'Esp8266Type',
@@ -113,6 +114,7 @@ export default {
     },
     data() {
         return {
+            uuid: null,
             data: {},
             icons: {
                 humidity: humidity,
@@ -132,15 +134,17 @@ export default {
         },
     },
     created() {
+        this.uuid = UUID.getOne()
+
         this.getData(this.device)
-        this.checkHealth(this.device)
-        this.ping()
-        this.socket.on('device.update.result', device => {
-            if (device.id === this.device.id) {
-                this.getData(device)
-                this.checkHealth(device)
-            }
-        })
+        //this.checkHealth(this.device)
+        //this.ping()
+        // this.socket.on('device.update.result', device => {
+        //     if (device.id === this.device.id) {
+        //         this.getData(device)
+        //         this.checkHealth(device)
+        //     }
+        // })
     },
     methods: {
         ping() {
@@ -167,8 +171,8 @@ export default {
             this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'RESTART' } })
         },
         getData(device) {
-            this.socket.emit('message.getAll', { deviceId: this.device.id, limit: 1, offset: 0, type: 'data' })
-            this.socket.on('message.getAll.result', messages => {
+            this.socket.emit('message.getAll', { deviceId: this.device.id, limit: 1, offset: 0, type: 'data', uuid: this.uuid })
+            this.socket.on('message.getAll.result.' + this.uuid, messages => {
                 if (messages && messages.length > 0) {
                     this.data = JSON.parse(messages[0].data)
                 } else {
