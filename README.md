@@ -29,10 +29,10 @@ Personal home automation with real time messaging for Raspberry Pi 3.
 ## Powered with
 
 - [Vue.js 2.x](https://vuejs.org/)
-- [Webpack 2.x](https://webpack.js.org/)
-- [MQTT](https://github.com/mqttjs/MQTT.js)
-- [Socket.io](http://socket.io/)
-- [Sequelize](http://docs.sequelizejs.com/en/v3/)
+- [Webpack 3.x](https://webpack.js.org/)
+- [MQTT 2.9.x](https://github.com/mqttjs/MQTT.js)
+- [Socket.io 2.x](http://socket.io/)
+- [Sequelize 4.x](http://docs.sequelizejs.com/en/v3/)
 - [RTSP stream wrapper](https://github.com/Wifsimster/node-rtsp-stream-es6)
 - [Node-cron](https://github.com/merencia/node-cron)
 - [Alertify](https://github.com/MohammadYounes/AlertifyJS)
