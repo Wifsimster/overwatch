@@ -19,10 +19,10 @@ Personal home automation with real time messaging for Raspberry Pi 3.
 - [x] Display MQTT messages in real time
 - [x] Display MQTT broker health
 - [x] [Sonoff switch](https://www.itead.cc/sonoff-wifi-wireless-switch.html)
+- [x] Yeelight status
 - [ ] Enable/disabled scenario
 - [ ] Backup data
 - [ ] Netatmo meteo prevision
-- [ ] Yeelight status
 - [ ] RGB led strip with ESP8266
 - [ ] Color picker for Yeelight devices
 
