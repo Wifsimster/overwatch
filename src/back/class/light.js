@@ -26,96 +26,217 @@ module.exports = class Light {
     }
 
     getAll() {
-        const lights = yeelightSearch.getYeelights()
-        let list = []
-        lights.map((light) => {
-            list.push({
-                id: light.id,
-                name: this.getName(light.id),
-                model: light.model,
-                port: light.port,
-                hostname: light.hostname,
-                supports: light.supports,
+        return new Promise((resolve, reject) => {
+            const lights = yeelightSearch.getYeelights()
+            let list = []
+            lights.map((light) => {
+                list.push({
+                    id: light.id,
+                    name: this.getName(light.id),
+                    model: light.model,
+                    port: light.port,
+                    hostname: light.hostname,
+                    supports: light.supports,
+                })
             })
+            resolve(list)
         })
-        return list
     }
 
-    turnOn(id) {
-        const light = yeelightSearch.getYeelightById(id)
-        if (light) { return light.turnOn() }
-    }
-
-    turnOff(id) {
-        const light = yeelightSearch.getYeelightById(id)
-        if (light) { return light.turnOff() }
+    getValues(id) {
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(id)
+            if (light) {
+                light.getValues('power', 'bright', 'rgb', 'color_mode', 'hue', 'sat', 'ct').then(() => {
+                    resolve(light)
+                }).catch(err => {
+                    console.error('Error :', err)
+                    reject(id)
+                })
+            } else {
+                reject(id)
+            }
+        })
     }
 
     toggle(id) {
-        const light = yeelightSearch.getYeelightById(id)
-        if (light) { return light.toggle() }
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(id)
+            if (light) {
+                light.toggle()
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
     }
 
-    getValues(options) {
-        const light = yeelightSearch.getYeelightById(options.id)
-        if (light) {
-            return light.getValues(options.props)
-        }
+    refresh(id) {
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(id)
+            if (light) {
+                light.refresh()
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
+    }
+
+    turnOn(id) {
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(id)
+            if (light) {
+                light.turnOn()
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
+    }
+
+    turnOff(id) {
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(id)
+            if (light) {
+                light.turnOff()
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
     }
 
     setName(options) {
-        const light = yeelightSearch.getYeelightById(options.id)
-        if (light) { return light.setName(options.name) }
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(options.id)
+            if (light) {
+                light.setName(options.name)
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
     }
 
     setColorTemperature(options) {
-        const light = yeelightSearch.getYeelightById(options.id)
-        if (light) { return light.setColorTemperature(options.temperature) }
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(options.id)
+            if (light) {
+                light.setColorTemperature(options.temperature)
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
     }
 
     setBrightness(options) {
-        const light = yeelightSearch.getYeelightById(options.id)
-        if (light) { return light.setBrightness(options.brightness) }
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(options.id)
+            if (light) {
+                light.setBrightness(options.brightness)
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
     }
 
     setRGB(options) {
-        const light = yeelightSearch.getYeelightById(options.id)
-        if (light) { return light.setRGB(options.hex) }
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(options.id)
+            if (light) {
+                light.setRGB(options.hex)
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
     }
 
     setHSV(options) {
-        const light = yeelightSearch.getYeelightById(options.id)
-        if (light) { return light.setHSV(options.hue, options.staturation) }
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(options.id)
+            if (light) {
+                light.setHSV(options.hue, options.staturation)
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
     }
 
     getCron(options) {
-        const light = yeelightSearch.getYeelightById(options.id)
-        if (light) { return light.getCron(options.type, options.index) }
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(options.id)
+            if (light) {
+                light.getCron(options.type, options.index)
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
     }
 
     addCron(options) {
-        const light = yeelightSearch.getYeelightById(options.id)
-        if (light) { return light.addCron(options.type, options.value) }
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(options.id)
+            if (light) {
+                light.addCron(options.type, options.value)
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
     }
 
     deleteCron(options) {
-        const light = yeelightSearch.getYeelightById(options.id)
-        if (light) { return light.deleteCron(options.type, options.index) }
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(options.id)
+            if (light) {
+                light.deleteCron(options.type, options.index)
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
     }
 
     startColorFlow(options) {
-        const light = yeelightSearch.getYeelightById(options.id)
-        if (light) { return light.startColorFlow(options.count, options.action, options.flowExpression) }
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(options.id)
+            if (light) {
+                light.startColorFlow(options.count, options.action, options.flowExpression)
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
     }
 
     stopColorFlow(options) {
-        const light = yeelightSearch.getYeelightById(options.id)
-        if (light) { return light.stopColorFlow() }
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(options.id)
+            if (light) {
+                light.stopColorFlow()
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
     }
 
     setAdjust(options) {
-        const light = yeelightSearch.getYeelightById(options.id)
-        if (light) { return light.setAdjust(options.action, options.prop) }
+        return new Promise((resolve, reject) => {
+            const light = yeelightSearch.getYeelightById(options.id)
+            if (light) {
+                light.setAdjust(options.action, options.prop)
+                resolve(light)
+            } else {
+                reject(id)
+            }
+        })
     }
 }
 

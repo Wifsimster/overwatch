@@ -1,7 +1,7 @@
 <template>
     <div class="flex-container" v-if="settings.yeelight.display">
         <div v-for="light in lights" :key="light.id">
-            <light :device="light"></light>
+            <light :row="light"></light>
         </div>
     </div>
 </template>
@@ -24,6 +24,7 @@ export default {
     },
     created() {
         this.socket.on('light.found', light => {
+            console.log('Light found')
             let exist = this.lights.filter(li => {
                 if (li.id === light.id) { return true }
             })
@@ -35,13 +36,17 @@ export default {
 
         this.socket.emit('light.getAll')
 
-        setInterval(() => {
-            this.socket.emit('light.getAll')
-        }, 5000)
+        // setInterval(() => {
+        //     console.log('Looking for light...')
+        //     this.socket.emit('light.getAll')
+        // }, 5000)
 
         this.socket.on('light.getAll.result', lights => {
-            //                console.log('Get all lights :', lights)
+            console.log('Get all lights :', lights)
             this.lights = lights
+        })
+        this.socket.on('light.getAll.error', err => {
+            console.error('Get all lights :', err.message)
         })
     },
 }

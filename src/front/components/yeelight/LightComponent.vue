@@ -19,11 +19,16 @@
                     <li>Hostname: {{ device.hostname }}</li>
                     <li>Port: {{ device.port }}</li>
                     <li>Model: {{ device.model }}</li>
+                    <li v-if="device.power">Power: {{ device.power }}</li>
+                    <li v-if="device.bright">Bright: {{ device.bright }}</li>
+                    <li v-if="device.color_mode">Color mode: {{ device.color_mode }}</li>
+                    <li v-if="device.ct">CT: {{ device.ct }}</li>
+                    <li v-if="device.hue">Hue: {{ device.hue }}</li>
+                    <li v-if="device.rgb">RGB: {{ device.rgb }}</li>
                     <li>Brightness:
-                        <range-slider class="slider" min="1" max="100" step="10" v-model="slider"></range-slider>
+                        <range-slider class="slider" min="1" max="100" step="5" v-model="device.bright"></range-slider>
                     </li>
-                    <li>State: {{ state }}</li>
-                    <switchy :state=state @switch="onState"></switchy>
+                    <switchy :state="state" @switch="onState"></switchy>
     
                 </ul>
             </div>
@@ -45,7 +50,7 @@ export default {
         Switchy,
     },
     props: {
-        device: {
+        row: {
             type: Object,
             required: true,
         },
@@ -54,45 +59,74 @@ export default {
         return {
             socket: this.$store.state.socket.socket,
             bulbImg: bulbImg,
-            state: false,
             error: false,
-            slider: 1,
             modalShow: false,
+            state: false,
+            device: {
+                id: null,
+                bright: null,
+                color_mode: null,
+                ct: null,
+                hue: null,
+                power: null,
+                rgb: null,
+            }
         }
     },
     created() {
-        console.log('Get values :', this.device.id)
-        this.socket.emit('light.getValues', {
-            id: this.device.id,
-            props: ['power'],
-        })
-
-        this.socket.on('light.getValues.result', data => {
-            console.log('Get values result :', data)
-        })
-
-        //this.turnOff()
+        Object.assign(this.device, this.row)
+        this.getValues()
     },
     watch: {
-        slider(val) { this.setBrightness(val) },
+        device(val) {
+            console.log('Change trigger')
+            this.getValues()
+        },
+        'device.bright'(val) {
+            this.setBrightness(val)
+        },
     },
     methods: {
-        onState(val) {
-            if (!this.state) {
-                this.turnOn()
+        onState() {
+            this.toggle()
+            this.getValues()
+        },
+        getValues() {
+            if (this.device) {
+                this.socket.emit('light.getValues', this.device.id)
+
+                this.socket.on('light.getValues.result.' + this.device.id, data => {
+                    if (data && typeof data === 'object') {
+                        Object.assign(this.device, data)
+                        if (this.device.power === 'on') { this.state = true }
+                        if (this.device.power === 'off') { this.state = false }
+                    }
+                })
+
+                this.socket.on('light.getValues.error.' + this.device.id, err => {
+                    console.error('Error :', err)
+                    this.$store.dispatch('setAlert', { type: 'error', message: err })
+                    this.error = true
+                })
             }
-            else {
-                this.turnOff()
-            }
+        },
+        refresh() {
+            this.socket.emit('light.refresh', this.device.id)
+            this.socket.on('light.refresh.result.' + this.device.id, data => {
+                console.log('Refresh :', data)
+            })
+            this.socket.on('light.refresh.error.' + this.device.id, err => {
+                this.$store.dispatch('setAlert', { type: 'error', message: err })
+                this.error = true
+            })
         },
         toggle() {
             this.socket.emit('light.toggle', this.device.id)
-            this.socket.on('light.toggle.result', id => {
-                if (this.device.id === id) {
-                    this.state = !this.state
-                }
+            this.socket.on('light.toggle.result.' + this.device.id, () => {
+                console.log('Toggle')
+                this.getValues()
             })
-            this.socket.on('light.toggle.error', err => {
+            this.socket.on('light.toggle.error.' + this.device.id, err => {
                 this.$store.dispatch('setAlert', { type: 'error', message: err })
                 this.error = true
             })
@@ -101,47 +135,6 @@ export default {
             this.socket.emit('light.setBrightness', {
                 id: this.device.id,
                 brightness: value
-            })
-            this.socket.on('light.setBrightness.result', data => {
-                console.log('Brightness', data)
-            })
-            this.socket.on('light.setBrightness.error', err => {
-                this.$store.dispatch('setAlert', { type: 'error', message: err })
-                this.error = true
-            })
-        },
-        turnOn() {
-            this.socket.emit('light.turnOn', this.device.id)
-            this.socket.on('light.turnOn.result', id => {
-                if (this.device.id === id) {
-                    this.state = true
-                }
-            })
-            this.socket.on('light.turnOn.error', err => {
-                this.$store.dispatch('setAlert', { type: 'error', message: err })
-                this.error = true
-            })
-        },
-        turnOff() {
-            this.socket.emit('light.turnOff', this.device.id)
-            this.socket.on('light.turnOff.result', id => {
-                if (this.device.id === id) {
-                    this.state = false
-                }
-            })
-            this.socket.on('light.turnOff.error', err => {
-                this.$store.dispatch('setAlert', { type: 'error', message: err })
-                this.error = true
-            })
-        },
-        getValues() {
-            this.socket.emit('light.getValues', this.device.id)
-            this.socket.on('light.getValues.result', data => {
-                console.log('Get values RST', data)
-            })
-            this.socket.on('light.getValues.error', err => {
-                this.$store.dispatch('setAlert', { type: 'error', message: err })
-                this.error = true
             })
         },
         onClose() {
