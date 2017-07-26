@@ -1,5 +1,18 @@
 @import '../colors';
 
+.colors-container {
+    > div {
+        > span {
+            height: 35px;
+            width: 19%;
+            border-radius: 3px;
+            cursor: pointer;
+            display: inline-block;
+            background-color: $amber;
+        }
+    }
+}
+
 $height: 116px;
 
 .light {

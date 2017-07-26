@@ -145,6 +145,7 @@ module.exports = class Light {
 
     setRGB(options) {
         return new Promise((resolve, reject) => {
+            console.log('setRGB :', options.hex)
             const light = yeelightSearch.getYeelightById(options.id)
             if (light) {
                 light.setRGB(options.hex)
