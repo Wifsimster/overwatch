@@ -1,0 +1,59 @@
+@import '../colors';
+
+$switch-handle-color: #a8b1bb;
+$switch-background-color: #444a53;
+$size: 60px;
+
+.switch-container {
+  height: $size + 16px;
+  display: flex;
+  justify-content: center;
+  .switch {
+    float: left;
+    height: inherit;
+    cursor: pointer;
+    display: block;
+    position: relative;
+    width: ($size * 3);
+    padding: ($size / 10);
+    background: $switch-background-color;
+    border-radius: $size / 2 + ($size / 10) * 2;
+
+    .handle {
+      left: 8px;
+      width: $size;
+      height: $size;
+      display: block;
+      position: absolute;
+      border-radius: ($size / 2);
+      background: $switch-handle-color;
+      transition: left .5s ease-in-out;
+
+      &.handle-right {
+        left: ($size * 2) - 8px;
+      }
+    }
+  }
+
+  .option {
+    float: left;
+    display: block;
+    height: inherit;
+    cursor: pointer;
+    line-height: $size;
+    font-size: ($size / 2);
+    // width: ($size * 2);
+    color: $switch-handle-color;
+    padding: ($size / 10) ($size / 4);
+
+    &.option-left {
+      text-align: right;
+    }
+    &.option-right {
+      text-align: left;
+    }
+    &.active {
+      color: white;
+    }
+  }
+}

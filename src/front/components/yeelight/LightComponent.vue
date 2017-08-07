@@ -11,61 +11,55 @@
         </transition>
     
         <modal v-if="modalShow" @close="onClose">
-            <div slot="header">Light - {{ device.name }}</div>
+            <div slot="header">
+                <i class="material-icons" @click="info = !info">info</i> Light - {{ device.name }}
+            </div>
             <div slot="body">
-                <ul>
-                    <li>Id: {{ device.id }}</li>
-                    <li>Hostname: {{ device.hostname }}</li>
-                    <li>Port: {{ device.port }}</li>
-                    <li>Model: {{ device.model }}</li>
-                    <li>Name: {{ device.name }}</li>
-                    <li v-if="device.power">Power: {{ device.power }}</li>
-                    <li v-if="device.bright">Bright: {{ device.bright }}</li>
-                    <li v-if="device.color_mode">Color mode: {{ device.color_mode }}</li>
-                    <li v-if="device.ct">CT: {{ device.ct }}</li>
-                    <li v-if="device.hue">Hue: {{ device.hue }}</li>
-                    <li v-if="device.rgb">RGB: {{ device.rgb }}</li>
-                    <li>Brightness:
-                        <range-slider class="slider" min="1" max="100" step="5" v-model="device.bright"></range-slider>
-                    </li>
     
-                    <div class="colors-container" v-if="device.model === 'color'">
-                        <div>
-                            <span style="background-color: #1abc9c" @click="setRGB('#1abc9c')"></span>
-                            <span style="background-color: #2ecc71" @click="setRGB('#2ecc71')"></span>
-                            <span style="background-color: #3498db" @click="setRGB('#3498db')"></span>
-                            <span style="background-color: #9b59b6" @click="setRGB('#9b59b6')"></span>
-                            <span style="background-color: #34495e" @click="setRGB('#34495e')"></span>
-                        </div>
-                        <div>
-                            <span style="background-color: #f1c40f" @click="setRGB('#f1c40f')"></span>
-                            <span style="background-color: #e67e22" @click="setRGB('#e67e22')"></span>
-                            <span style="background-color: #e74c3c" @click="setRGB('#e74c3c')"></span>
-                            <span style="background-color: #ecf0f1" @click="setRGB('#ecf0f1')"></span>
-                            <span style="background-color: #95a5a6" @click="setRGB('#95a5a6')"></span>
-                        </div>
-                    </div>
+                <switchy :row="state" @switch="onState"></switchy>
     
-                    <switchy :state="state" @switch="onState"></switchy>
+                <slider :value="device.bright" :rgb="device.rgb" @update="setBrightness"></slider>
     
-                </ul>
+                <colors-picker :value="device.rgb" v-if="device.model === 'color'" @update="setRGB"></colors-picker>
+    
+                <transition name="opacity">
+                    <ul v-if="info">
+                        <li>Id: {{ device.id }}</li>
+                        <li>Hostname: {{ device.hostname }}</li>
+                        <li>Port: {{ device.port }}</li>
+                        <li>Model: {{ device.model }}</li>
+                        <li>Name: {{ device.name }}</li>
+                        <li v-if="device.power">Power: {{ device.power }}</li>
+                        <li v-if="device.bright">Bright: {{ device.bright }}</li>
+                        <li v-if="device.color_mode">Color mode: {{ device.color_mode }}</li>
+                        <li v-if="device.ct">CT: {{ device.ct }}</li>
+                        <li v-if="device.hue">Hue: {{ device.hue }}</li>
+    
+                        <!-- Color mode 1 - RGB : 1 to 16777215 -->
+                        <!-- Color mode 2 - CT : color temperature  1700 to 6500(k) -->
+                        <!-- Color mode 3 - HUE range : 0 to 359 -->
+                        <!-- Color mode 3 - Saturation : 0 to 100 -->
+    
+                        <li v-if="device.rgb">RGB: {{ device.rgb }}</li>
+                    </ul>
+                </transition>
             </div>
         </modal>
-    
     </div>
 </template>
 
 <script>
 import Modal from '../ModalComponent.vue'
-import RangeSlider from 'vue-range-slider'
-import 'vue-range-slider/dist/vue-range-slider.css'
+import Slider from '../SliderComponent.vue'
 import bulbImg from '../../assets/bulb.png'
 import Switchy from '../SwitchComponent.vue'
+import ColorsPicker from '../ColorsPickerComponent.vue'
 export default {
     components: {
         Modal,
-        RangeSlider,
+        Slider,
         Switchy,
+        ColorsPicker,
     },
     props: {
         row: {
@@ -88,7 +82,8 @@ export default {
                 hue: null,
                 power: null,
                 rgb: null,
-            }
+            },
+            info: false,
         }
     },
     created() {
@@ -150,9 +145,10 @@ export default {
             })
         },
         setBrightness(value) {
+            console.log(parseInt(value))
             this.socket.emit('light.setBrightness', {
                 id: this.device.id,
-                brightness: value
+                brightness: parseInt(value)
             })
         },
         setRGB(value) {
@@ -169,5 +165,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../sass/components/light'
+@import '../../sass/components/light';
 </style>
