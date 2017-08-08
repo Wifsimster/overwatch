@@ -1,7 +1,7 @@
 <template>
     <div>
         <transition name="opacity">
-            <div :class="{ 'red': error }" class="light" v-if="device" @click="modalShow = true">
+            <div class="light" v-if="device" @click="modalShow = true">
                 <div class="image">
                     <img :src="bulbImg">
                 </div>
@@ -16,9 +16,11 @@
             </div>
             <div slot="body">
     
+                <div class="alert error">{{ error }}</div>
+    
                 <switchy :row="state" @switch="onState"></switchy>
     
-                <slider :value="device.bright" :rgb="device.rgb" @update="setBrightness"></slider>
+                <slider :value="device.bright" :hex="hex" @update="setBrightness"></slider>
     
                 <colors-picker :value="device.rgb" v-if="device.model === 'color'" @update="setRGB"></colors-picker>
     
@@ -31,16 +33,12 @@
                         <li>Name: {{ device.name }}</li>
                         <li v-if="device.power">Power: {{ device.power }}</li>
                         <li v-if="device.bright">Bright: {{ device.bright }}</li>
-                        <li v-if="device.color_mode">Color mode: {{ device.color_mode }}</li>
+                        <li v-if="device.color_mode == 1">Color mode: Color (1)</li>
+                        <li v-if="device.color_mode === 2">Color mode: Temperature (2)</li>
+                        <li v-if="device.color_mode === 3">Color mode: HSV (3)</li>
+                        <li v-if="device.rgb">RGB: {{ device.rgb }}</li>
                         <li v-if="device.ct">CT: {{ device.ct }}</li>
                         <li v-if="device.hue">Hue: {{ device.hue }}</li>
-    
-                        <!-- Color mode 1 - RGB : 1 to 16777215 -->
-                        <!-- Color mode 2 - CT : color temperature  1700 to 6500(k) -->
-                        <!-- Color mode 3 - HUE range : 0 to 359 -->
-                        <!-- Color mode 3 - Saturation : 0 to 100 -->
-    
-                        <li v-if="device.rgb">RGB: {{ device.rgb }}</li>
                     </ul>
                 </transition>
             </div>
@@ -54,6 +52,7 @@ import Slider from '../SliderComponent.vue'
 import bulbImg from '../../assets/bulb.png'
 import Switchy from '../SwitchComponent.vue'
 import ColorsPicker from '../ColorsPickerComponent.vue'
+import Colors from '../../mixins/colors'
 export default {
     components: {
         Modal,
@@ -71,7 +70,7 @@ export default {
         return {
             socket: this.$store.state.socket.socket,
             bulbImg: bulbImg,
-            error: false,
+            error: null,
             modalShow: false,
             state: false,
             device: {
@@ -83,6 +82,7 @@ export default {
                 power: null,
                 rgb: null,
             },
+            hex: null,
             info: false,
         }
     },
@@ -97,6 +97,9 @@ export default {
         },
         'device.bright'(val) {
             this.setBrightness(val)
+        },
+        'device.rgb'(val) {
+            this.hex = Colors.parseRGB(val)
         },
     },
     methods: {
@@ -118,20 +121,9 @@ export default {
 
                 this.socket.on('light.getValues.error.' + this.device.id, err => {
                     console.error('Error :', err)
-                    this.$store.dispatch('setAlert', { type: 'error', message: err })
                     this.error = true
                 })
             }
-        },
-        refresh() {
-            this.socket.emit('light.refresh', this.device.id)
-            this.socket.on('light.refresh.result.' + this.device.id, data => {
-                console.log('Refresh :', data)
-            })
-            this.socket.on('light.refresh.error.' + this.device.id, err => {
-                this.$store.dispatch('setAlert', { type: 'error', message: err })
-                this.error = true
-            })
         },
         toggle() {
             this.socket.emit('light.toggle', this.device.id)
@@ -140,21 +132,35 @@ export default {
                 this.getValues()
             })
             this.socket.on('light.toggle.error.' + this.device.id, err => {
-                this.$store.dispatch('setAlert', { type: 'error', message: err })
+                console.error('Error :', err)
                 this.error = true
             })
         },
         setBrightness(value) {
-            console.log(parseInt(value))
             this.socket.emit('light.setBrightness', {
                 id: this.device.id,
                 brightness: parseInt(value)
+            })
+            this.socket.on('light.setBrightness.result.' + this.device.id, () => {
+                console.log('Result - SetBrightness')
+            })
+            this.socket.on('light.setBrightness.error.' + this.device.id, err => {
+                console.error('Error :', err)
+                this.error = true
             })
         },
         setRGB(value) {
             this.socket.emit('light.setRGB', {
                 id: this.device.id,
                 hex: value
+            })
+            this.socket.on('light.setRGB.result.' + this.device.id, () => {
+                console.log('Result - SetRGB :', value)
+                this.hex = value
+            })
+            this.socket.on('light.setRGB.error.' + this.device.id, err => {
+                console.error('Error :', err)
+                this.error = true
             })
         },
         onClose() {

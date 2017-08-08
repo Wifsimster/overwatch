@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import Colors from '../mixins/colors'
 import noUiSlider from 'nouislider'
 export default {
     props: {
@@ -12,7 +13,7 @@ export default {
             type: String,
             default: 0,
         },
-        rgb: {
+        hex: {
             type: String
         },
     },
@@ -21,7 +22,6 @@ export default {
             let slider = document.getElementById('slider')
             noUiSlider.create(slider, {
                 start: parseInt(this.value),
-                connect: [true, false],
                 range: {
                     'min': 0,
                     'max': 100
@@ -32,18 +32,20 @@ export default {
                 this.$emit('update', values)
             })
 
-            slider.children[0].children[0].style.backgroundImage = 'linear-gradient(to right, rgb(' + this.getRGB(this.rgb) + ') 0%, #f0cb35 100%)'
-            console.log('RGB', 'linear-gradient(to right, #' + this.rgb + ' 0%, #f0cb35 100%)')
+            this.setBackground(this.hex)
         })
     },
+    watch: {
+        hex(val) {
+            this.setBackground(val)
+        },
+    },
     methods: {
-        getRGB(rgb) {
-            let red = rgb.substring(0, 3)
-            let green = rgb.substring(3, 6)
-            let blue = rgb.substring(6, rgb.length)
-            return red + ', ' + green + ', ' + blue
-        }
-    }
+        setBackground(val) {
+            let lighter = Colors.lighten(0.8, val)
+            slider.children[0].style.backgroundImage = 'linear-gradient(to right, ' + val + ' 0%, ' + lighter + ' 100%)'
+        },
+    },
 }
 </script>
 

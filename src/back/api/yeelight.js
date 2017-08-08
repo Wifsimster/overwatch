@@ -121,7 +121,7 @@ module.exports = socket => {
     light
       .setName(options)
       .then(() => {
-        socket.emit("light.setName.result." + id)
+        socket.emit("light.setName.result." + options.id)
       })
       .catch(err => {
         socket.emit("light.setName.error." + err)
@@ -133,7 +133,7 @@ module.exports = socket => {
     light
       .setColorTemperature(options)
       .then(() => {
-        socket.emit("light.setColorTemperature.result." + id)
+        socket.emit("light.setColorTemperature.result." + options.id)
       })
       .catch(err => {
         socket.emit("light.setColorTemperature.error." + err)
@@ -145,7 +145,7 @@ module.exports = socket => {
     light
       .setBrightness(options)
       .then(() => {
-        socket.emit("light.setBrightness.result." + id)
+        socket.emit("light.setBrightness.result." + options.id)
       })
       .catch(err => {
         socket.emit("light.setBrightness.error." + err)
@@ -157,7 +157,7 @@ module.exports = socket => {
     light
       .setRGB(options)
       .then(() => {
-        socket.emit("light.setRGB.result." + id)
+        socket.emit("light.setRGB.result." + options.id)
       })
       .catch(err => {
         socket.emit("light.setRGB.error." + err)
@@ -169,7 +169,7 @@ module.exports = socket => {
     light
       .setHSV(options)
       .then(() => {
-        socket.emit("light.setHSV.result." + id)
+        socket.emit("light.setHSV.result." + options.id)
       })
       .catch(err => {
         socket.emit("light.setHSV.error." + err)
