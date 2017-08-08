@@ -19,16 +19,16 @@ export default {
     data() {
         return {
             active: null,
-            colors: ['#1abc9c', '#2ecc71', '#3498db', '#9b59b6', '#34495e'],
-            colors2: ['#f1c40f', '#e67e22', '#e74c3c', '#ecf0f1', '#95a5a6']
+            colors: ['#1ABC9C', '#2ECC71', '#3498DB', '#9B59B6', '#34495E'],
+            colors2: ['#F1C40F', '#E67E22', '#E74C3C', '#ECF0F1', '#95A5A6']
         }
     },
     created() {
-        this.active = '#' + this.value
+        this.active = this.value
     },
     watch: {
         value(val) {
-            this.active = '#' + val
+            this.active = val
         },
     },
     methods: {

@@ -22,7 +22,7 @@
     
                 <slider :value="device.bright" :hex="hex" @update="setBrightness"></slider>
     
-                <colors-picker :value="device.rgb" v-if="device.model === 'color'" @update="setRGB"></colors-picker>
+                <colors-picker :value="hex" v-if="device.model === 'color'" @update="setRGB"></colors-picker>
     
                 <transition name="opacity">
                     <ul v-if="info">
