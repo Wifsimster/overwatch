@@ -48,11 +48,11 @@
                     </tbody>
                 </table>
     
-                <edit-modal v-if="editShow" :device="editDevice" @close="editShow = false"></edit-modal>
+                <edit-modal v-if="editShow" :device="editDevice" @update="onUpdate" @close="editShow = false"></edit-modal>
     
-                <remove-modal v-if="removeShow" :device="removeDevice" @close="removeShow = false"></remove-modal>
+                <remove-modal v-if="removeShow" :device="removeDevice" @remove="onRemove" @close="removeShow = false"></remove-modal>
     
-                <remove-all-modal v-if="removeAllShow" @close="removeAllShow = false"></remove-all-modal>
+                <remove-all-modal v-if="removeAllShow" @removeAll="onRemoveAll" @close="removeAllShow = false"></remove-all-modal>
     
             </div>
             <div v-else>
@@ -115,16 +115,17 @@ export default {
         openRemoveAllModal() {
             this.removeAllShow = true
         },
-    },
-    watch: {
-        editShow(val) {
+        onRemove() {
             this.socket.emit('device.getAll', { uuid: this.uuid })
+            this.removeShow = false
         },
-        removeShow(val) {
+        onRemoveAll() {
             this.socket.emit('device.getAll', { uuid: this.uuid })
+            this.removeAllShow = false
         },
-        removeAllShow(val) {
+        onUpdate() {
             this.socket.emit('device.getAll', { uuid: this.uuid })
+            this.editShow = false
         },
     },
 }  

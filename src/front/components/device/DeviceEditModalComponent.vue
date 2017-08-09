@@ -72,6 +72,10 @@ export default {
         this.socket.on('location.getAll.result.' + this.uuid, data => {
             this.locations = data
         })
+
+        this.socket.on('device.update.result.' + this.uuid, data => {
+            this.$emit('update')
+        })
     },
     watch: {
         device() {
@@ -90,10 +94,7 @@ export default {
             this.device.locationId = location.id
         },
         edit() {
-            this.socket.emit('device.update', { data: this.device, uuid: this.uuid })
-            this.socket.on('device.update.result.' + this.uuid, data => {
-                this.hide()
-            })
+            this.socket.emit('device.update', { uuid: this.uuid, data: this.device })
         },
     }
 }

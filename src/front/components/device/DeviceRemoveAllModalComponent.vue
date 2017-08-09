@@ -28,6 +28,10 @@ export default {
     },
     created() {
         this.uuid = UUID.getOne()
+
+        this.socket.on('device.removeAll.result.' + this.uuid, () => {
+            this.$emit('removeAll')
+        })
     },
     methods: {
         hide() {

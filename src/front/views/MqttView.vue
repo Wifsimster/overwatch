@@ -25,6 +25,7 @@ export default {
     },
     created() {
         this.socket.emit('setting.getAll')
+
         this.socket.on('setting.getAll.result', (result) => {
             this.settings = result
         })

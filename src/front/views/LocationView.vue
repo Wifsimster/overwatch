@@ -8,10 +8,10 @@
                     </a>
                 </h2>
                 <div class="locations" v-if="locations.length > 0">
-                    <form class="pure-form">
+                    <div class="pure-form">
                         <fieldset class="pure-group">
-                            <ul v-for="location in locations" :key="location.id">
-                                <li>
+                            <ul>
+                                <li v-for="location in locations" :key="location.id">
                                     <span v-if="!edit">{{ location.name }}</span>
                                     <input class="pure-input-1" v-if="edit" type="text" v-model="location.name">
                                     <a v-if="edit" @click="remove(location)">
@@ -22,7 +22,7 @@
                         </fieldset>
                         <a class="add" v-if="edit" @click="add">Add one more</a>
                         <button v-if="edit" @click="submit" class="pure-button pure-input-1 pure-button-primary">Edit</button>
-                    </form>
+                    </div>
                 </div>
                 <div v-else>
                     <p>No location found.</p>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import UUID from '../mixins/uuid'
 export default {
     components: {},
     data() {
@@ -41,40 +41,56 @@ export default {
             locations: [],
             socket: this.$store.state.socket.socket,
             edit: false,
+            uuid: null,
         }
     },
     created() {
-        this.socket.emit('location.getAll')
-        this.socket.on('location.getAll.result', (locations) => {
-            this.locations = locations
+        this.uuid = UUID.getOne()
+
+        this.socket.emit('location.getAll', { uuid: this.uuid })
+
+        this.socket.on('location.getAll.result.' + this.uuid, data => {
+            this.locations = data
+        })
+
+        this.socket.on('location.updateAll.result.' + this.uuid, data => {
+            this.edit = false
+            this.socket.emit('location.getAll', { uuid: this.uuid })
+        })
+
+        this.socket.on('location.remove.result.' + this.uuid, data => {
+            this.edit = false
+        })
+
+        this.socket.on('location.getAll.error', err => {
+            console.log('Error :', err)
+            this.$store.dispatch('setAlert', { type: 'error' })
+        })
+
+        this.socket.on('location.updateAll.error', err => {
+            console.log('Error :', err)
+            this.$store.dispatch('setAlert', { type: 'error' })
+        })
+
+        this.socket.on('location.remove.error', err => {
+            console.log('Error :', err)
+            this.$store.dispatch('setAlert', { type: 'error' })
         })
     },
     methods: {
         submit() {
-            this.socket.emit('location.updateAll', this.locations)
-            this.edit = false
+            this.socket.emit('location.updateAll', { uuid: this.uuid, data: this.locations })
         },
         add() {
             this.locations.push({})
         },
         remove(location) {
-            this.socket.emit('location.remove', location)
+            this.socket.emit('location.remove', { uuid: this.uuid, id: location.id })
         },
     },
 }  
 </script>
 
 <style lang="scss" scoped>
-@import '../sass/transition';
-
-.add {
-    display: block;
-    text-align: center;
-    padding: 0 0 10px;
-}
-
-.locations input {
-    width: calc(100% - 30px) !important;
-    display: inline !important;
-}
+@import '../sass/components/location'
 </style>

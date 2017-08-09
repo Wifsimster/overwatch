@@ -8,17 +8,17 @@
                     </a>
                 </h2>
                 <div class="types" v-if="types.length > 0">
-                    <form class="pure-form">
+                    <div class="pure-form">
                         <fieldset class="pure-group">
-                            <ul v-for="type in types" :key="type.id">
-                                <li>
+                            <ul>
+                                <li v-for="type in types" :key="type.id">
                                     <span v-if="!edit">{{ type.name }}</span>
                                     <input class="pure-input-1" v-if="edit" type="text" v-model="type.name">
                                 </li>
                             </ul>
                         </fieldset>
                         <button v-if="edit" @click="submit" class="pure-button pure-input-1 pure-button-primary">Edit</button>
-                    </form>
+                    </div>
                 </div>
                 <div v-else>
                     <p>No type found.</p>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import UUID from '../mixins/uuid'
 export default {
     components: {},
     data() {
@@ -37,23 +37,31 @@ export default {
             types: [],
             socket: this.$store.state.socket.socket,
             edit: false,
+            uuid: null,
         }
     },
     created() {
-        this.socket.emit('type.getAll')
-        this.socket.on('type.getAll.result', (types) => {
-            this.types = types
+        this.uuid = UUID.getOne()
+
+        this.socket.emit('type.getAll', { uuid: this.uuid })
+
+        this.socket.on('type.getAll.result.' + this.uuid, data => {
+            this.types = data
+        })
+
+        this.socket.on('type.updateAll.result.' + this.uuid, data => {
+            this.edit = false
+        })
+
+        this.socket.on('type.updateAll.error', err => {
+            console.log('Error :', err)
+            this.$store.dispatch('setAlert', { type: 'error' })
         })
     },
     methods: {
         submit() {
-            this.socket.emit('type.updateAll', this.types)
-            this.edit = false
+            this.socket.emit('type.updateAll', { uuid: this.uuid, data: this.types })
         },
     },
 }  
 </script>
-
-<style lang="scss" scoped>
-@import '../sass/transition'
-</style>

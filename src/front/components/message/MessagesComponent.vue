@@ -42,9 +42,8 @@
             </div>
         </transition>
     
-        <remove-modal v-if="removeShow" :message="removeMessage" @update="onUpdate" @close="removeShow = false"></remove-modal>
-    
-        <remove-all-modal v-if="removeAllShow" @update="onUpdate" @close="removeAllShow = false"></remove-all-modal>
+        <remove-modal v-if="removeShow" :message="removeMessage" @remove="onRemove" @close="removeShow = false"></remove-modal>
+        <remove-all-modal v-if="removeAllShow" @removeAll="onRemoveAll" @close="removeAllShow = false"></remove-all-modal>
     </div>
 </template>
 
@@ -80,6 +79,8 @@ export default {
     created() {
         this.uuid = UUID.getOne()
 
+        this.getMessages()
+
         this.socket.on('message.remove.result.' + this.uuid, data => {
             this.getMessages()
         })
@@ -96,7 +97,10 @@ export default {
             this.$store.dispatch('setMessages', data)
         })
 
-        this.getMessages()
+        this.socket.on('message.getAll.result', data => {
+            console.log('Broadcast message')
+        })
+
     },
     methods: {
         getMessages() {
@@ -114,20 +118,17 @@ export default {
         openRemoveAllModal() {
             this.removeAllShow = true
         },
-        onUpdate() {
-            this.removeShow = false
-            this.removeAllShow = false
+        onRemove() {
             this.getMessages()
-        }
+            this.removeShow = false
+        },
+        onRemoveAll() {
+            this.getMessages()
+            this.removeAllShow = false
+        },
     },
     watch: {
         type(val) {
-            this.getMessages()
-        },
-        removeShow(val) {
-            this.getMessages()
-        },
-        removeAllShow(val) {
             this.getMessages()
         },
     },
@@ -135,7 +136,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.messages {
-    width: 100%;
-}
+@import '../../sass/components/messages'
 </style>

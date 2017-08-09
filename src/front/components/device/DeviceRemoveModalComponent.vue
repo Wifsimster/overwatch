@@ -28,13 +28,14 @@ export default {
     },
     created() {
         this.uuid = UUID.getOne()
+
+        this.socket.on('device.remove.result.' + this.uuid, () => {
+            this.$emit('remove')
+        })
     },
     methods: {
         remove() {
-            this.socket.emit('device.remove', { data: this.device, uuid: this.uuid })
-            this.socket.on('device.remove.result.' + this.uuid, () => {
-                this.$emit('close')
-            })
+            this.socket.emit('device.remove', { uuid: this.uuid, id: this.device.id })
         },
         hide() {
             this.$emit('close')

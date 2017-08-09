@@ -24,37 +24,46 @@ module.exports = socket => {
       })
       .catch(err => {
         console.error(err)
-        socket.emit("message.getAll.error." + data.uuid, err)
+        socket.emit("message.getAll.error", err)
       })
   })
 
   socket.on("message.update", options => {
-    Message.update({ name: options.data.name }, { where: { id: options.data.id } })
-      .then(data => {
-        socket.emit("message.update.result." + options.uuid, data)
-      })
-      .catch(err => {
-        socket.emit("message.update.error", err)
-      })
+    if (options.data) {
+      let data = options.data
+      Message.update({ name: data.name }, { where: { id: data.id } })
+        .then(data => {
+          socket.emit("message.update.result." + options.uuid, data)
+        })
+        .catch(err => {
+          socket.emit("message.update.error", err)
+        })
+    } else {
+      socket.emit("message.update.error")
+    }
   })
 
-  socket.on("message.remove", data => {
-    Message.destroy({ where: { id: data.id } })
-      .then(rst => {
-        socket.emit("message.remove.result." + data.uuid, rst)
-      })
-      .catch(err => {
-        socket.emit("message.remove.error", err)
-      })
+  socket.on("message.remove", options => {
+    if (options.id) {
+      Message.destroy({ where: { id: options.id } })
+        .then(rst => {
+          socket.emit("message.remove.result." + options.uuid, rst)
+        })
+        .catch(err => {
+          socket.emit("message.remove.error", err)
+        })
+    } else {
+      socket.emit("message.remove.error")
+    }
   })
 
-  socket.on("message.removeAll", data => {
+  socket.on("message.removeAll", options => {
     Message.destroy({ where: {} })
       .then(rst => {
-        socket.emit("message.removeAll.result." + data.uuid, rst)
+        socket.emit("message.removeAll.result." + options.uuid, rst)
       })
       .catch(err => {
-        socket.emit("message.removeAll.error." + data.uuid, err)
+        socket.emit("message.removeAll.error", err)
       })
   })
 }

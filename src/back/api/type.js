@@ -11,8 +11,8 @@ module.exports = socket => {
       })
   })
 
-  socket.on("type.update", options => {
-    Type.update({ name: options.data.name }, { where: { id: options.data.id } })
+  socket.on("type.update", (options, data) => {
+    Type.update({ name: data.name }, { where: { id: data.id } })
       .then(rst => {
         socket.emit("type.update.result." + options.uuid, rst)
       })
@@ -22,7 +22,7 @@ module.exports = socket => {
   })
 
   socket.on("type.remove", options => {
-    Type.destroy({ where: { id: options.data.id } })
+    Type.destroy({ where: { id: options.id } })
       .then(rst => {
         socket.emit("type.remove.result." + options.uuid, rst)
       })
@@ -42,16 +42,20 @@ module.exports = socket => {
   })
 
   socket.on("type.updateAll", options => {
-    options.data.forEach((type, index) => {
-      Type.update({ name: type.name }, { where: { id: type.id } })
-        .then((count, row) => {
-          if ((index = types.length - 1)) {
-            socket.emit("type.updateAll.result." + options.uuid, count)
-          }
+    if (options.data) {
+      let p0 = []
+      options.data.map(type => {
+        p0.push(Type.update({ name: type.name }, { where: { id: type.id } }))
+      })
+      Promise.all(p0)
+        .then(result => {
+          socket.emit("type.updateAll.result." + options.uuid, result)
         })
         .catch(err => {
-          socket.emit("type.getAll.error", err)
+          socket.emit("type.updateAll.error", err)
         })
-    })
+    } else {
+      socket.emit("type.updateAll.error")
+    }
   })
 }

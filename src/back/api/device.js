@@ -4,7 +4,7 @@ const Location = require("../models/location")
 const Message = require("../models/message")
 
 module.exports = socket => {
-  socket.on("device.getAll", data => {
+  socket.on("device.getAll", options => {
     Device.findAll({
       include: [Type, Location]
     })
@@ -27,60 +27,11 @@ module.exports = socket => {
         Promise.all(p0)
           .then(results => {
             let states = results.map((messages, index) => {
-              return JSON.parse(messages[0].data)
+              if (messages[0] && messages[0].data) {
+                return JSON.parse(messages[0].data)
+              }
             })
-            socket.emit("device.getAll.result." + data.uuid, devices)
-          })
-          .catch(err => {
-            console.error(err)
-            socket.emit("device.getAll.error." + data.uuid, err)
-          })
-      })
-      .catch(err => {
-        console.error(err)
-        socket.emit("device.getAll.error." + data.uuid, err)
-      })
-  })
-
-  socket.on("device.getOne", data => {
-    Device.findById(data.id, {
-      include: [Type, Location, Message]
-    })
-      .then(device => {
-        socket.emit("device.getOne.result." + data.uuid, device)
-      })
-      .catch(err => {
-        console.error(err)
-        socket.emit("device.getOne.error." + data.uuid, err)
-      })
-  })
-
-  socket.on("device.update", data => {
-    Device.findById(data.id)
-      .then(device => {
-        let types = []
-        data.types.forEach(type => {
-          types.push(type.id)
-        })
-        device
-          .setTypes(types)
-          .then(() => {
-            device.setLocation(data.locationId)
-            Device.update(
-              {
-                name: data.name,
-                mac: data.mac,
-                ip: data.ip
-              },
-              { where: { id: data.id } }
-            )
-              .then((count, rows) => {
-                socket.emit("device.update.result", { count: count, rows: rows })
-              })
-              .catch(err => {
-                console.error(err)
-                socket.emit("device.getAll.error", err)
-              })
+            socket.emit("device.getAll.result." + options.uuid, devices)
           })
           .catch(err => {
             console.error(err)
@@ -93,25 +44,89 @@ module.exports = socket => {
       })
   })
 
-  socket.on("device.remove", data => {
-    Device.destroy({ where: { id: data.id } })
-      .then(rst => {
-        socket.emit("device.remove.result." + data.uuid, rst)
+  socket.on("device.getOne", options => {
+    if (options.data) {
+      Device.findById(options.data.id, {
+        include: [Type, Location, Message]
       })
-      .catch(err => {
-        console.error(err)
-        socket.emit("device.remove.error." + data.uuid, err)
-      })
+        .then(device => {
+          socket.emit("device.getOne.result." + options.uuid, device)
+        })
+        .catch(err => {
+          console.error(err)
+          socket.emit("device.getOne.error", err)
+        })
+    } else {
+      socket.emit("device.getOne.error")
+    }
   })
 
-  socket.on("device.removeAll", data => {
+  socket.on("device.update", options => {
+    if (options.data) {
+      let data = options.data
+      Device.findById(data.id)
+        .then(device => {
+          let types = []
+          data.types.forEach(type => {
+            types.push(type.id)
+          })
+          device
+            .setTypes(types)
+            .then(() => {
+              device.setLocation(data.locationId)
+              Device.update(
+                {
+                  name: data.name,
+                  mac: data.mac,
+                  ip: data.ip
+                },
+                { where: { id: data.id } }
+              )
+                .then((count, rows) => {
+                  socket.emit("device.update.result." + options.uuid, { count: count, rows: rows })
+                })
+                .catch(err => {
+                  console.error(err)
+                  socket.emit("device.getAll.error", err)
+                })
+            })
+            .catch(err => {
+              console.error(err)
+              socket.emit("device.getAll.error", err)
+            })
+        })
+        .catch(err => {
+          console.error(err)
+          socket.emit("device.getAll.error", err)
+        })
+    } else {
+      socket.emit("device.getAll.error")
+    }
+  })
+
+  socket.on("device.remove", options => {
+    if (options.data) {
+      Device.destroy({ where: { id: options.data.id } })
+        .then(rst => {
+          socket.emit("device.remove.result." + options.uuid, rst)
+        })
+        .catch(err => {
+          console.error(err)
+          socket.emit("device.remove.error", err)
+        })
+    } else {
+      socket.emit("device.remove.error")
+    }
+  })
+
+  socket.on("device.removeAll", options => {
     Device.destroy({ where: {} })
       .then(rst => {
-        socket.emit("device.removeAll.result." + data.uuid, rst)
+        socket.emit("device.removeAll.result." + options.uuid, rst)
       })
       .catch(err => {
         console.error(err)
-        socket.emit("device.removeAll.error." + data.uuid, err)
+        socket.emit("device.removeAll.error", err)
       })
   })
 }

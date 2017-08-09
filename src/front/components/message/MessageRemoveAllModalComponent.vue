@@ -28,6 +28,10 @@ export default {
     },
     created() {
         this.uuid = UUID.getOne()
+
+        this.socket.on('message.removeAll.result.' + this.uuid, () => {
+            this.$emit('removeAll')
+        })
     },
     methods: {
         hide() {
@@ -35,10 +39,6 @@ export default {
         },
         removeAll() {
             this.socket.emit('message.removeAll', { uuid: this.uuid })
-
-            this.socket.on('message.removeAll.result.' + this.uuid, () => {
-                this.$emit('update')
-            })
         },
     }
 }

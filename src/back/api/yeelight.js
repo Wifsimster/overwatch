@@ -64,7 +64,7 @@ module.exports = socket => {
       })
       .catch(err => {
         console.error("Error :", err)
-        socket.emit("light.getValues.error." + err)
+        socket.emit("light.getValues.error", err)
       })
   })
 
@@ -76,7 +76,7 @@ module.exports = socket => {
         socket.emit("light.toggle.result." + id)
       })
       .catch(err => {
-        socket.emit("light.toggle.error." + err)
+        socket.emit("light.toggle.error", err)
       })
   })
 
@@ -88,7 +88,7 @@ module.exports = socket => {
         socket.emit("light.refresh.result." + id)
       })
       .catch(err => {
-        socket.emit("light.refresh.error." + err)
+        socket.emit("light.refresh.error", err)
       })
   })
 
@@ -100,7 +100,7 @@ module.exports = socket => {
         socket.emit("light.turnOn.result." + id)
       })
       .catch(err => {
-        socket.emit("light.turnOn.error." + err)
+        socket.emit("light.turnOn.error", err)
       })
   })
 
@@ -112,7 +112,7 @@ module.exports = socket => {
         socket.emit("light.turnOff.result." + id)
       })
       .catch(err => {
-        socket.emit("light.turnOff.error." + err)
+        socket.emit("light.turnOff.error", err)
       })
   })
 
@@ -124,7 +124,7 @@ module.exports = socket => {
         socket.emit("light.setName.result." + options.id)
       })
       .catch(err => {
-        socket.emit("light.setName.error." + err)
+        socket.emit("light.setName.error", err)
       })
   })
 
@@ -136,7 +136,7 @@ module.exports = socket => {
         socket.emit("light.setColorTemperature.result." + options.id)
       })
       .catch(err => {
-        socket.emit("light.setColorTemperature.error." + err)
+        socket.emit("light.setColorTemperature.error", err)
       })
   })
 
@@ -148,7 +148,7 @@ module.exports = socket => {
         socket.emit("light.setBrightness.result." + options.id)
       })
       .catch(err => {
-        socket.emit("light.setBrightness.error." + err)
+        socket.emit("light.setBrightness.error", err)
       })
   })
 
@@ -160,7 +160,7 @@ module.exports = socket => {
         socket.emit("light.setRGB.result." + options.id)
       })
       .catch(err => {
-        socket.emit("light.setRGB.error." + err)
+        socket.emit("light.setRGB.error", err)
       })
   })
 
@@ -172,7 +172,7 @@ module.exports = socket => {
         socket.emit("light.setHSV.result." + options.id)
       })
       .catch(err => {
-        socket.emit("light.setHSV.error." + err)
+        socket.emit("light.setHSV.error", err)
       })
   })
 }
