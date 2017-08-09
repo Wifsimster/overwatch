@@ -42,15 +42,16 @@
             </div>
         </transition>
     
-        <remove-modal v-if="removeShow" :message="removeMessage" @close="removeShow = false"></remove-modal>
+        <remove-modal v-if="removeShow" :message="removeMessage" @update="onUpdate" @close="removeShow = false"></remove-modal>
     
-        <remove-all-modal v-if="removeAllShow" @close="removeAllShow = false"></remove-all-modal>
+        <remove-all-modal v-if="removeAllShow" @update="onUpdate" @close="removeAllShow = false"></remove-all-modal>
     </div>
 </template>
 
 <script>
 import RemoveModal from './MessageRemoveModalComponent.vue'
 import RemoveAllModal from './MessageRemoveAllModalComponent.vue'
+import UUID from '../../mixins/uuid'
 export default {
     components: {
         RemoveModal,
@@ -62,6 +63,7 @@ export default {
             removeShow: false,
             removeAllShow: false,
             type: 'data',
+            uuid: null,
         }
     },
     computed: {
@@ -76,11 +78,13 @@ export default {
         },
     },
     created() {
-        this.socket.on('message.remove.result', data => {
+        this.uuid = UUID.getOne()
+
+        this.socket.on('message.remove.result.' + this.uuid, data => {
             this.getMessages()
         })
 
-        this.socket.on('message.removeAll.result', data => {
+        this.socket.on('message.removeAll.result.' + this.uuid, data => {
             this.getMessages()
         })
 
@@ -88,7 +92,7 @@ export default {
             this.getMessages()
         })
 
-        this.socket.on('message.getAll.result', data => {
+        this.socket.on('message.getAll.result.' + this.uuid, data => {
             this.$store.dispatch('setMessages', data)
         })
 
@@ -99,7 +103,8 @@ export default {
             this.socket.emit('message.getAll', {
                 type: this.type,
                 limit: 22,
-                offset: 0
+                offset: 0,
+                uuid: this.uuid
             })
         },
         openRemoveModal(message) {
@@ -109,6 +114,11 @@ export default {
         openRemoveAllModal() {
             this.removeAllShow = true
         },
+        onUpdate() {
+            this.removeShow = false
+            this.removeAllShow = false
+            this.getMessages()
+        }
     },
     watch: {
         type(val) {

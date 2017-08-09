@@ -31,7 +31,7 @@ export default {
     },
     methods: {
         remove() {
-            this.socket.emit('device.remove', this.device)
+            this.socket.emit('device.remove', { data: this.device, uuid: this.uuid })
             this.socket.on('device.remove.result.' + this.uuid, () => {
                 this.$emit('close')
             })
