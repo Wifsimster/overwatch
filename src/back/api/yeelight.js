@@ -141,7 +141,7 @@ module.exports = socket => {
   })
 
   socket.on("light.setBrightness", options => {
-    console.log("Yeelight - Set brightness :", options.id)
+    console.log(" - Yeelight - Set brightness :", options.id)
     light
       .setBrightness(options)
       .then(() => {

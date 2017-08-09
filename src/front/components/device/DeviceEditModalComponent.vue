@@ -29,7 +29,6 @@
         </div>
         <div slot="footer">
             <button class="pure-button pure-button-primary" @click="edit">Edit</button>
-            <button class="pure-button" @click="hide()">Cancel</button>
         </div>
     </modal>
 </template>
@@ -37,6 +36,7 @@
 <script>
 import Multiselect from 'vue-multiselect'
 import Modal from '../ModalComponent.vue'
+import UUID from '../../mixins/uuid'
 export default {
     components: {
         Multiselect,
@@ -55,16 +55,22 @@ export default {
             selectedTypes: [],
             selectedLocation: null,
             refreshRate: null,
+            uuid: null,
         }
     },
     created() {
-        this.socket.emit('type.getAll')
-        this.socket.on('type.getAll.result', (types) => {
-            this.types = types
+        this.uuid = UUID.getOne()
+
+        this.socket.emit('type.getAll', { uuid: this.uuid })
+
+        this.socket.on('type.getAll.result.' + this.uuid, data => {
+            this.types = data
         })
-        this.socket.emit('location.getAll')
-        this.socket.on('location.getAll.result', (locations) => {
-            this.locations = locations
+
+        this.socket.emit('location.getAll', { uuid: this.uuid })
+
+        this.socket.on('location.getAll.result.' + this.uuid, data => {
+            this.locations = data
         })
     },
     watch: {
@@ -84,8 +90,8 @@ export default {
             this.device.locationId = location.id
         },
         edit() {
-            this.socket.emit('device.update', this.device)
-            this.socket.on('device.update.result', data => {
+            this.socket.emit('device.update', { data: this.device, uuid: this.uuid })
+            this.socket.on('device.update.result.' + this.uuid, data => {
                 this.hide()
             })
         },
@@ -94,18 +100,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.multiselect {
-    display: inline-block;
-    width: 250px;
-}
-
-.message {
-    padding: 0;
-    margin: 0;
-    overflow: inherit !important;
-    white-space: normal !important;
-    width: calc(100% - 185px);
-    word-wrap: break-word;
-    display: inline-block;
-}
+@import '../../sass/components/device-edit'
 </style>

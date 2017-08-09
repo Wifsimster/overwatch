@@ -6,13 +6,13 @@
         </div>
         <div slot="footer">
             <button class="pure-button pure-button-red" @click="removeAll()">Remove all</button>
-            <button class="pure-button" @click="hide()">Cancel</button>
         </div>
     </modal>
 </template>
 
 <script>
 import Modal from '../ModalComponent.vue'
+import UUID from '../../mixins/uuid'
 export default {
     components: { Modal },
     props: {
@@ -23,17 +23,19 @@ export default {
     data() {
         return {
             socket: this.$store.state.socket.socket,
+            uuid: null,
         }
+    },
+    created() {
+        this.uuid = UUID.getOne()
     },
     methods: {
         hide() {
             this.$emit('close')
         },
         removeAll() {
-            this.socket.emit('device.removeAll')
+            this.socket.emit('device.removeAll', { uuid: this.uuid })
         },
     }
 }
 </script>
-
-<style lang="scss" scoped></style>

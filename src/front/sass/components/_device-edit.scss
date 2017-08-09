@@ -1,0 +1,14 @@
+.multiselect {
+  display: inline-block;
+  width: 250px;
+}
+
+.message {
+  padding: 0;
+  margin: 0;
+  overflow: inherit !important;
+  white-space: normal !important;
+  width: calc(100% - 185px);
+  word-wrap: break-word;
+  display: inline-block;
+}
