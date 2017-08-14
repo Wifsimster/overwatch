@@ -65,11 +65,14 @@ export default {
     created() {
         this.uuid = UUID.getOne()
 
-        this.socket.emit('device.getOne', { id: this.id, uuid: this.uuid })
+        this.socket.emit('device.getOne', { uuid: this.uuid, id: this.id })
+
         this.socket.on('device.getOne.result.' + this.uuid, device => {
+            this.device = device
             this.getState().then(state => {
                 device.state = state
                 this.device = device
+                console.log('Motion :', this.device)
             }).catch(err => {
                 console.error(err)
             })
@@ -96,7 +99,10 @@ export default {
                         let state = JSON.parse(messages[0].data).state
                         if (state) {
                             resolve(state === "1" ? true : false)
+                        } else {
+                            resolve()
                         }
+                    } else {
                         resolve()
                     }
                 })

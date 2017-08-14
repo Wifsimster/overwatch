@@ -45,8 +45,8 @@ module.exports = socket => {
   })
 
   socket.on("device.getOne", options => {
-    if (options.data) {
-      Device.findById(options.data.id, {
+    if (options.id) {
+      Device.findById(options.id, {
         include: [Type, Location, Message]
       })
         .then(device => {

@@ -2,11 +2,11 @@
     <transition-group name="opacity" tag="div" class="flex-container">
         <div v-for="device in devices" :key="device.id">
     
-            <div v-if="device.types[0].key === 'motion'">
+            <div v-if="device.types && device.types[0] && device.types[0].key === 'motion'">
                 <esp8266-motion :id="device.id"></esp8266-motion>
             </div>
     
-            <div v-if="device.types[0].key === 'switch'">
+            <div v-if="device.types && device.types[0] && device.types[0].key === 'switch'">
                 <esp8266-switch :id="device.id"></esp8266-switch>
             </div>
     
