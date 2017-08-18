@@ -21,27 +21,32 @@ module.exports = io => {
         mqttClient.subscribe("/#")
 
         mqttClient.on("connected", () => {
+          console.log("MQTT - Connected")
           io.emit("mqtt.connected")
         })
 
         mqttClient.on("reconnecting", () => {
+          console.log("MQTT - Reconnecting")
           io.emit("mqtt.reconnecting")
         })
 
         mqttClient.on("close", () => {
+          console.log("MQTT - Close")
           io.emit("mqtt.close")
         })
 
         mqttClient.on("offline", () => {
+          console.log("MQTT - Offline")
           io.emit("mqtt.offline")
         })
 
         mqttClient.on("error", () => {
+          console.log("MQTT - Error")
           io.emit("mqtt.error")
         })
 
         mqttClient.on("message", (topic, message) => {
-          console.log("- MQTT : New message")
+          console.log("MQTT - New message :", message)
           try {
             let data = JSON.parse(message.toString())
             if (data.mac) {
