@@ -46,14 +46,15 @@ module.exports = io => {
         })
 
         mqttClient.on("message", (topic, message) => {
-          console.log("MQTT - New message :", message)
           try {
             let data = JSON.parse(message.toString())
+            // console.log("MQTT - Message :", data)
             if (data.mac) {
               Device.findOne({ where: { mac: data.mac } })
                 .then(device => {
                   if (device) {
                     if (topic.startsWith("/online/")) {
+                      console.log("MQTT - Online : " + JSON.stringify(data))
                       addMessage(data, device, "online")
                       notify({
                         message: device.name + " is online !",

@@ -5,8 +5,8 @@
                 <div class="image">
                     <img :src="icon">
                 </div>
-                <span class="data" v-if="device.state === true">On</span>
-                <span class="data" v-if="device.state === false">Off</span>
+                <span class="data" v-if="state === true">On</span>
+                <span class="data" v-if="state === false">Off</span>
                 <span class="name">{{ device.name }}</span>
                 <span class="location" v-if="device.location">{{ device.location.name }}</span>
             </div>
@@ -15,7 +15,8 @@
         <modal v-if="modalShow" @close="onClose">
             <div slot="header">{{ device.name }}</div>
             <div slot="body">
-                <switchy v-if="device.state !== undefined" :state=device.state @switch="onState"></switchy>
+                <div class="alert error">{{ error }}</div>
+                <switchy :row="state" @switch="onState"></switchy>
                 <ul>
                     <li>Id: {{ device.id }}</li>
                     <li>MAC: {{ device.mac }}</li>
@@ -26,7 +27,7 @@
                     <li>Types:
                         <span v-for="type in device.types" :key="type.id">{{ type.name }}, </span>
                     </li>
-                    <li>State: {{ device.state }}</li>
+                    <li>State: {{ state }}</li>
                 </ul>
                 <a @click="ping">Ping device</a> |
                 <a @click="restart">Restart device</a> |
@@ -53,11 +54,13 @@ export default {
     },
     data() {
         return {
+            error: null,
             device: null,
             uuid: null,
             icon: icon,
             isDead: false,
             modalShow: false,
+            state: false,
         }
     },
     computed: {
@@ -72,12 +75,7 @@ export default {
 
         this.socket.on('device.getOne.result.' + this.uuid, device => {
             this.device = device
-            this.getState().then(state => {
-                device.state = state
-                this.device = device
-            }).catch(err => {
-                console.error(err)
-            })
+            this.getState()
         })
 
         this.socket.on('device.update.result', device => {
@@ -85,37 +83,31 @@ export default {
                 Object.assign(this.device, device)
             }
         })
+
+        this.socket.on('message.getAll.result.' + this.uuid, messages => {
+            if (messages && messages.length > 0) {
+                let state = JSON.parse(messages[0].data).state
+                if (state) {
+                    this.state = state === "1" ? true : false
+                }
+            }
+        })
     },
     methods: {
         getState() {
-            return new Promise((resolve, reject) => {
-                this.socket.emit('message.getAll', {
-                    uuid: this.uuid,
-                    deviceId: this.id,
-                    limit: 1,
-                    offset: 0,
-                    type: 'data'
-                })
-
-                this.socket.on('message.getAll.result.' + this.uuid, messages => {
-                    if (messages && messages.length > 0) {
-                        let state = JSON.parse(messages[0].data).state
-                        if (state) {
-                            resolve(state === "1" ? true : false)
-                        } else {
-                            resolve()
-                        }
-                    } else {
-                        resolve()
-                    }
-                })
+            this.socket.emit('message.getAll', {
+                uuid: this.uuid,
+                deviceId: this.id,
+                limit: 1,
+                offset: 0,
+                type: 'data'
             })
         },
         onClose() {
             this.modalShow = false
         },
         onState(val) {
-            this.device.state = val
+            this.state = val
             let value = val ? 'ON' : 'OFF'
             this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: value } })
         },
@@ -124,6 +116,7 @@ export default {
             this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'PING' } })
         },
         checkHealth() {
+            console.log('Check health', this.device.name)
             if (moment().diff(this.device.updatedAt, 'minutes') > 2) {
                 this.isDead = true
             } else {
@@ -150,21 +143,7 @@ export default {
             console.log('Restart device')
             this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'RESET' } })
         },
-        // getState() {
-        //     console.log('Get state')
-        //     this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'STATE' } })
-        //     this.parseLastDataMessage()
-        // },
     },
-    // watch: {
-    //     device() {
-    //         this.getState().then(data => {
-    //             this.device.state = data
-    //         }).catch(err => {
-    //             console.error('- State :', err)
-    //         })
-    //     }
-    // },
 }
 </script>
 
