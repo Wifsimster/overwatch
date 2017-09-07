@@ -21,10 +21,10 @@ Personal home automation with real time messaging for Raspberry Pi 3.
 - [x] [Sonoff switch](https://www.itead.cc/sonoff-wifi-wireless-switch.html)
 - [x] Yeelight status
 - [x] Color picker for Yeelight devices
+- [ ] [H801](https://github.com/Wifsimster/h801-mqtt/tree/master) RGB led strip
 - [ ] Enable/disabled scenario
 - [ ] Backup data
 - [ ] Netatmo meteo prevision
-- [ ] RGB led strip with ESP8266
 
 ## Powered with
 
