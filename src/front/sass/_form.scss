@@ -1,0 +1,14 @@
+@import 'colors';
+
+input {
+    color: $black !important;
+}
+
+.pure-form {
+    fieldset {
+        padding: 10px !important;
+        legend {
+            color: white;
+        }
+    }
+}

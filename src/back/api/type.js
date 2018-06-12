@@ -1,53 +1,61 @@
-const errorHandler = require('./errorHandler')
-const Type = require('../models/type')
+const Type = require("../models/type")
 
-module.exports = (socket) => {
+module.exports = socket => {
+  socket.on("type.getAll", options => {
+    Type.findAll(options)
+      .then(types => {
+        socket.emit("type.getAll.result." + options.uuid, types)
+      })
+      .catch(err => {
+        socket.emit("type.getAll.error", err)
+      })
+  })
 
-    socket.on('type.getAll', (options) => {
-        Type.findAll(options)
-            .then((types) => { 
-            socket.emit('type.getAll.result', types)
-        }).catch((err) => { 
-            socket.emit('type.getAll.error', new errorHandler(err))
+  socket.on("type.update", (options, data) => {
+    Type.update({ name: data.name }, { where: { id: data.id } })
+      .then(rst => {
+        socket.emit("type.update.result." + options.uuid, rst)
+      })
+      .catch(err => {
+        socket.emit("type.update.error", err)
+      })
+  })
+
+  socket.on("type.remove", options => {
+    Type.destroy({ where: { id: options.id } })
+      .then(rst => {
+        socket.emit("type.remove.result." + options.uuid, rst)
+      })
+      .catch(err => {
+        socket.emit("type.remove.error", err)
+      })
+  })
+
+  socket.on("type.removeAll", options => {
+    Type.destroy({ where: {} })
+      .then(rst => {
+        socket.emit("type.removeAll.result." + options.uuid, rst)
+      })
+      .catch(err => {
+        socket.emit("type.removeAll.error", err)
+      })
+  })
+
+  socket.on("type.updateAll", options => {
+    if (options.data) {
+      let p0 = []
+      options.data.map(type => {
+        p0.push(Type.update({ name: type.name }, { where: { id: type.id } }))
+      })
+      Promise.all(p0)
+        .then(result => {
+          socket.emit("type.updateAll.result." + options.uuid, result)
         })
-    })
-
-    socket.on('type.update', (data) => {
-        Type.update({name: data.name}, {where: {id: data.id}})
-            .then((rst) => {
-            socket.emit('type.update.result', rst)
-        }).catch((err) => {
-            socket.emit('type.update.error', new errorHandler(err))
+        .catch(err => {
+          socket.emit("type.updateAll.error", err)
         })
-    })
-
-    socket.on('type.remove', (data) => {
-        Type.destroy({ where: { id: data.id }})
-            .then((rst) => {
-            socket.emit('type.remove.result', rst)
-        }).catch((err) => { 
-            socket.emit('type.remove.error', new errorHandler(err))
-        })
-    })
-
-    socket.on('type.removeAll', () => {
-        Type.destroy({where: {}})
-            .then((rst) => {
-            socket.emit('type.removeAll.result', rst)
-        }).catch((err) => { 
-            socket.emit('type.removeAll.error', new errorHandler(err))
-        })
-    })
-
-    socket.on('type.updateAll', (types) => {
-        types.forEach((type, index) => {
-            Type.update({name: type.name}, { where: { id: type.id}}).then((count, row) => {
-                if(index = types.length - 1) {
-                    socket.emit('type.updateAll.result', count)
-                }
-            }).catch((err) => {
-                socket.emit('type.getAll.error', new errorHandler(err))
-            })
-        })
-    })
+    } else {
+      socket.emit("type.updateAll.error")
+    }
+  })
 }

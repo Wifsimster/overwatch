@@ -1,16 +1,16 @@
-var Sequelize = require('sequelize')
-var sequelize = require('../db/database')
-var Type = require('./type')
-var Location = require('./location')
-var Message = require('./message')
+const Sequelize = require('sequelize')
+const sequelize = require('../db/database')
+const Type = require('./type')
+const Location = require('./location')
+const Message = require('./message')
 
 const Device = sequelize.define('device', {
-    name: Sequelize.STRING,
     mac: Sequelize.STRING,
+    name: Sequelize.STRING,
     ip: Sequelize.STRING,
 }, {
-    freezeTableName: true,
-})
+        freezeTableName: true,
+    })
 
 Device.belongsToMany(Type, { through: 'DeviceType' })
 Type.belongsToMany(Device, { through: 'DeviceType' })

@@ -4,8 +4,7 @@ const state = {
 }
 
 const getters = {
-    type: state => state.type,
-    message: state => state.message,
+    alert: state => state,
 }
 
 const actions = {

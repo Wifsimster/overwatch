@@ -13,6 +13,10 @@
     color: $gallery;
 }
 
+h1, h2 {
+    padding: 0 0 10px;
+}
+
 a {
     cursor: pointer;
     color: $tulip-tree;
@@ -40,11 +44,17 @@ ul {
 }
 
 .wrapper {
-    margin-left: 50px;
-    padding-top: 50px;
+    margin-left: 60px;
+    padding-top: 60px;
+    transition: all .4s ease-in-out;
+
+    @media(min-width: 720px) {
+        margin-left: 150px;
+    }
+    
     .container {
         margin: 0 auto;
-        padding: 10px 20px;
+        padding: 20px;
     }
 }
 
@@ -53,7 +63,7 @@ ul {
 }
 
 .pull-right {
-    float: right;
+    float: right !important;
 }
 
 .clearfix {
@@ -61,14 +71,11 @@ ul {
 }
 
 table {
+    margin: 10px 0;
     td {
         padding: 5px 8px; 
         white-space: nowrap;
     }
-}
-
-input[type=password], [type=email], [type=url], input[type=date], input[type=month], input[type=time], input[type=datetime], input[type=datetime-local], input[type=week], input[type=tel], input[type=color], input[type=number], input[type=search], input[type=text], select, textarea {
-    color: $black !important;
 }
 
 .center {

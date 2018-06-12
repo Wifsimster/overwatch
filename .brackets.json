@@ -1,8 +1,0 @@
-{
-    "dimitrk.exclude-indexing-filetree.excludeList": [
-        ".git(?!ignore)",
-        "dist",
-        "bower_components",
-        "node_modules"
-    ]
-}

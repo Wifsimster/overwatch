@@ -1,0 +1,12 @@
+.flex-container {
+    display: flex;
+    flex-flow: column wrap;
+    align-content: flex-start;
+    justify-content: flex-start;
+    > .flex-container {
+        display: flex;
+        flex-flow: row wrap;
+        align-content: flex-start;
+        justify-content: flex-start;
+    }
+}

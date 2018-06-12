@@ -1,0 +1,17 @@
+@import 'colors';
+
+.pure-button {
+    background-color: $gallery;
+
+    &.pure-button-primary {
+        background-color: $geebung;
+    }
+    &.pure-button-red {
+        color: $gallery;
+        background-color: $red;
+    }
+    &.pure-button-green {
+        color: $gallery;
+        background-color: $green;
+    }
+}

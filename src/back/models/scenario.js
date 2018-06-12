@@ -1,6 +1,6 @@
-var Sequelize = require('sequelize')
-var sequelize = require('../db/database')
-var Device = require('./device')
+const Sequelize = require('sequelize')
+const sequelize = require('../db/database')
+const Device = require('./device')
 
 const Scenario = sequelize.define('Scenario', {
     name: Sequelize.STRING,
@@ -9,11 +9,11 @@ const Scenario = sequelize.define('Scenario', {
     if: Sequelize.STRING,
     then: Sequelize.STRING,
 }, {
-    freezeTableName: true,
-})
+        freezeTableName: true,
+    })
 
-Device.belongsToMany(Scenario)
-Scenario.hasOne(Device, {as: 'listener'})
-Scenario.hasOne(Device, {as: 'action'})
+//Device.belongsToMany(Scenario)
+//Scenario.hasOne(Device, {as: 'listener'})
+//Scenario.hasOne(Device, {as: 'action'})
 
 module.exports = Scenario

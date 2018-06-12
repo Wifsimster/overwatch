@@ -1,13 +1,14 @@
-var Sequelize = require('sequelize');
-var sequelize = require('../db/database');
+const Sequelize = require('sequelize')
+const sequelize = require('../db/database')
 
-var Message = sequelize.define('message', {
+const Message = sequelize.define('message', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    data: Sequelize.STRING
-}, { freezeTableName: true });
+    type: Sequelize.STRING,
+    data: Sequelize.STRING,
+}, { freezeTableName: true })
 
-module.exports = Message;
+module.exports = Message

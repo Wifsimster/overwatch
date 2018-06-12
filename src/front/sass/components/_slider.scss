@@ -1,0 +1,22 @@
+.slider-container {
+  margin: 20px 0;
+}
+
+.noUi-connect {
+  background-color: #1abc9c;
+  // background-image: linear-gradient(to right, #c02425 0%, #f0cb35 100%);
+}
+
+.noUi-handle {
+  width: 28px !important;
+  height: 28px !important;
+  top: -7px !important;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+  background: #fff;
+  border-radius: 50%;
+  border-width: 0;
+  &::before,
+  &::after {
+    content: none;
+  }
+}

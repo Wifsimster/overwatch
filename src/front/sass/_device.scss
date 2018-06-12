@@ -8,6 +8,13 @@ $height: 116px;
     margin: 5px;
     padding: 5px 10px;
     height: $height;
+    width: 100%;
+    transition: all 1s easy-in-out;
+
+    @media(min-width: 650px) {
+        max-width: 200px;
+    }
+
     .image {
         position: absolute;
         overflow: hidden;

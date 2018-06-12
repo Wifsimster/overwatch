@@ -1,48 +1,54 @@
 <template>
-<div class="device">
-    <span>{{ date | moment('ddd DD MMM YYYY') }}</span>
-    <span>{{ date | moment('HH:mm:ss') }}</span>
+    <div>
+        <transition name="opacity">
+            <div class="datetime" v-if="date" @click="modalShow = true">
+                <span>{{ date | moment('ddd DD MMM YYYY') }}</span>
+                <span>{{ date | moment('HH:mm:ss') }}</span>
+            </div>
+        </transition>
+    
+        <modal v-if="modalShow" @close="onClose">
+            <div slot="header">Date & Time</div>
+            <div slot="body">
+                <ul>
+                    <li>Date: {{ date | moment('ddd DD MMM YYYY') }}</li>
+                    <li>Time: {{ date | moment('HH:mm:ss') }}</li>
+                </ul>
+            </div>
+        </modal>
+    
     </div>
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-                date: new Date(),
-            }
-        },
-        created() {
-            setInterval(() => {
-                this.date = new Date()
-            }, 1000)
+import Modal from './ModalComponent.vue'
+export default {
+    components: { Modal },
+    props: {
+        settings: {
+            type: Object,
+            required: true,
         }
-    }
+    },
+    data() {
+        return {
+            date: new Date(),
+            modalShow: false,
+        }
+    },
+    created() {
+        setInterval(() => {
+            this.date = new Date()
+        }, 1000)
+    },
+    methods: {
+        onClose() {
+            this.modalShow = false
+        },
+    },
+}
 </script>
 
 <style lang="scss" scoped>
-@import '../sass/_colors.scss';
-
-$height: 116px;
-
-.device {
-    position: relative;
-    background-color: $mine-shaft-app;
-    margin: 5px;
-    padding: 5px 10px;
-    height: $height;
-    text-align: center;
-    span {
-        display: block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        position: relative;
-        padding: 2px 0;
-        font-size: 24px;
-        &:nth-child(2) {
-        font-size: 34px;
-        }
-    }
-}
+@import '../sass/components/date-time'
 </style>
