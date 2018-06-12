@@ -20,7 +20,7 @@
     }
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 @import '../sass/_colors.scss';
 
 $height: 116px;

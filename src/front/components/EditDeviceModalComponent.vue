@@ -119,7 +119,7 @@
     }
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 .multiselect {
     display: inline-block;
     width: 250px;

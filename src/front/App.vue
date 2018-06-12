@@ -44,7 +44,7 @@
     }
 </script>
 
-<style lang="sass">
+<style lang="scss">
 @import './sass/global';
 @import './sass/transition';
 @import './sass/led';

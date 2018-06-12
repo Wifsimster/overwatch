@@ -23,6 +23,6 @@
 </script>
 
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 @import '../../sass/_device.scss';
 </style>

@@ -54,7 +54,7 @@
   }
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 .camera {
   text-align: center;
   margin: 5px;

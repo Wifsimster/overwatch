@@ -64,7 +64,7 @@
     }  
 </script>
 
-<style lang="sass" scoped>
+<style lang="scss" scoped>
 .messages {
     width: 100%;
     max-height: 650px;
