@@ -1,0 +1,64 @@
+<template>
+    <div class="app">
+        <com-header></com-header>
+        <com-sidebar></com-sidebar>
+        <div class="wrapper">
+            <div class="container">
+                <alert></alert>
+                <notify></notify>
+                <transition name="opacity" mode="out-in">
+                    <router-view></router-view>
+                </transition>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+import io from 'socket.io-client'
+const ComHeader = () => import('../components/HeaderComponent.vue')
+const ComSidebar = () => import('../components/SidebarComponent.vue')
+const Alert = () => import("../components/AlertComponent.vue")
+const Notify = () => import("../components/NotificationComponent.vue")
+import "../sass/_multiselect.scss"
+import 'purecss'
+import 'purecss/build/grids-responsive.css'
+export default {
+    components: {
+        ComHeader,
+        ComSidebar,
+        Alert,
+        Notify
+    },
+    computed: {
+        socket() {
+            return this.$store.getters.socket
+        },
+    },
+    created() {
+        console.log('Starting socket connection...')
+        
+        this.$store.dispatch('setSocket', io('http://localhost:8080'))
+
+        if (this.socket) {
+            this.socket.on('notify', data => {
+                console.log('Notify :', data)
+                this.$store.dispatch('addNotification', data.message)
+            })
+        }
+    },
+}
+</script>
+
+<style lang="scss">
+@import '../sass/global';
+@import '../sass/led';
+@import '../sass/card';
+@import '../sass/checkbox';
+@import '../sass/modal';
+@import '../sass/form';
+@import '../sass/btn';
+@import '../sass/device';
+@import '../sass/tabs';
+@import '../sass/transition';
+</style>

@@ -24,11 +24,18 @@
 <script>
 import icon from '../../assets/thermometer.png'
 export default {
-    components: { Modal },
+    components: { 
+        Modal 
+    },
     props: {
         id: {
             type: Number,
             required: true,
+        }
+    },
+    computed: {
+        socket() {
+            return this.$store.getters.socket
         }
     },
     data() {
@@ -38,11 +45,6 @@ export default {
             isDead: false,
             modalShow: false,
         }
-    },
-    computed: {
-        socket() {
-            return this.$store.getters.socket
-        },
     },
     created() {
         this.socket.emit('device.getOne', this.id)
@@ -85,5 +87,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../sass/components/esp8266-temperature'
+@import '../../sass/components/esp8266-temperature';
 </style>

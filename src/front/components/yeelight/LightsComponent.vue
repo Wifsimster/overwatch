@@ -7,18 +7,24 @@
 </template>
 
 <script>
-import Light from './LightComponent.vue'
+const Light = () => import('./LightComponent.vue')
 export default {
-    components: { Light },
+    components: { 
+        Light 
+    },
     props: {
         settings: {
             type: Object,
             required: true,
         },
     },
+    computed: {
+        socket() {
+            return this.$store.getters.socket
+        },
+    },
     data() {
-        return {
-            socket: this.$store.state.socket.socket,
+        return {            
             lights: null,
         }
     },
@@ -53,5 +59,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../sass/components/lights'
+@import '../../sass/components/lights';
 </style>

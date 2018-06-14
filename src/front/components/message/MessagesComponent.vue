@@ -48,22 +48,13 @@
 </template>
 
 <script>
-import RemoveModal from './MessageRemoveModalComponent.vue'
-import RemoveAllModal from './MessageRemoveAllModalComponent.vue'
-import UUID from '../../mixins/uuid'
+const RemoveModal = () => import('./MessageRemoveModalComponent.vue')
+const RemoveAllModal = () => import('./MessageRemoveAllModalComponent.vue')
+import Vue from 'vue'
 export default {
     components: {
         RemoveModal,
         RemoveAllModal,
-    },
-    data() {
-        return {
-            removeMessage: null,
-            removeShow: false,
-            removeAllShow: false,
-            type: 'data',
-            uuid: null,
-        }
     },
     computed: {
         socket() {
@@ -76,8 +67,17 @@ export default {
             return this.$store.getters.filters
         },
     },
+    data() {
+        return {
+            removeMessage: null,
+            removeShow: false,
+            removeAllShow: false,
+            type: 'data',
+            uuid: null,
+        }
+    },
     created() {
-        this.uuid = UUID.getOne()
+        this.uuid = Vue.getUUID()
 
         this.getMessages()
 
@@ -136,5 +136,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../sass/components/messages'
+@import '../../sass/components/messages';
 </style>

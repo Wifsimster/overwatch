@@ -1,13 +1,28 @@
-$black:                 #000000;
-$cod-gray:              #141414;
-$mine-shaft:            #1f1f1f;
-$mine-shaft-app:        #282828;
-$mine-shaft-light:      #323232;
-$dusty-gray:            #999999;
+// Primary color: navigation
+$primary-color: #006875;
 
-$amber:                 #f9be03;
-$geebung:               #cc7b19;
-$tulip-tree:            #e9a049;
-$red:           		#f75f51;
-$gallery:               #eeeeee;
-$green:                 #008000;
+// Secondary color: buttons, links & active states
+$link-color: #fd6051;
+$active-color: #fe9335;
+
+// Complementary color: background, text, icons
+$black: #000000;
+$cod-gray: #141414;
+$mine-shaft: #1f1f1f;
+$mine-shaft-app: #282828;
+$mine-shaft-light: #323232;
+$dusty-gray: #999999;
+$input-background-color: #fbfbfb;
+$input-border-color: #aeaeae;
+$amber: #f9be03;
+$geebung: #cc7b19;
+$tulip-tree: #e9a049;
+$red: #f75f51;
+$gallery: #eeeeee;
+$green: #008000;
+
+// Status
+$info-color: #019bae;
+$success-color: #11b776;
+$warning-color: #f2790e;
+$error-color: #f44040;

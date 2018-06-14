@@ -13,7 +13,7 @@
     </tr>
     </thead>
                 <tbody>
-                    <tr v-for="message in messages">
+                    <tr v-for="message in messages" :key="message.createdAt">
                         <td>{{ message.createdAt | moment('DD/MM/YY HH:mm:ss') }}</td>
                         <td><span v-if="message.device && message.device.mac">{{ message.device.mac }}</span></td>
                         <td>{{ message.data }}</td>
@@ -30,44 +30,47 @@
 </template>
 
 <script>
-    import io from 'socket.io-client'
-    export default {
-        data() {
-            return {
-                messages: [],
-                socket: io(),
-            }
+export default {        
+    computed: {
+        socket() {
+            return this.$store.getters.socket
         },
-        created() {
+    },
+    data() {
+        return {
+            messages: [],
+        }
+    },
+    created() {
+        this.socket.emit('message.getAll')
+        this.socket.on('message.getAll.result', (messages) => {
+            this.messages = messages
+        })
+        this.socket.on('message.remove.result', (rst) => {
             this.socket.emit('message.getAll')
-            this.socket.on('message.getAll.result', (messages) => {
-                this.messages = messages
-            })
-            this.socket.on('message.remove.result', (rst) => {
-                this.socket.emit('message.getAll')
-            })
-            this.socket.on('message.removeAll.result', (rst) => {
-                this.messages = []
-            })
-            this.socket.on('message.add.result', (rst) => {
-                this.socket.emit('message.getAll')
-            })
+        })
+        this.socket.on('message.removeAll.result', (rst) => {
+            this.messages = []
+        })
+        this.socket.on('message.add.result', (rst) => {
+            this.socket.emit('message.getAll')
+        })
+    },
+    methods: {
+        remove(message) { 
+            this.socket.emit('message.remove', message) 
         },
-        methods: {
-            remove(message) { 
-                this.socket.emit('message.remove', message) 
-            },
-            removeAll() { 
-                this.socket.emit('message.removeAll') 
-            },
+        removeAll() { 
+            this.socket.emit('message.removeAll') 
         },
-    }  
+    },
+}  
 </script>
 
 <style lang="scss" scoped>
 .messages {
-    width: 100%;
-    max-height: 650px;
-    overflow: auto;
-    }
+  width: 100%;
+  max-height: 650px;
+  overflow: auto;
+}
 </style>

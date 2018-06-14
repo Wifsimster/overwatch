@@ -29,13 +29,12 @@
 </template>
 
 <script>
-import alertify from 'alertifyjs'
-import DateTime from '../components/DateTimeComponent.vue'
-import Freebox from '../components/FreeboxComponent.vue'
-import Camera from '../components/CameraComponent.vue'
-import Lights from '../components/yeelight/LightsComponent.vue'
-import Esp8266 from '../components/esp8266/Esp8266Component.vue'
-import Netatmo from '../components/netatmo/NetatmoComponent.vue'
+const DateTime = () => import('../components/DateTimeComponent.vue')
+const Freebox = () => import('../components/FreeboxComponent.vue')
+const Camera = () => import('../components/CameraComponent.vue')
+const Lights = () => import('../components/yeelight/LightsComponent.vue')
+const Esp8266 = () => import('../components/esp8266/Esp8266Component.vue')
+const Netatmo = () => import('../components/netatmo/NetatmoComponent.vue')
 export default {
     components: {
         DateTime,
@@ -45,9 +44,13 @@ export default {
         Netatmo,
         Esp8266,
     },
+    computed: {
+        socket() {
+            return this.$store.getters.socket.socket
+        }
+    },
     data() {
         return {
-            socket: this.$store.state.socket.socket,
             settings: null,
             camera: null,
         }
@@ -74,5 +77,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../sass/views/dashboard';
+@import '../sass/dashboard';
 </style>

@@ -34,9 +34,9 @@
 </template>
 
 <script>
-import Multiselect from 'vue-multiselect'
-import Modal from '../ModalComponent.vue'
-import UUID from '../../mixins/uuid'
+const Multiselect = () => import('vue-multiselect')
+const Modal = () => import('../ModalComponent.vue')
+import Vue from 'vue'
 export default {
     components: {
         Multiselect,
@@ -47,9 +47,13 @@ export default {
             type: Object,
         },
     },
+    computed: {
+        socket() {
+            return this.$store.getters.socket
+        }
+    },
     data() {
         return {
-            socket: this.$store.state.socket.socket,
             types: [],
             locations: [],
             selectedTypes: [],
@@ -59,7 +63,7 @@ export default {
         }
     },
     created() {
-        this.uuid = UUID.getOne()
+        this.uuid = Vue.getUUID()
 
         this.socket.emit('type.getAll', { uuid: this.uuid })
 
@@ -101,5 +105,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../sass/components/device-edit'
+@import '../../sass/components/device-edit';
 </style>

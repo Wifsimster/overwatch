@@ -37,15 +37,22 @@
 <script>
 import icon from '../../assets/motion.png'
 import moment from 'moment'
-import Modal from '../ModalComponent.vue'
-import UUID from '../../mixins/uuid'
+const Modal = () => import('../ModalComponent.vue')
+import Vue from 'vue'
 export default {
     name: 'Esp8266Motion',
-    components: { Modal },
+    components: { 
+        Modal 
+    },
     props: {
         id: {
             type: Number,
             required: true,
+        }
+    },
+    computed: {
+        socket() {
+            return this.$store.getters.socket
         }
     },
     data() {
@@ -57,13 +64,8 @@ export default {
             modalShow: false,
         }
     },
-    computed: {
-        socket() {
-            return this.$store.getters.socket
-        },
-    },
     created() {
-        this.uuid = UUID.getOne()
+        this.uuid = Vue.getUUID()
 
         this.socket.emit('device.getOne', { uuid: this.uuid, id: this.id })
 
@@ -168,5 +170,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../sass/components/esp8266-motion'
+@import '../../sass/components/esp8266-motion';
 </style>

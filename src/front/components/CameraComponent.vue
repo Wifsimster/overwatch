@@ -12,8 +12,7 @@ export default {
     port: String,
   },
   data() {
-    return {
-      socket: this.$store.state.socket.socket,
+    return {      
       id: 'canvas_' + this.port
     }
   },

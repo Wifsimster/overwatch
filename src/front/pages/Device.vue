@@ -9,8 +9,10 @@
 </template>
 
 <script>
-import Devices from '../components/device/DevicesComponent.vue'
+const Devices = () => import('../components/device/DevicesComponent.vue')
 export default {
-    components: { Devices },
+    components: { 
+        Devices 
+    }
 }
 </script>

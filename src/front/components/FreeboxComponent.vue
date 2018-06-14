@@ -32,18 +32,24 @@
 </template>
 
 <script>
-import Modal from './ModalComponent.vue'
+const Modal = () => import('./ModalComponent.vue')
 export default {
-    components: { Modal },
+    components: { 
+        Modal 
+    },
     props: {
         settings: {
             type: Object,
             required: true,
         }
     },
+    computed: {
+        socket() {
+            return this.$store.getters.socket
+        },
+    },
     data() {
-        return {
-            socket: this.$store.state.socket.socket,
+        return {            
             auth: {},
             login: {},
             session: {},
@@ -123,8 +129,8 @@ export default {
 @import '../sass/_device.scss';
 
 .freebox {
-    span {
-        font-size: 22px;
-        }
-    }
+  span {
+    font-size: 22px;
+  }
+}
 </style>

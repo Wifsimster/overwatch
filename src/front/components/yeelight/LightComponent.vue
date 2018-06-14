@@ -47,12 +47,12 @@
 </template>
 
 <script>
-import Modal from '../ModalComponent.vue'
-import Slider from '../SliderComponent.vue'
+const Modal = () => import('../ModalComponent.vue')
+const Slider = () => import('../SliderComponent.vue')
 import bulbImg from '../../assets/bulb.png'
-import Switchy from '../SwitchComponent.vue'
-import ColorsPicker from '../ColorsPickerComponent.vue'
-import Colors from '../../mixins/colors'
+const Switchy = () => import('../SwitchComponent.vue')
+const ColorsPicker = () => import('../ColorsPickerComponent.vue')
+import Vue from 'vue'
 export default {
     components: {
         Modal,
@@ -66,9 +66,13 @@ export default {
             required: true,
         },
     },
+    computed: {
+        socket() {
+            return this.$store.getters.socket
+        },
+    },
     data() {
-        return {
-            socket: this.$store.state.socket.socket,
+        return {            
             bulbImg: bulbImg,
             error: null,
             modalShow: false,

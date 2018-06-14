@@ -6,7 +6,8 @@ const sequelize = new Sequelize(db.database, db.user, db.password, {
     host: db.host,
     dialect: 'sqlite',
     storage: './src/back/db/database.sqlite',
-    logging: false
+    logging: false,
+    operatorsAliases: false
 })
 
 module.exports = sequelize

@@ -1,22 +1,18 @@
-const state = {
-  socket: null,
-}
-
-const getters = {
-  socket: state => state.socket,
-}
-
-const mutations = {
-  setSocket (state, data) { state.socket = data },
-}
-
-const actions = {
-    setSocket({ commit, state }, data) { commit('setSocket', data) },
-}
-
 export default {
-  state,
-  getters,
-  actions,
-  mutations
+  state: {
+    socket: null
+  },
+  getters: {
+    socket: state => state.socket
+  },
+  mutations: {
+    setSocket(state, data) {
+      state.socket = data
+    }
+  },
+  actions: {
+    setSocket: ({ commit, state }, data) => {
+      commit('setSocket', data)
+    }
+  }
 }

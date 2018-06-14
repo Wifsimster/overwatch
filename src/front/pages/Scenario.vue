@@ -7,8 +7,10 @@
 </template>
 
 <script>
-import Scenario from '../components/scenario/ScenariiComponent.vue'
+const Scenario = () => import('../components/scenario/ScenariiComponent.vue')
 export default {
-    components: { Scenario },
+    components: { 
+        Scenario 
+    }
 }
 </script>

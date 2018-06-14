@@ -15,7 +15,7 @@
     </tr>
     </thead>
             <tbody>
-                <tr v-for="device in devices">
+                <tr v-for="device in devices" :key="device.id">
                     <td>{{ device.name }}</td>
                     <td>{{ device.mac }}</td>
                     <td>{{ device.ip }}</td>
@@ -51,44 +51,48 @@
 </template>
 
 <script>
-    import io from 'socket.io-client'
-    import EditDeviceModal from './EditDeviceModalComponent.vue'
-    import RemoveDeviceModal from './RemoveDeviceModalComponent.vue'
-    export default {
-        components: {
-            EditDeviceModal,
-            RemoveDeviceModal,
+const EditDeviceModal = () => import('./EditDeviceModalComponent.vue')
+const RemoveDeviceModal = () => import('./RemoveDeviceModalComponent.vue')
+export default {
+    components: {
+        EditDeviceModal,
+        RemoveDeviceModal,
+    },
+    computed: {
+        socket() {
+            return this.$store.getters.socket
         },
-        data() {
-            return {
-                devices: [],
-                socket: io(),
-            }
-        },
-        created() {
+    },
+    data() {
+        return {
+            devices: [],
+            socket: io(),
+        }
+    },
+    created() {
+        this.socket.emit('device.getAll')
+        this.socket.on('device.getAll.result', (devices) => {
+            this.devices = devices
+        })
+        this.socket.on('device.removeAll.result', (rst) => {
+            this.devices = []
+        })
+        this.socket.on('device.add.result', (rst) => {
             this.socket.emit('device.getAll')
-            this.socket.on('device.getAll.result', (devices) => {
-                this.devices = devices
-            })
-            this.socket.on('device.removeAll.result', (rst) => {
-                this.devices = []
-            })
-            this.socket.on('device.add.result', (rst) => {
-                this.socket.emit('device.getAll')
-            })
+        })
+    },
+    methods: {
+        openModal(device) {
+            this.$store.commit('openModal', device)
         },
-        methods: {
-            openModal(device) {
-                this.$store.commit('openModal', device)
-            },
-            openRemoveModal(device) {
-                this.$store.commit('openRemoveModal', device)
-            },
-            removeAll() { 
-                this.socket.emit('device.removeAll') 
-            },
+        openRemoveModal(device) {
+            this.$store.commit('openRemoveModal', device)
         },
-    }  
+        removeAll() { 
+            this.socket.emit('device.removeAll') 
+        },
+    },
+}  
 </script>
 
 <style lang="scss" scoped></style>

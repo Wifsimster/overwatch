@@ -1,0 +1,238 @@
+@mixin clearfix() {
+  &:before,
+  &:after {
+    content: "";
+    display: table;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+@mixin center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin vertical-align {
+  position: relative;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  -ms-border-radius: $radius;
+  border-radius: $radius;
+}
+
+@mixin truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin opacity($opacity) {
+  opacity: $opacity;
+  $opacity-ie: $opacity * 100;
+  filter: alpha(opacity=$opacity-ie);
+}
+
+@mixin transform($transforms) {
+  -moz-transform: $transforms;
+  -o-transform: $transforms;
+  -ms-transform: $transforms;
+  -webkit-transform: $transforms;
+  transform: $transforms;
+}
+
+@mixin transition($transition) {
+  -moz-transition: #{$transition};
+  -o-transition: #{$transition};
+  -ms-transition: #{$transition};
+  -webkit-transition: #{$transition};
+  transition: #{$transition};
+}
+
+@mixin box-shadow($params) {
+  -webkit-box-shadow : $params;
+  -moz-box-shadow    : $params;
+  box-shadow         : $params;
+}
+
+@mixin rotate ($deg) {
+  @include transform(rotate(#{$deg}deg));
+}
+
+@mixin keyframes($animation-name) {
+  @-webkit-keyframes #{$animation-name} {
+    @content;
+  }
+  @-moz-keyframes #{$animation-name} {
+    @content;
+  }
+  @-ms-keyframes #{$animation-name} {
+    @content;
+  }
+  @-o-keyframes #{$animation-name} {
+    @content;
+  }
+  @keyframes #{$animation-name} {
+    @content;
+  }
+}
+
+// Rotate animation 360
+@-moz-keyframes rotate360 {
+  0% {
+    -moz-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes rotate360 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotate360 {
+  0% {
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@mixin animation($str) {
+  -webkit-animation: #{$str};
+  -moz-animation: #{$str};
+  -ms-animation: #{$str};
+  -o-animation: #{$str};
+  animation: #{$str};
+}
+
+@mixin bp($point) {
+  @if $point == xlg { // 1400px
+    @media (max-width: $screen-xlg) { @content; }
+  }
+  @else if $point == lg { // 1200px
+    @media (max-width: $screen-lg) { @content; }
+  }
+  @else if $point == md { // 992px
+    @media (max-width: $screen-md)  { @content; }
+  }
+  @else if $point == sm { // 768px
+    @media (max-width: $screen-sm)  { @content; }
+  }
+  @else if $point == xs { // 480px
+    @media (max-width: $screen-xs)  { @content; }
+  }
+}
+
+@mixin triangle($direction, $size: 10px, $color: #222){
+  content: '';
+  display: block;
+  position: absolute;
+  height: 0; width: 0;
+  @if ($direction == up){
+    border-bottom: $size solid $color;
+    border-left: $size solid transparent;
+    border-right: $size solid transparent;
+  }
+  @else if ($direction == down){
+    border-top: $size solid $color;
+    border-left: $size solid transparent;
+    border-right: $size solid transparent;
+  }
+  @else if ($direction == left){
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-right: $size solid $color;
+  }
+  @else if ($direction == right){
+    border-top: $size solid transparent;
+    border-bottom: $size solid transparent;
+    border-left: $size solid $color;
+  }
+}
+
+@mixin flex {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -moz-flex;
+  display: -webkit-flex;
+  display: flex;
+}
+
+/* Forms label + input sizing */
+@mixin label-width($prt, $important:"") {
+  & > label { width: $prt% #{$important}; }
+  @include prefix($prt);
+}
+
+@mixin input-width($prt, $offset:35px, $important:"") {
+  & > input, & > textarea, & > .select-wrapper, & > .file-field, & > .dropdown {
+    width: calc(#{$prt}% - #{$offset}) #{$important};
+  }
+}
+
+@mixin prefix($prt, $offset:10px) {
+  &.prefix {
+    i {
+      left: calc(#{$prt}% + #{$offset});
+    }
+    input {
+      padding-left: 35px;
+    }
+  }
+}
+
+@mixin prefix-right($input, $label:0) {
+  $padding-left: 10px;
+  $padding-right: 35px;
+  
+  $label: $label + %;
+  $prt: (#{$label} + #{$input});
+  $offset: #{$padding-right} + 5px;
+  
+  &.prefix-right {
+    input {
+      padding: 0 $padding-right 0 $padding-left;
+      width: calc(#{$input} - #{$padding-right} - #{$padding-left}) !important;
+    }
+    i {
+      left: calc(#{$prt}% - #{$offset}) !important;
+    }
+  }
+}
+
+// Extend
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none;   /* Chrome/Safari/Opera */
+  -khtml-user-select: none;    /* Konqueror */
+  -moz-user-select: none;      /* Firefox */
+  -ms-user-select: none;       /* IE/Edge */
+  user-select: none;           /* non-prefixed version */
+}

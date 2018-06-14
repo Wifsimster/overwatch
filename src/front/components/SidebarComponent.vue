@@ -47,12 +47,14 @@
 </template>
 
 <script>
-import MqttHealth from './MqttHealthComponent.vue'
+const MqttHealth = () => import('./MqttHealthComponent.vue')
 export default {
-    components: { MqttHealth },
+    components: { 
+        MqttHealth 
+    },
 }
 </script>
 
 <style lang="scss" scoped>
-@import '../sass/components/sidebar'
+@import '../sass/components/sidebar';
 </style>

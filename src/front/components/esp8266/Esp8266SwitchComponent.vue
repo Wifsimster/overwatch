@@ -39,17 +39,25 @@
 
 <script>
 import icon from '../../assets/switch.png'
-import Switchy from '../SwitchComponent.vue'
+const Switchy = () => import('../SwitchComponent.vue')
 import moment from 'moment'
-import Modal from '../ModalComponent.vue'
-import UUID from '../../mixins/uuid'
+const Modal = () => import('../ModalComponent.vue')
+import Vue from 'vue'
 export default {
     name: 'Esp8266Switch',
-    components: { Switchy, Modal },
+    components: { 
+        Switchy, 
+        Modal
+    },
     props: {
         id: {
             type: Number,
             required: true,
+        }
+    },
+    computed: {
+        socket() {
+            return this.$store.getters.socket
         }
     },
     data() {
@@ -63,13 +71,8 @@ export default {
             state: false,
         }
     },
-    computed: {
-        socket() {
-            return this.$store.getters.socket
-        },
-    },
     created() {
-        this.uuid = UUID.getOne()
+        this.uuid = Vue.getUUID()
 
         this.socket.emit('device.getOne', { uuid: this.uuid, id: this.id })
 
@@ -148,5 +151,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../sass/components/esp8266-switch'
+@import '../../sass/components/esp8266-switch';
 </style>

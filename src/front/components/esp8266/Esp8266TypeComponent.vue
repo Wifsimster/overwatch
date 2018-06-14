@@ -99,18 +99,26 @@ import dimmer from '../../assets/dimmer.png'
 import luminosity from '../../assets/luminosity.png'
 import gas from '../../assets/gas.png'
 import rgbw from '../../assets/led_strip.png'
-import Esp8266Switch from './Esp8266SwitchComponent.vue'
-import Esp8266Motion from './Esp8266MotionComponent.vue'
-import UUID from '../../mixins/uuid'
+const Esp8266Switch = () => import('./Esp8266SwitchComponent.vue')
+const Esp8266Motion = () => import('./Esp8266MotionComponent.vue')
+import Vue from 'vue'
 import moment from 'moment'
 export default {
     name: 'Esp8266Type',
-    components: { Esp8266Switch, Esp8266Motion, },
+    components: { 
+        Esp8266Switch, 
+        Esp8266Motion
+    },
     props: {
         device: {
             type: Object,
             required: true,
         },
+    },
+    computed: {
+        socket() {
+            return this.$store.getters.socket
+        }
     },
     data() {
         return {
@@ -128,13 +136,8 @@ export default {
             isDead: false,
         }
     },
-    computed: {
-        socket() {
-            return this.$store.getters.socket
-        },
-    },
     created() {
-        this.uuid = UUID.getOne()
+        this.uuid = Vue.getUUID()
 
         this.getData(this.device)
         //this.checkHealth(this.device)

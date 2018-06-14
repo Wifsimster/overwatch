@@ -10,12 +10,10 @@
 
 <script>    
 export default {
-    data() {
-        return {
-            socket: this.$store.state.socket.socket,
+    computed: {
+        socket() {
+            return this.$store.getters.socket.socket
         }
-    },
-    components: {},
-    created() { },
+    }
 }
 </script>

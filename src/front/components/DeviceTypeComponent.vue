@@ -69,67 +69,70 @@
 </template>
 
 <script>
-    import thermometer from '../assets/thermometer.png'
-    import humidity from '../assets/humidity.png'
-    import pressure from '../assets/pressure.png'
-    import _switch from '../assets/switch.png'
-    import dimmer from '../assets/dimmer.png'
-    import luminosity from '../assets/luminosity.png'
-    import gas from '../assets/gas.png'
-    import rgbw from '../assets/led_strip.png'
-    import moment from 'moment'
-    import io from 'socket.io-client'
-    export default {
-        props: {
-            device: Object,
+import thermometer from '../assets/thermometer.png'
+import humidity from '../assets/humidity.png'
+import pressure from '../assets/pressure.png'
+import _switch from '../assets/switch.png'
+import dimmer from '../assets/dimmer.png'
+import luminosity from '../assets/luminosity.png'
+import gas from '../assets/gas.png'
+import rgbw from '../assets/led_strip.png'
+import moment from 'moment'
+export default {
+    props: {
+        device: Object,
+    },
+    computed: {
+        socket() {
+            return this.$store.getters.socket
         },
-        data() {
-            return {
-                socket: io(),
-                data: {},
-                icons: { 
-                    temperature: thermometer, 
-                    humidity: humidity,
-                    pressure: pressure,
-                    switch: _switch,
-                    dimmer: dimmer,
-                    luminosity: luminosity,
-                    gas: gas,
-                    rgbw: rgbw,
-                },
-                lastSeen: null,
-                isDead: false,
-            }
-        },
-        created() {
-            if(this.device.messages && this.device.messages.length > 0) {
-                this.getData()
-            }
-        },
-        methods: {
-            getData() {
-                this.device.messages.sort((a, b) => {
-                    return new Date(a.createdAt) - new Date(b.createdAt)
-                })
-                this.data = JSON.parse(this.device.messages[this.device.messages.length - 1].data)
-                this.lastSeen = this.device.messages[this.device.messages.length - 1].createdAt
-                if(moment().diff(this.lastSeen, 'days') > 0) { this.isDead = true }
+    },
+    data() {
+        return {
+            data: {},
+            icons: { 
+                temperature: thermometer, 
+                humidity: humidity,
+                pressure: pressure,
+                switch: _switch,
+                dimmer: dimmer,
+                luminosity: luminosity,
+                gas: gas,
+                rgbw: rgbw,
             },
+            lastSeen: null,
+            isDead: false,
+        }
+    },
+    created() {
+        if(this.device.messages && this.device.messages.length > 0) {
+            this.getData()
+        }
+    },
+    methods: {
+        getData() {
+            this.device.messages.sort((a, b) => {
+                return new Date(a.createdAt) - new Date(b.createdAt)
+            })
+            this.data = JSON.parse(this.device.messages[this.device.messages.length - 1].data)
+            this.lastSeen = this.device.messages[this.device.messages.length - 1].createdAt
+            if(moment().diff(this.lastSeen, 'days') > 0) { this.isDead = true }
         },
-        watch: {
-            device() {
-                this.device.messages.sort((a, b) => {
-                    return new Date(a.createdAt) - new Date(b.createdAt)
-                })
+    },
+    watch: {
+        device() {
+            this.device.messages.sort((a, b) => {
+                return new Date(a.createdAt) - new Date(b.createdAt)
+            })
 
-                this.data = JSON.parse(this.device.messages[this.device.messages.length - 1].data)
+            this.data = JSON.parse(this.device.messages[this.device.messages.length - 1].data)
 
-                this.lastSeen = this.device.messages[this.device.messages.length - 1].createdAt
+            this.lastSeen = this.device.messages[this.device.messages.length - 1].createdAt
 
-                if(moment().diff(this.lastSeen, 'days') > 0) { this.isDead = true }
-            }
-        },
-    }
+            if(moment().diff(this.lastSeen, 'days') > 0) { this.isDead = true }
+        }
+    },
+}
 </script>
 
 <style lang="scss" scoped>

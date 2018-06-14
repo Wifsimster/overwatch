@@ -21,35 +21,27 @@
 </template>
 
 <script>
-    import io from 'socket.io-client'
-    import { mapGetters, mapActions } from 'vuex'
-    export default {
-        data() { 
-            return {
-                socket: io(),
-            }
-        },
-        computed: {
-            ...mapGetters({
-                isOpenModal: 'removeModal',
-                device: 'removeDevice',
-            })
-        },
-        created() {
-            this.socket.on('device.remove.result', (rst) => {
-                this.$store.commit('closeModal')
-                this.socket.emit('device.getAll')
-            })
-        },
-        methods: {
-            remove() { 
-                this.socket.emit('device.remove', this.device) 
-            },
-            close() {
-                this.$store.commit('closeModal')
-            },
+export default {
+    computed: {
+        socket() {
+            return this.$store.getters.socket
         }
+    },
+    created() {
+        this.socket.on('device.remove.result', (rst) => {
+            this.$store.commit('closeModal')
+            this.socket.emit('device.getAll')
+        })
+    },
+    methods: {
+        remove() { 
+            this.socket.emit('device.remove', this.device) 
+        },
+        close() {
+            this.$store.commit('closeModal')
+        },
     }
+}
 </script>
 
 <style lang="scss" scoped>

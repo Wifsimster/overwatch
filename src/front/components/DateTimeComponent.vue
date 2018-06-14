@@ -21,9 +21,11 @@
 </template>
 
 <script>
-import Modal from './ModalComponent.vue'
+const Modal = () => import('./ModalComponent.vue')
 export default {
-    components: { Modal },
+    components: { 
+        Modal 
+    },
     props: {
         settings: {
             type: Object,
@@ -50,5 +52,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../sass/components/date-time'
+@import '../sass/components/date-time';
 </style>

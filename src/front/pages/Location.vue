@@ -33,19 +33,22 @@
 </template>
 
 <script>
-import UUID from '../mixins/uuid'
-export default {
-    components: {},
+import Vue from 'vue'
+export default {    
+    computed: {
+        socket() {
+            return this.$store.getters.socket.socket
+        }
+    },
     data() {
         return {
             locations: [],
-            socket: this.$store.state.socket.socket,
             edit: false,
             uuid: null,
         }
     },
     created() {
-        this.uuid = UUID.getOne()
+        this.uuid = Vue.getUUID()
 
         this.socket.emit('location.getAll', { uuid: this.uuid })
 
@@ -92,5 +95,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../sass/components/location'
+@import '../sass/components/location';
 </style>

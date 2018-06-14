@@ -1,27 +1,29 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
+const Dashboard = () => '../pages/Dashboard.vue'
+const Device = () => '../pages/Device.vue'
+const Message = () => '../pages/Message.vue'
+const Type = () => '../pages/Type.vue'
+const Location = () => '../pages/Location.vue'
+const Backup = () => '../pages/Backup.vue'
+const Settings = () => '../pages/Settings.vue'
+const Scenario = () => '../pages/Scenario.vue'
+
 Vue.use(Router)
 
-import DashboardView from '../views/DashboardView.vue'
-import DeviceView from '../views/DeviceView.vue'
-import MessageView from '../views/MessageView.vue'
-import TypeView from '../views/TypeView.vue'
-import LocationView from '../views/LocationView.vue'
-import BackupView from '../views/BackupView.vue'
-import SettingsView from '../views/SettingsView.vue'
-import ScenarioView from '../views/ScenarioView.vue'
-
-export default new Router({
-    scrollBehavior: () => ({ y: 0 }),
-    routes: [
-        { path: '/', component: DashboardView },
-        { path: '/messages', component: MessageView },
-        { path: '/devices', component: DeviceView },
-        { path: '/types', component: TypeView },
-        { path: '/locations', component: LocationView },
-        { path: '/backup', component: BackupView },
-        { path: '/settings', component: SettingsView },
-        { path: '/scenario', component: ScenarioView },
-    ]
+let router = new Router({
+  scrollBehavior: () => ({ y: 0 }),
+  routes: [
+    { path: '/', component: Dashboard },
+    { path: '/messages', component: Message },
+    { path: '/devices', component: Device },
+    { path: '/types', component: Type },
+    { path: '/locations', component: Location },
+    { path: '/backup', component: Backup },
+    { path: '/settings', component: Settings },
+    { path: '/scenario', component: Scenario }
+  ]
 })
+
+export default router

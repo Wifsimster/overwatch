@@ -1,0 +1,37 @@
+.notification-container {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  z-index: 9999;
+
+  .notify-me {
+    position: relative;
+    z-index: 9999;
+    bottom: 10px;
+    margin: 0 10px 10px 0;
+    padding: 20px;
+    width: 350px;
+    .close {
+      position: absolute;
+      font-size: 32px;
+      top: 0;
+      right: 10px;
+      cursor: pointer;
+    }
+    h1 {
+      font-size: 18px;
+    }
+    p {
+      font-size: 14px;
+    }
+  }
+
+  .notify-me:last-child {
+    margin-bottom: 0;
+  }
+}

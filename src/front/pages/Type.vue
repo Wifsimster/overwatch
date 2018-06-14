@@ -29,19 +29,22 @@
 </template>
 
 <script>
-import UUID from '../mixins/uuid'
+import Vue from 'vue'
 export default {
-    components: {},
+    computed: {
+        socket() {
+            return this.$store.getters.socket.socket
+        }
+    },
     data() {
         return {
             types: [],
-            socket: this.$store.state.socket.socket,
             edit: false,
             uuid: null,
         }
     },
     created() {
-        this.uuid = UUID.getOne()
+        this.uuid = Vue.getUUID()
 
         this.socket.emit('type.getAll', { uuid: this.uuid })
 

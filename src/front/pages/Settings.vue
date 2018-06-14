@@ -86,9 +86,13 @@
 
 <script>
 export default {
+    computed: {
+        socket() {
+            return this.$store.getters.socket.socket
+        }
+    },
     data() {
         return {
-            socket: this.$store.state.socket.socket,
             settings: null,
         }
     },

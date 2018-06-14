@@ -1,31 +1,35 @@
-const state = {
-    type: null,
-    message: null,
-}
-
-const getters = {
-    alert: state => state,
-}
-
-const actions = {
-    setAlert({ commit, state }, data) { commit('setAlert', data) },
-    resetAlert({ commit, state }) { commit('resetAlert') }
-}
-
-const mutations = {    
-    setAlert (state, data) {
-        state.type = data.type
-        state.message = data.message
-    },
-    resetAlert (state) {
-        state.type = null
-        state.message = null
-    },
-}
-
 export default {
-    state,
-    getters,
-    actions,
-    mutations
+  state: {
+    message: null,
+    type: 'error',
+    show: false,
+    delay: null
+  },
+  getters: {
+    alert: state => state
+  },
+  mutations: {
+    setAlert(state, data) {
+      state.show = true
+      if (data.type) {
+        state.type = data.type
+      }
+      if (data.message) {
+        state.message = data.message
+      }
+      if (data.delay) {
+        state.delay = data.delay
+      }
+    },
+    resetAlert(state) {
+      state.show = false
+      state.message = null
+      state.type = null
+      state.delay = null
+    }
+  },
+  actions: {
+    setAlert: ({ commit, state }, data) => commit('setAlert', data),
+    resetAlert: ({ commit }) => commit('resetAlert')
+  }
 }

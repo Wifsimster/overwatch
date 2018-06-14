@@ -1,0 +1,58 @@
+@import "colors";
+
+$height: 34px;
+
+.multiselect--disabled .multiselect__select {
+  background-color: transparent;
+}
+
+.multiselect {
+  vertical-align: middle;
+  width: auto !important;
+  min-height: $height !important;
+  display: inline-block !important;
+  border: 1px solid $input-border-color;
+  background-color: $input-background-color;
+  &.with-editor {
+    z-index: unset;
+  }
+  &.with-index {
+    z-index: 10;
+  }
+  .multiselect__tags {
+    border: none;
+    min-height: $height;
+    padding: 0 25px 0 5px;
+    background-color: transparent;
+    input {
+      height: 32px;
+      margin: 0 !important;
+      width: 228px !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 10px 5px !important;
+    }
+    .multiselect__tag {
+      background-color: $primary-color;
+      line-height: 16px;
+      margin: 5px 3px;
+    }
+    .multiselect__tag-icon:hover {
+      background-color: $primary-color;
+    }
+  }
+  &.with-editor .multiselect__content {
+    z-index: unset;
+  }
+  .multiselect__content-wrapper {
+    z-index: 100;
+  }
+  .multiselect__content {
+    border: 1px solid $input-border-color;
+    background-color: $input-background-color;
+  }
+  .multiselect__select {
+    height: $height;
+    width: $height;
+  }
+}

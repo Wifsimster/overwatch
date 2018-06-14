@@ -11,23 +11,29 @@
 </template>
 
 <script>
-import Modal from '../ModalComponent.vue'
-import UUID from '../../mixins/uuid'
+const Modal = () => import('../ModalComponent.vue')
+import Vue from 'vue'
 export default {
-    components: { Modal },
+    components: { 
+        Modal 
+    },
     props: {
         device: {
             type: Object,
         },
     },
+    computed: {
+        socket() {
+            return this.$store.getters.socket
+        }
+    },
     data() {
-        return {
-            socket: this.$store.state.socket.socket,
+        return {            
             uuid: null,
         }
     },
     created() {
-        this.uuid = UUID.getOne()
+        this.uuid = Vue.getUUID()
 
         this.socket.on('message.removeAll.result.' + this.uuid, () => {
             this.$emit('removeAll')

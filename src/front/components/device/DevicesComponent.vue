@@ -46,14 +46,10 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>
-    
-                <edit-modal v-if="editShow" :device="editDevice" @update="onUpdate" @close="editShow = false"></edit-modal>
-    
-                <remove-modal v-if="removeShow" :device="removeDevice" @remove="onRemove" @close="removeShow = false"></remove-modal>
-    
-                <remove-all-modal v-if="removeAllShow" @removeAll="onRemoveAll" @close="removeAllShow = false"></remove-all-modal>
-    
+                </table>    
+                <edit-modal v-if="editShow" :device="editDevice" @update="onUpdate" @close="editShow = false"></edit-modal>    
+                <remove-modal v-if="removeShow" :device="removeDevice" @remove="onRemove" @close="removeShow = false"></remove-modal>    
+                <remove-all-modal v-if="removeAllShow" @removeAll="onRemoveAll" @close="removeAllShow = false"></remove-all-modal>    
             </div>
             <div v-else>
                 <br>
@@ -64,19 +60,23 @@
 </template>
 
 <script>
-import EditModal from './DeviceEditModalComponent.vue'
-import RemoveModal from './DeviceRemoveModalComponent.vue'
-import RemoveAllModal from './DeviceRemoveAllModalComponent.vue'
-import UUID from '../../mixins/uuid'
+const EditModal = () => import('./DeviceEditModalComponent.vue')
+const RemoveModal = () => import('./DeviceRemoveModalComponent.vue')
+const RemoveAllModal = () => import('./DeviceRemoveAllModalComponent.vue')
+import Vue from 'vue'
 export default {
     components: {
         EditModal,
         RemoveModal,
         RemoveAllModal,
     },
+    computed: {
+        socket() {
+            return this.$store.getters.socket
+        }
+    },
     data() {
-        return {
-            socket: this.$store.state.socket.socket,
+        return {            
             devices: null,
             editDevice: null,
             removeDevice: null,
@@ -87,7 +87,7 @@ export default {
         }
     },
     created() {
-        this.uuid = UUID.getOne()
+        this.uuid = Vue.getUUID()
 
         this.socket.emit('device.getAll', { uuid: this.uuid })
 

@@ -35,9 +35,13 @@
 
 <script>
 export default {
+    computed: {
+        socket() {
+            return this.$store.getters.socket
+        }
+    },
     data() {
-        return {
-            socket: this.$store.state.socket.socket,
+        return {            
             online: false,
             offline: false,
             close: false,
@@ -88,5 +92,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../sass/components/mqtt-health'
+@import '../sass/components/mqtt-health';
 </style>

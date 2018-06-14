@@ -41,6 +41,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../sass/components/colors-picker'
+@import '../sass/components/colors-picker';
 </style>
 

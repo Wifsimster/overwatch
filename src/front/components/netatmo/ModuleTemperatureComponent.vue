@@ -37,10 +37,12 @@
 
 <script>
 import icon from '../../assets/thermometer.png'
-import Modal from '../ModalComponent.vue'
+const Modal = () => import('../ModalComponent.vue')
 import moment from 'moment'
 export default {
-    components: { Modal },
+    components: { 
+        Modal 
+    },
     props: {
         device: {
             type: Object,

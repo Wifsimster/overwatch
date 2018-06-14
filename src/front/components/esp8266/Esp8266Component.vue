@@ -17,7 +17,7 @@
 <script>
 import Esp8266Switch from './Esp8266SwitchComponent.vue'
 import Esp8266Motion from './Esp8266MotionComponent.vue'
-import UUID from '../../mixins/uuid'
+import Vue from 'vue'
 export default {
     components: {
         Esp8266Switch,
@@ -29,19 +29,19 @@ export default {
             required: true,
         },
     },
+    computed: {
+        socket() {
+            return this.$store.getters.socket
+        }
+    },
     data() {
         return {
             devices: [],
             uuid: null,
         }
     },
-    computed: {
-        socket() {
-            return this.$store.getters.socket
-        },
-    },
     created() {
-        this.uuid = UUID.getOne()
+        this.uuid = Vue.getUUID()
 
         this.socket.emit('device.getAll', { uuid: this.uuid })
 
@@ -86,5 +86,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../sass/components/esp8266'
+@import '../../sass/components/esp8266';
 </style>
