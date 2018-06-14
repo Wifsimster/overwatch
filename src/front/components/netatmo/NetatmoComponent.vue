@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import netatmo from 'netatmo'
+// import netatmo from 'netatmo'
 import Humidity from './HumidityComponent.vue'
 import OutdoorHumidity from './ModuleHumidityComponent.vue'
 import Temperature from './TemperatureComponent.vue'
@@ -44,24 +44,24 @@ export default {
         }
     },
     created() {
-        this.netatmoApi = new netatmo(this.settings.netatmo)
-        this.getNetatmoData()
-        setInterval(() => { this.getNetatmoData() }, 300000)
+        // this.netatmoApi = new netatmo(this.settings.netatmo)
+        // this.getNetatmoData()
+        // setInterval(() => { this.getNetatmoData() }, 300000)
     },
     methods: {
-        getNetatmoData() {
-            this.netatmoApi.getStationsData((err, devices) => {
-                if (!err) {
-                    this.netatmoDevice = devices[0]
-                } else {
-                    console.error(err)
-                }
-            })
-        },
+        // getNetatmoData() {
+        //     this.netatmoApi.getStationsData((err, devices) => {
+        //         if (!err) {
+        //             this.netatmoDevice = devices[0]
+        //         } else {
+        //             console.error(err)
+        //         }
+        //     })
+        // },
     }
 }
 </script>
 
 <style lang="scss" scoped>
-@import '../../sass/components/netatmo'
+@import '../../sass/components/netatmo';
 </style>

@@ -51,5 +51,5 @@ export default {
 
 <style lang="scss">
 @import '../sass/components/slider';
-@import '../../../node_modules/nouislider/distribute/nouislider.css';
+// @import '../../../node_modules/nouislider/distribute/nouislider.css';
 </style>

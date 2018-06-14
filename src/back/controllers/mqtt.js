@@ -6,7 +6,6 @@ const scenario = require("../controllers/scenario")
 const mqtt = require("mqtt")
 const jsonfile = require("jsonfile")
 const file = "config/default.json"
-const Promise = require("promise")
 
 module.exports = io => {
   return new Promise((resolve, reject) => {

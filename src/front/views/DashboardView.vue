@@ -74,5 +74,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../sass/views/dashboard'
+@import '../sass/views/dashboard';
 </style>
