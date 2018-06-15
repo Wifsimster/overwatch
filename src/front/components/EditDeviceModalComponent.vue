@@ -70,8 +70,8 @@ export default {
         Multiselect 
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         },
     },
     data() { 
@@ -84,12 +84,12 @@ export default {
         }
     },
     created() {
-        this.socket.emit('type.getAll')
-        this.socket.on('type.getAll.result', (types) => {
+        this.ws.emit('type.getAll')
+        this.ws.on('type.getAll.result', (types) => {
             this.types = types
         })
-        this.socket.emit('location.getAll')
-        this.socket.on('location.getAll.result', (locations) => {
+        this.ws.emit('location.getAll')
+        this.ws.on('location.getAll.result', (locations) => {
             this.locations = locations
         })
     },
@@ -105,7 +105,7 @@ export default {
             this.device.types = types
         },
         edit() {
-            this.socket.emit('device.update', this.device)
+            this.ws.emit('device.update', this.device)
             this.$store.commit('closeModal')
         },
         close() {

@@ -23,19 +23,19 @@
 <script>
 export default {
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         }
     },
     created() {
-        this.socket.on('device.remove.result', (rst) => {
+        this.ws.on('device.remove.result', (rst) => {
             this.$store.commit('closeModal')
-            this.socket.emit('device.getAll')
+            this.ws.emit('device.getAll')
         })
     },
     methods: {
         remove() { 
-            this.socket.emit('device.remove', this.device) 
+            this.ws.emit('device.remove', this.device) 
         },
         close() {
             this.$store.commit('closeModal')

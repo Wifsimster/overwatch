@@ -31,8 +31,8 @@ export default {
         light: Object,
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         }
     },
     data() {
@@ -60,50 +60,50 @@ export default {
     },
     methods: {
         toggle() {
-            this.socket.emit('light.toggle', this.light.id)
-            this.socket.on('light.toggle.result', (rst) => {
+            this.ws.emit('light.toggle', this.light.id)
+            this.ws.on('light.toggle.result', (rst) => {
                 this.state = !this.state
             })
-            this.socket.on('light.toggle.error', (err) => {
+            this.ws.on('light.toggle.error', (err) => {
                 this.$store.commit('setAlert', {type: 'error', message: err})
                 this.error = true
             })
         },
         setBrightness(value) {
-            this.socket.emit('light.setBrightness', {id: this.light.id, brightness: value})
-            this.socket.on('light.setBrightness.result', (rst) => {
+            this.ws.emit('light.setBrightness', {id: this.light.id, brightness: value})
+            this.ws.on('light.setBrightness.result', (rst) => {
             })
-            this.socket.on('light.setBrightness.error', (err) => {
+            this.ws.on('light.setBrightness.error', (err) => {
                 this.$store.commit('setAlert', {type: 'error', message: err})
                 this.error = true
             })
         },
         turnOn() {
-            this.socket.emit('light.turnOn', this.light.id)
-            this.socket.on('light.turnOn.result', (rst) => {
+            this.ws.emit('light.turnOn', this.light.id)
+            this.ws.on('light.turnOn.result', (rst) => {
                 this.state = true
             })
-            this.socket.on('light.turnOn.error', (err) => {
+            this.ws.on('light.turnOn.error', (err) => {
                 this.$store.commit('setAlert', {type: 'error', message: err})
                 this.error = true
             })
         },
         turnOff() {
-            this.socket.emit('light.turnOff', this.light.id)
-            this.socket.on('light.turnOff.result', (rst) => {
+            this.ws.emit('light.turnOff', this.light.id)
+            this.ws.on('light.turnOff.result', (rst) => {
                 this.state = false
             })
-            this.socket.on('light.turnOff.error', (err) => {
+            this.ws.on('light.turnOff.error', (err) => {
                 this.$store.commit('setAlert', {type: 'error', message: err})
                 this.error = true
             })
         },
         getValues() {
-            this.socket.emit('light.getValues', this.light.id)
-            this.socket.on('light.getValues.result', (rst) => {
+            this.ws.emit('light.getValues', this.light.id)
+            this.ws.on('light.getValues.result', (rst) => {
                 console.log('Get values RST', rst)
             })
-            this.socket.on('light.getValues.error', (err) => {
+            this.ws.on('light.getValues.error', (err) => {
                 this.$store.commit('setAlert', {type: 'error', message: err})
                 this.error = true
             })

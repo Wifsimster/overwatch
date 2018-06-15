@@ -48,8 +48,8 @@ export default {
         },
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         }
     },
     data() {
@@ -65,19 +65,19 @@ export default {
     created() {
         this.uuid = Vue.getUUID()
 
-        this.socket.emit('type.getAll', { uuid: this.uuid })
+        this.ws.emit('type.getAll', { uuid: this.uuid })
 
-        this.socket.on('type.getAll.result.' + this.uuid, data => {
+        this.ws.on('type.getAll.result.' + this.uuid, data => {
             this.types = data
         })
 
-        this.socket.emit('location.getAll', { uuid: this.uuid })
+        this.ws.emit('location.getAll', { uuid: this.uuid })
 
-        this.socket.on('location.getAll.result.' + this.uuid, data => {
+        this.ws.on('location.getAll.result.' + this.uuid, data => {
             this.locations = data
         })
 
-        this.socket.on('device.update.result.' + this.uuid, data => {
+        this.ws.on('device.update.result.' + this.uuid, data => {
             this.$emit('update')
         })
     },
@@ -98,7 +98,7 @@ export default {
             this.device.locationId = location.id
         },
         edit() {
-            this.socket.emit('device.update', { uuid: this.uuid, data: this.device })
+            this.ws.emit('device.update', { uuid: this.uuid, data: this.device })
         },
     }
 }

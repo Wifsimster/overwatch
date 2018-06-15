@@ -11,8 +11,8 @@
 <script>    
 export default {
     computed: {
-        socket() {
-            return this.$store.getters.socket.socket
+        ws() {
+            return this.$store.getters.ws.socket
         }
     }
 }

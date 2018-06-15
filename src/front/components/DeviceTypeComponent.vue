@@ -83,8 +83,8 @@ export default {
         device: Object,
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         },
     },
     data() {

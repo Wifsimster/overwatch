@@ -36,8 +36,8 @@
 <script>
 export default {
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         }
     },
     data() {
@@ -50,43 +50,53 @@ export default {
         }
     },
     created() {
-        this.socket.emit('mqtt.status')
+        if(this.socket) {
+            this.ws.send('mqtt.status')
 
-        this.socket.on('mqtt.connected', result => {
-            this.online = true
-            this.offline = false
-            this.close = false
-            this.reconnecting = false
-            this.error = false
-        })
-        this.socket.on('mqtt.close', result => {
-            this.online = false
-            this.offline = false
-            this.close = true
-            this.reconnecting = false
-            this.error = false
-        })
-        this.socket.on('mqtt.offline', result => {
-            this.online = false
-            this.offline = true
-            this.close = false
-            this.reconnecting = false
-            this.error = false
-        })
-        this.socket.on('mqtt.reconnecting', result => {
-            this.online = false
-            this.offline = false
-            this.close = false
-            this.reconnecting = true
-            this.error = false
-        })
-        this.socket.on('mqtt.error', result => {
-            this.online = false
-            this.offline = false
-            this.close = false
-            this.reconnecting = false
-            this.error = true
-        })
+            this.ws.on('message', function incoming(data) {
+                console.log('Data :', data)
+            })
+        }
+
+        // this.ws.on('mqtt.connected', result => {
+        //     this.online = true
+        //     this.offline = false
+        //     this.close = false
+        //     this.reconnecting = false
+        //     this.error = false
+        // })
+
+        // this.ws.on('mqtt.close', result => {
+        //     this.online = false
+        //     this.offline = false
+        //     this.close = true
+        //     this.reconnecting = false
+        //     this.error = false
+        // })
+
+        // this.ws.on('mqtt.offline', result => {
+        //     this.online = false
+        //     this.offline = true
+        //     this.close = false
+        //     this.reconnecting = false
+        //     this.error = false
+        // })
+        
+        // this.ws.on('mqtt.reconnecting', result => {
+        //     this.online = false
+        //     this.offline = false
+        //     this.close = false
+        //     this.reconnecting = true
+        //     this.error = false
+        // })
+
+        // this.ws.on('mqtt.error', result => {
+        //     this.online = false
+        //     this.offline = false
+        //     this.close = false
+        //     this.reconnecting = false
+        //     this.error = true
+        // })
     },
 }
 </script>

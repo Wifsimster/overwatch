@@ -30,8 +30,8 @@ export default {
         },
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         }
     },
     data() {
@@ -43,13 +43,13 @@ export default {
     created() {
         this.uuid = Vue.getUUID()
 
-        this.socket.emit('device.getAll', { uuid: this.uuid })
+        // this.ws.emit('device.getAll', { uuid: this.uuid })
 
-        this.socket.on('device.getAll.result.' + this.uuid, devices => {
-            console.log('Devices', devices)
-            this.devices = devices
-            //this.split(devices)
-        })
+        // this.ws.on('device.getAll.result.' + this.uuid, devices => {
+        //     console.log('Devices', devices)
+        //     this.devices = devices
+        //     //this.split(devices)
+        // })
     },
     methods: {
         isType(device, name) {

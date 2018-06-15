@@ -34,8 +34,8 @@ export default {
         }
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         }
     },
     data() {
@@ -47,15 +47,15 @@ export default {
         }
     },
     created() {
-        this.socket.emit('device.getOne', this.id)
-        this.socket.on('device.getOne.result', device => {
+        this.ws.emit('device.getOne', this.id)
+        this.ws.on('device.getOne.result', device => {
             if (device.id === this.id) {
                 this.device = device
                 this.parseLastDataMessage()
             }
         })
 
-        this.socket.on('device.update.result', device => {
+        this.ws.on('device.update.result', device => {
             if (device.id === this.id) {
                 Object.assign(this.device, device)
                 this.parseLastDataMessage()
@@ -67,13 +67,13 @@ export default {
             this.modalShow = false
         },
         parseLastDataMessage() {
-            this.socket.emit('message.getAll', {
+            this.ws.emit('message.getAll', {
                 deviceId: this.id,
                 limit: 1,
                 offset: 0,
                 type: 'data'
             })
-            this.socket.on('message.getAll.result', messages => {
+            this.ws.on('message.getAll.result', messages => {
                 if (messages && messages.length > 0) {
                     let state = JSON.parse(messages[0].data).state
                     if (state) {

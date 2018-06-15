@@ -17,8 +17,8 @@
 <script>
 export default {    
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         },
     },
     data() {
@@ -27,8 +27,8 @@ export default {
         }
     },
     created() {
-        this.socket.emit('scenario.getAll')
-        this.socket.on('scenario.getAll.result', scenarii => {
+        this.ws.emit('scenario.getAll')
+        this.ws.on('scenario.getAll.result', scenarii => {
             this.scenarii = scenarii
         })
     }

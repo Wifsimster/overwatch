@@ -36,8 +36,8 @@
 import Vue from 'vue'
 export default {    
     computed: {
-        socket() {
-            return this.$store.getters.socket.socket
+        ws() {
+            return this.$store.getters.ws.socket
         }
     },
     data() {
@@ -50,45 +50,45 @@ export default {
     created() {
         this.uuid = Vue.getUUID()
 
-        this.socket.emit('location.getAll', { uuid: this.uuid })
+        this.ws.emit('location.getAll', { uuid: this.uuid })
 
-        this.socket.on('location.getAll.result.' + this.uuid, data => {
+        this.ws.on('location.getAll.result.' + this.uuid, data => {
             this.locations = data
         })
 
-        this.socket.on('location.updateAll.result.' + this.uuid, data => {
+        this.ws.on('location.updateAll.result.' + this.uuid, data => {
             this.edit = false
-            this.socket.emit('location.getAll', { uuid: this.uuid })
+            this.ws.emit('location.getAll', { uuid: this.uuid })
         })
 
-        this.socket.on('location.remove.result.' + this.uuid, data => {
+        this.ws.on('location.remove.result.' + this.uuid, data => {
             this.edit = false
         })
 
-        this.socket.on('location.getAll.error', err => {
+        this.ws.on('location.getAll.error', err => {
             console.log('Error :', err)
             this.$store.dispatch('setAlert', { type: 'error' })
         })
 
-        this.socket.on('location.updateAll.error', err => {
+        this.ws.on('location.updateAll.error', err => {
             console.log('Error :', err)
             this.$store.dispatch('setAlert', { type: 'error' })
         })
 
-        this.socket.on('location.remove.error', err => {
+        this.ws.on('location.remove.error', err => {
             console.log('Error :', err)
             this.$store.dispatch('setAlert', { type: 'error' })
         })
     },
     methods: {
         submit() {
-            this.socket.emit('location.updateAll', { uuid: this.uuid, data: this.locations })
+            this.ws.emit('location.updateAll', { uuid: this.uuid, data: this.locations })
         },
         add() {
             this.locations.push({})
         },
         remove(location) {
-            this.socket.emit('location.remove', { uuid: this.uuid, id: location.id })
+            this.ws.emit('location.remove', { uuid: this.uuid, id: location.id })
         },
     },
 }  

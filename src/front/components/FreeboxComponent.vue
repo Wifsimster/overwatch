@@ -44,8 +44,8 @@ export default {
         }
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         },
     },
     data() {
@@ -66,28 +66,28 @@ export default {
             this.modalShow = false
         },
         init() {
-            this.socket.emit('freebox.getAutorize')
-            this.socket.on('freebox.getAutorize.result', (data) => {
+            this.ws.emit('freebox.getAutorize')
+            this.ws.on('freebox.getAutorize.result', (data) => {
                 if (data.success) {
                     this.auth.challenge = data.result.challenge
                     this.auth.salt = data.result.password_salt
                     this.auth.status = data.result.status
                     if (this.auth.status === 'granted') {
-                        this.socket.emit('freebox.login')
+                        this.ws.emit('freebox.login')
                     }
                 }
             })
-            this.socket.on('freebox.login.result', (data) => {
+            this.ws.on('freebox.login.result', (data) => {
                 if (data.success) {
                     this.login.challenge = data.result.challenge
                     this.login.salt = data.result.password_salt
                     this.login.loggedIn = data.result.logged_in
-                    this.socket.emit('freebox.openSession', {
+                    this.ws.emit('freebox.openSession', {
                         challenge: this.login.challenge
                     })
                 }
             })
-            this.socket.on('freebox.openSession.result', (data) => {
+            this.ws.on('freebox.openSession.result', (data) => {
                 if (data.success) {
                     this.session.challenge = data.result.challenge
                     this.session.salt = data.result.password_salt
@@ -98,10 +98,10 @@ export default {
             })
         },
         getData() {
-            this.socket.emit('freebox.connection', {
+            this.ws.emit('freebox.connection', {
                 token: this.session.token
             })
-            this.socket.on('freebox.connection.result', (data) => {
+            this.ws.on('freebox.connection.result', (data) => {
                 if (data.success) {
                     this.connection = data.result
                 }

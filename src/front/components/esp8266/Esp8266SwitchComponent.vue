@@ -56,8 +56,8 @@ export default {
         }
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         }
     },
     data() {
@@ -74,20 +74,20 @@ export default {
     created() {
         this.uuid = Vue.getUUID()
 
-        this.socket.emit('device.getOne', { uuid: this.uuid, id: this.id })
+        this.ws.emit('device.getOne', { uuid: this.uuid, id: this.id })
 
-        this.socket.on('device.getOne.result.' + this.uuid, device => {
+        this.ws.on('device.getOne.result.' + this.uuid, device => {
             this.device = device
             this.getState()
         })
 
-        this.socket.on('device.update.result', device => {
+        this.ws.on('device.update.result', device => {
             if (device.id === this.device.id) {
                 Object.assign(this.device, device)
             }
         })
 
-        this.socket.on('message.getAll.result.' + this.uuid, messages => {
+        this.ws.on('message.getAll.result.' + this.uuid, messages => {
             if (messages && messages.length > 0) {
                 let state = JSON.parse(messages[0].data).state
                 if (state) {
@@ -98,7 +98,7 @@ export default {
     },
     methods: {
         getState() {
-            this.socket.emit('message.getAll', {
+            this.ws.emit('message.getAll', {
                 uuid: this.uuid,
                 deviceId: this.id,
                 limit: 1,
@@ -112,11 +112,11 @@ export default {
         onState(val) {
             this.state = val
             let value = val ? 'ON' : 'OFF'
-            this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: value } })
+            this.ws.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: value } })
         },
         ping() {
             console.log('Ping', this.device.name)
-            this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'PING' } })
+            this.ws.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'PING' } })
         },
         checkHealth() {
             console.log('Check health', this.device.name)
@@ -128,23 +128,23 @@ export default {
         },
         getType() {
             console.log('Get type')
-            this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'TYPE' } })
+            this.ws.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'TYPE' } })
         },
         getName() {
             console.log('Get name')
-            this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'NAME' } })
+            this.ws.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'NAME' } })
         },
         getIp() {
             console.log('Get IP')
-            this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'IP' } })
+            this.ws.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'IP' } })
         },
         getOnline() {
             console.log('Get online')
-            this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'ONLINE' } })
+            this.ws.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'ONLINE' } })
         },
         restart() {
             console.log('Restart device')
-            this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'RESET' } })
+            this.ws.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'RESET' } })
         },
     },
 }

@@ -57,8 +57,8 @@ export default {
         RemoveAllModal,
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         },
         messages() {
             return this.$store.getters.messages
@@ -81,30 +81,30 @@ export default {
 
         this.getMessages()
 
-        this.socket.on('message.remove.result.' + this.uuid, data => {
+        this.ws.on('message.remove.result.' + this.uuid, data => {
             this.getMessages()
         })
 
-        this.socket.on('message.removeAll.result.' + this.uuid, data => {
+        this.ws.on('message.removeAll.result.' + this.uuid, data => {
             this.getMessages()
         })
 
-        this.socket.on('message.add.result', data => {
+        this.ws.on('message.add.result', data => {
             this.getMessages()
         })
 
-        this.socket.on('message.getAll.result.' + this.uuid, data => {
+        this.ws.on('message.getAll.result.' + this.uuid, data => {
             this.$store.dispatch('setMessages', data)
         })
 
-        this.socket.on('message.getAll.result', data => {
+        this.ws.on('message.getAll.result', data => {
             console.log('Broadcast message')
         })
 
     },
     methods: {
         getMessages() {
-            this.socket.emit('message.getAll', {
+            this.ws.emit('message.getAll', {
                 type: this.type,
                 limit: 22,
                 offset: 0,

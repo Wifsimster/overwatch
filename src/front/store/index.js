@@ -6,7 +6,7 @@ Vue.use(Vuex)
 import alert from './modules/alert'
 import device from './modules/device'
 import message from './modules/message'
-import socket from './modules/socket'
+import webSocket from './modules/webSocket'
 import filters from './modules/filters'
 import notification from './modules/notification'
 
@@ -18,11 +18,11 @@ export default new Vuex.Store({
   state,
   mutations,
   modules: {
-    socket,
     alert,
     device,
     message,
     filters,
-    notification
+    notification,
+    webSocket
   }
 })

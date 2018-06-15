@@ -23,8 +23,8 @@ export default {
         },
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         }
     },
     data() {
@@ -35,13 +35,13 @@ export default {
     created() {
         this.uuid = Vue.getUUID()
 
-        this.socket.on('device.remove.result.' + this.uuid, () => {
+        this.ws.on('device.remove.result.' + this.uuid, () => {
             this.$emit('remove')
         })
     },
     methods: {
         remove() {
-            this.socket.emit('device.remove', { uuid: this.uuid, id: this.device.id })
+            this.ws.emit('device.remove', { uuid: this.uuid, id: this.device.id })
         },
         hide() {
             this.$emit('close')

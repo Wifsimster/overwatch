@@ -67,8 +67,8 @@ export default {
         },
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         },
     },
     data() {
@@ -113,9 +113,9 @@ export default {
         },
         getValues() {
             if (this.device) {
-                this.socket.emit('light.getValues', this.device.id)
+                this.ws.emit('light.getValues', this.device.id)
 
-                this.socket.on('light.getValues.result.' + this.device.id, data => {
+                this.ws.on('light.getValues.result.' + this.device.id, data => {
                     if (data && typeof data === 'object') {
                         Object.assign(this.device, data)
                         if (this.device.power === 'on') { this.state = true }
@@ -123,46 +123,46 @@ export default {
                     }
                 })
 
-                this.socket.on('light.getValues.error.' + this.device.id, err => {
+                this.ws.on('light.getValues.error.' + this.device.id, err => {
                     console.error('Error :', err)
                     this.error = true
                 })
             }
         },
         toggle() {
-            this.socket.emit('light.toggle', this.device.id)
-            this.socket.on('light.toggle.result.' + this.device.id, () => {
+            this.ws.emit('light.toggle', this.device.id)
+            this.ws.on('light.toggle.result.' + this.device.id, () => {
                 console.log('Toggle')
                 this.getValues()
             })
-            this.socket.on('light.toggle.error.' + this.device.id, err => {
+            this.ws.on('light.toggle.error.' + this.device.id, err => {
                 console.error('Error :', err)
                 this.error = true
             })
         },
         setBrightness(value) {
-            this.socket.emit('light.setBrightness', {
+            this.ws.emit('light.setBrightness', {
                 id: this.device.id,
                 brightness: parseInt(value)
             })
-            this.socket.on('light.setBrightness.result.' + this.device.id, () => {
+            this.ws.on('light.setBrightness.result.' + this.device.id, () => {
                 console.log('Result - SetBrightness')
             })
-            this.socket.on('light.setBrightness.error.' + this.device.id, err => {
+            this.ws.on('light.setBrightness.error.' + this.device.id, err => {
                 console.error('Error :', err)
                 this.error = true
             })
         },
         setRGB(value) {
-            this.socket.emit('light.setRGB', {
+            this.ws.emit('light.setRGB', {
                 id: this.device.id,
                 hex: value
             })
-            this.socket.on('light.setRGB.result.' + this.device.id, () => {
+            this.ws.on('light.setRGB.result.' + this.device.id, () => {
                 console.log('Result - SetRGB :', value)
                 this.hex = value
             })
-            this.socket.on('light.setRGB.error.' + this.device.id, err => {
+            this.ws.on('light.setRGB.error.' + this.device.id, err => {
                 console.error('Error :', err)
                 this.error = true
             })

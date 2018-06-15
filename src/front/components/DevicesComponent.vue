@@ -59,8 +59,8 @@ export default {
         RemoveDeviceModal,
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         },
     },
     data() {
@@ -70,15 +70,15 @@ export default {
         }
     },
     created() {
-        this.socket.emit('device.getAll')
-        this.socket.on('device.getAll.result', (devices) => {
+        this.ws.emit('device.getAll')
+        this.ws.on('device.getAll.result', (devices) => {
             this.devices = devices
         })
-        this.socket.on('device.removeAll.result', (rst) => {
+        this.ws.on('device.removeAll.result', (rst) => {
             this.devices = []
         })
-        this.socket.on('device.add.result', (rst) => {
-            this.socket.emit('device.getAll')
+        this.ws.on('device.add.result', (rst) => {
+            this.ws.emit('device.getAll')
         })
     },
     methods: {
@@ -89,7 +89,7 @@ export default {
             this.$store.commit('openRemoveModal', device)
         },
         removeAll() { 
-            this.socket.emit('device.removeAll') 
+            this.ws.emit('device.removeAll') 
         },
     },
 }  

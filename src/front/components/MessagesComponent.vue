@@ -32,8 +32,8 @@
 <script>
 export default {        
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         },
     },
     data() {
@@ -42,26 +42,26 @@ export default {
         }
     },
     created() {
-        this.socket.emit('message.getAll')
-        this.socket.on('message.getAll.result', (messages) => {
+        this.ws.emit('message.getAll')
+        this.ws.on('message.getAll.result', (messages) => {
             this.messages = messages
         })
-        this.socket.on('message.remove.result', (rst) => {
-            this.socket.emit('message.getAll')
+        this.ws.on('message.remove.result', (rst) => {
+            this.ws.emit('message.getAll')
         })
-        this.socket.on('message.removeAll.result', (rst) => {
+        this.ws.on('message.removeAll.result', (rst) => {
             this.messages = []
         })
-        this.socket.on('message.add.result', (rst) => {
-            this.socket.emit('message.getAll')
+        this.ws.on('message.add.result', (rst) => {
+            this.ws.emit('message.getAll')
         })
     },
     methods: {
         remove(message) { 
-            this.socket.emit('message.remove', message) 
+            this.ws.emit('message.remove', message) 
         },
         removeAll() { 
-            this.socket.emit('message.removeAll') 
+            this.ws.emit('message.removeAll') 
         },
     },
 }  

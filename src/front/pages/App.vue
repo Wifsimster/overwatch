@@ -15,7 +15,8 @@
 </template>
 
 <script>
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
+// import WebSocket from 'ws'
 const ComHeader = () => import('../components/HeaderComponent.vue')
 const ComSidebar = () => import('../components/SidebarComponent.vue')
 const Alert = () => import("../components/AlertComponent.vue")
@@ -31,22 +32,33 @@ export default {
         Notify
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         },
     },
     created() {
         console.log('Starting socket connection...')
-        
-        this.$store.dispatch('setSocket', io('http://localhost:8080'))
 
-        if (this.socket) {
-            this.socket.on('notify', data => {
-                console.log('Notify :', data)
-                this.$store.dispatch('addNotification', data.message)
-            })
+        const ws = new WebSocket('ws://localhost:8082')
+
+        ws.onerror = (err) => console.error('WS :', err)
+        
+        ws.onopen = () => {
+            console.log('Connection WS open !')
+            ws.send(JSON.stringify({ message: `Hi`}))
         }
-    },
+
+        ws.onclose = () => console.log('Connection WS closed !')        
+
+        this.$store.dispatch('setWebSocket', ws)
+
+        // if (this.socket) {
+        //     this.ws.on('notify', data => {
+        //         console.log('Notify :', data)
+        //         this.$store.dispatch('addNotification', data.message)
+        //     })
+        // }
+    }
 }
 </script>
 

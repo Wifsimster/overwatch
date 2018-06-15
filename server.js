@@ -3,38 +3,38 @@ const methodOverride = require('method-override')
 const bodyParser = require('body-parser')
 const favicon = require('serve-favicon')
 const app = express()
+const cors = require('cors')
 const router = express.Router()
 const http = require('http')
-const socket = require('socket.io')
 const mqtt = require('./src/back/controllers/mqtt')
+const WebSocket = require('ws')
+// const socket = require('socket.io')
 
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(methodOverride())
 app.use(express.static(__dirname + '/'))
 app.use(favicon(__dirname + '/src/front/assets/favicon.png'))
 
-const port = 8080
-const env = process.env.NODE_ENV
+const PORT = 8082
 
-if ('development' == env) {
-  app.use(errorHandler({ dumpExceptions: true, showStack: true }))
-}
-if ('production' == env) {
-  app.use(errorHandler())
-}
+const server = http.Server(app)
+const wss = new WebSocket.Server({ server })
+
+wss.on(
+  'connection',
+  (connection = (ws, req) => {
+    ws.on('message', (incoming = message => console.log(`Received : ${message}`)))
+  })
+)
+
+server.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`))
 
 // Drop & create tables in DB
 //require('./src/back/models/createDatabase')
 
-const server = http.Server(app)
-const io = socket(server)
-
-server.listen(port)
-
-console.log(`Real time server started at ${port}`)
-
-mqtt(io).then(mqttClient => {
-  require('./src/back/controllers/socket')(mqttClient, io)
-  require('./src/back/controllers/scenario')(mqttClient, io)
-})
+// mqtt(webSocketServer).then(mqttClient => {
+//   require('./src/back/controllers/socket')(mqttClient, io)
+//   require('./src/back/controllers/scenario')(mqttClient, io)
+// })

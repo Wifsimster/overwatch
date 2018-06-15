@@ -32,8 +32,8 @@
 import Vue from 'vue'
 export default {
     computed: {
-        socket() {
-            return this.$store.getters.socket.socket
+        ws() {
+            return this.$store.getters.ws.socket
         }
     },
     data() {
@@ -46,24 +46,24 @@ export default {
     created() {
         this.uuid = Vue.getUUID()
 
-        this.socket.emit('type.getAll', { uuid: this.uuid })
+        this.ws.emit('type.getAll', { uuid: this.uuid })
 
-        this.socket.on('type.getAll.result.' + this.uuid, data => {
+        this.ws.on('type.getAll.result.' + this.uuid, data => {
             this.types = data
         })
 
-        this.socket.on('type.updateAll.result.' + this.uuid, data => {
+        this.ws.on('type.updateAll.result.' + this.uuid, data => {
             this.edit = false
         })
 
-        this.socket.on('type.updateAll.error', err => {
+        this.ws.on('type.updateAll.error', err => {
             console.log('Error :', err)
             this.$store.dispatch('setAlert', { type: 'error' })
         })
     },
     methods: {
         submit() {
-            this.socket.emit('type.updateAll', { uuid: this.uuid, data: this.types })
+            this.ws.emit('type.updateAll', { uuid: this.uuid, data: this.types })
         },
     },
 }  

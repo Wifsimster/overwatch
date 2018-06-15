@@ -23,8 +23,7 @@
     
         <div v-if="settings.cameras && settings.cameras.display !== 'false'">
             <camera port="9963"></camera>
-        </div>
-    
+        </div>    
     </div>
 </template>
 
@@ -45,8 +44,8 @@ export default {
         Esp8266,
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket.socket
+        ws() {
+            return this.$store.getters.ws.socket
         }
     },
     data() {
@@ -57,7 +56,7 @@ export default {
     },
     methods: {
         display(name) {
-            this.settings.forEach((setting, index) => {
+            this.settings.map((setting, index) => {
                 return (setting.name === name && setting.value)
             })
         },
@@ -68,10 +67,14 @@ export default {
         },
     },
     created() {
-        this.socket.emit('setting.getAll')
-        this.socket.on('setting.getAll.result', (settings) => {
-            this.settings = settings
-        })
+        this.ws.onopen = () => {
+            this.ws.send(JSON.stringify({ message: `Settings get all`}))
+        }
+
+        // this.ws.emit('setting.getAll')
+        // this.ws.on('setting.getAll.result', (settings) => {
+        //     this.settings = settings
+        // })
     },
 }
 </script>

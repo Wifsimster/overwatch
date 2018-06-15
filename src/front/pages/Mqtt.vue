@@ -18,8 +18,8 @@
 <script>
 export default {
     computed: {
-        socket() {
-            return this.$store.getters.socket.socket
+        ws() {
+            return this.$store.getters.ws.socket
         }
     },
     data() {
@@ -28,15 +28,15 @@ export default {
         }
     },
     created() {
-        this.socket.emit('setting.getAll')
+        this.ws.emit('setting.getAll')
 
-        this.socket.on('setting.getAll.result', (result) => {
+        this.ws.on('setting.getAll.result', (result) => {
             this.settings = result
         })
     },
     methods: {
         update() {
-            this.socket.emit('setting.update', this.settings)
+            this.ws.emit('setting.update', this.settings)
         },
     },
 }  

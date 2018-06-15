@@ -71,8 +71,8 @@ export default {
         RemoveAllModal,
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         }
     },
     data() {
@@ -89,18 +89,18 @@ export default {
     created() {
         this.uuid = Vue.getUUID()
 
-        this.socket.emit('device.getAll', { uuid: this.uuid })
+        this.ws.emit('device.getAll', { uuid: this.uuid })
 
-        this.socket.on('device.getAll.result.' + this.uuid, devices => {
+        this.ws.on('device.getAll.result.' + this.uuid, devices => {
             this.devices = devices
         })
 
-        this.socket.on('device.removeAll.result.' + this.uuid, rst => {
+        this.ws.on('device.removeAll.result.' + this.uuid, rst => {
             this.devices = null
         })
 
-        this.socket.on('device.add.result.' + this.uuid, rst => {
-            this.socket.emit('device.getAll')
+        this.ws.on('device.add.result.' + this.uuid, rst => {
+            this.ws.emit('device.getAll')
         })
     },
     methods: {
@@ -116,15 +116,15 @@ export default {
             this.removeAllShow = true
         },
         onRemove() {
-            this.socket.emit('device.getAll', { uuid: this.uuid })
+            this.ws.emit('device.getAll', { uuid: this.uuid })
             this.removeShow = false
         },
         onRemoveAll() {
-            this.socket.emit('device.getAll', { uuid: this.uuid })
+            this.ws.emit('device.getAll', { uuid: this.uuid })
             this.removeAllShow = false
         },
         onUpdate() {
-            this.socket.emit('device.getAll', { uuid: this.uuid })
+            this.ws.emit('device.getAll', { uuid: this.uuid })
             this.editShow = false
         },
     },

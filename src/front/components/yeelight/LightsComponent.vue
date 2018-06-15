@@ -19,8 +19,8 @@ export default {
         },
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         },
     },
     data() {
@@ -29,31 +29,31 @@ export default {
         }
     },
     created() {
-        this.socket.on('light.found', light => {
-            console.log('Light found')
-            let exist = this.lights.filter(li => {
-                if (li.id === light.id) { return true }
-            })
-            if (exist.length === 0) {
-                console.log('New light found :', light)
-                this.lights.push(light)
-            }
-        })
+        // this.ws.on('light.found', light => {
+        //     console.log('Light found')
+        //     let exist = this.lights.filter(li => {
+        //         if (li.id === light.id) { return true }
+        //     })
+        //     if (exist.length === 0) {
+        //         console.log('New light found :', light)
+        //         this.lights.push(light)
+        //     }
+        // })
 
-        this.socket.emit('light.getAll')
+        // this.ws.emit('light.getAll')
 
-        // setInterval(() => {
-        //     console.log('Looking for light...')
-        //     this.socket.emit('light.getAll')
-        // }, 5000)
+        // // setInterval(() => {
+        // //     console.log('Looking for light...')
+        // //     this.ws.emit('light.getAll')
+        // // }, 5000)
 
-        this.socket.on('light.getAll.result', lights => {
-            console.log('Get all lights :', lights)
-            this.lights = lights
-        })
-        this.socket.on('light.getAll.error', err => {
-            console.error('Get all lights :', err.message)
-        })
+        // this.ws.on('light.getAll.result', lights => {
+        //     console.log('Get all lights :', lights)
+        //     this.lights = lights
+        // })
+        // this.ws.on('light.getAll.error', err => {
+        //     console.error('Get all lights :', err.message)
+        // })
     },
 }
 </script>

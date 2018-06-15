@@ -116,8 +116,8 @@ export default {
         },
     },
     computed: {
-        socket() {
-            return this.$store.getters.socket
+        ws() {
+            return this.$store.getters.ws
         }
     },
     data() {
@@ -142,7 +142,7 @@ export default {
         this.getData(this.device)
         //this.checkHealth(this.device)
         //this.ping()
-        // this.socket.on('device.update.result', device => {
+        // this.ws.on('device.update.result', device => {
         //     if (device.id === this.device.id) {
         //         this.getData(device)
         //         this.checkHealth(device)
@@ -151,7 +151,7 @@ export default {
     },
     methods: {
         ping() {
-            this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'PING' } })
+            this.ws.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'PING' } })
         },
         checkHealth(device) {
             this.lastSeen = device.updatedAt
@@ -162,20 +162,20 @@ export default {
             }
         },
         getState(device) {
-            this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'STATE' } })
+            this.ws.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'STATE' } })
         },
         getType(device) {
-            this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'TYPE' } })
+            this.ws.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'TYPE' } })
         },
         getIp(device) {
-            this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'IP' } })
+            this.ws.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'IP' } })
         },
         restart(device) {
-            this.socket.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'RESTART' } })
+            this.ws.emit('mqtt.publish', { topic: '/action/', message: { mac: this.device.mac, action: 'RESTART' } })
         },
         getData(device) {
-            this.socket.emit('message.getAll', { deviceId: this.device.id, limit: 1, offset: 0, type: 'data', uuid: this.uuid })
-            this.socket.on('message.getAll.result.' + this.uuid, messages => {
+            this.ws.emit('message.getAll', { deviceId: this.device.id, limit: 1, offset: 0, type: 'data', uuid: this.uuid })
+            this.ws.on('message.getAll.result.' + this.uuid, messages => {
                 if (messages && messages.length > 0) {
                     this.data = JSON.parse(messages[0].data)
                 } else {
