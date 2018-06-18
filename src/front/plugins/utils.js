@@ -75,3 +75,5 @@ const MyPlugin = {
     }
   }
 }
+
+export default MyPlugin

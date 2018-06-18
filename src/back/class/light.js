@@ -1,26 +1,21 @@
-const YeelightSearch = require("yeelight-wifi")
+const YeelightSearch = require('yeelight-wifi')
 const yeelightSearch = new YeelightSearch()
 
 module.exports = class Light {
   getName(id) {
     switch (id) {
-      case "0x00000000033601d3":
-        return "Salon"
-        break
-      case "0x0000000003360d2c":
-        return "Couloir"
-        break
-      case "0x0000000003312a03":
-        return "Bureau"
-        break
-      case "0x000000000335ff81":
-        return "Chambre"
-        break
-      case "0x000000000335f9ce":
-        return "Cuisine"
-        break
+      case '0x00000000033601d3':
+        return 'Salon'
+      case '0x0000000003360d2c':
+        return 'Couloir'
+      case '0x0000000003312a03':
+        return 'Bureau'
+      case '0x000000000335ff81':
+        return 'Chambre'
+      case '0x000000000335f9ce':
+        return 'Cuisine'
       default:
-        return "Unknown"
+        return 'Unknown'
     }
   }
 
@@ -47,12 +42,12 @@ module.exports = class Light {
       const light = yeelightSearch.getYeelightById(id)
       if (light) {
         light
-          .getValues("power", "bright", "rgb", "color_mode", "hue", "sat", "ct")
+          .getValues('power', 'bright', 'rgb', 'color_mode', 'hue', 'sat', 'ct')
           .then(() => {
             resolve(light)
           })
           .catch(err => {
-            console.error("Error :", err)
+            console.error('Error :', err)
             reject(id)
           })
       } else {

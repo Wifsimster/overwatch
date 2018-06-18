@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 const Modal = () => import('./ModalComponent.vue')
 export default {
     components: { 
@@ -49,7 +50,8 @@ export default {
         },
     },
     data() {
-        return {            
+        return {
+            uuid: null,
             auth: {},
             login: {},
             session: {},
@@ -58,54 +60,63 @@ export default {
         }
     },
     created() {
+        this.uuid = Vue.getUUID()        
         this.init()
-        setInterval(() => { this.getData() }, 5000)
     },
     methods: {
         onClose() {
             this.modalShow = false
         },
         init() {
-            this.ws.emit('freebox.getAutorize')
-            this.ws.on('freebox.getAutorize.result', (data) => {
-                if (data.success) {
-                    this.auth.challenge = data.result.challenge
-                    this.auth.salt = data.result.password_salt
-                    this.auth.status = data.result.status
-                    if (this.auth.status === 'granted') {
-                        this.ws.emit('freebox.login')
+            if(this.ws) {
+                this.ws.send(JSON.stringify({ object: 'Freebox', method: 'getAutorize', uuid: this.uuid }))
+                
+                this.ws.onmessage = message => {
+                    const data = JSON.parse(message.data)
+                    if(this.uuid === data.uuid) {
+                        switch(data.method) {
+                            case 'getAutorize':
+                                this.auth.challenge = data.result.challenge
+                                this.auth.salt = data.result.password_salt
+                                this.auth.status = data.result.status
+                                if (this.auth.status === 'granted') {
+                                    this.ws.send(JSON.stringify({ object: 'Freebox', method: 'login', uuid: this.uuid }))
+                                }
+                            break
+                            case 'login':
+                                this.login.challenge = data.result.challenge
+                                this.login.salt = data.result.password_salt
+                                this.login.loggedIn = data.result.logged_in
+                                this.ws.send(JSON.stringify({ object: 'Freebox', method: 'openSession', parameters: {
+                                    challenge: this.login.challenge
+                                }}))
+                            break
+                            case 'openSession':                   
+                                this.session.challenge = data.result.challenge
+                                this.session.salt = data.result.password_salt
+                                this.session.token = data.result.session_token
+                                this.session.permissions = data.result.permissions
+                                this.ws.send(JSON.stringify({ object: 'Freebox', method: 'connection', parameters: { 
+                                    token: this.session.token 
+                                }}))
+                            break
+                            case 'connection':
+                                this.connection = data.result
+                                this.refresh()
+                            break
+                            default:
+                                console.error('Invalid method :', data.method)
+                        }
                     }
                 }
-            })
-            this.ws.on('freebox.login.result', (data) => {
-                if (data.success) {
-                    this.login.challenge = data.result.challenge
-                    this.login.salt = data.result.password_salt
-                    this.login.loggedIn = data.result.logged_in
-                    this.ws.emit('freebox.openSession', {
-                        challenge: this.login.challenge
-                    })
-                }
-            })
-            this.ws.on('freebox.openSession.result', (data) => {
-                if (data.success) {
-                    this.session.challenge = data.result.challenge
-                    this.session.salt = data.result.password_salt
-                    this.session.token = data.result.session_token
-                    this.session.permissions = data.result.permissions
-                    this.getData()
-                }
-            })
+            }
         },
-        getData() {
-            this.ws.emit('freebox.connection', {
-                token: this.session.token
-            })
-            this.ws.on('freebox.connection.result', (data) => {
-                if (data.success) {
-                    this.connection = data.result
-                }
-            })
+        refresh() {
+            if(this.ws) {
+                setInterval(() => { 
+                    this.ws.send(JSON.stringify({ object: 'Freebox', method: 'connection', uuid: this.uuid }))
+                }, 5000)
+            }
         },
         convert(value) {
             let o = value / 8

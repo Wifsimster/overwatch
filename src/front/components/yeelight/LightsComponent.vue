@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 const Light = () => import('./LightComponent.vue')
 export default {
     components: { 
@@ -21,14 +22,38 @@ export default {
     computed: {
         ws() {
             return this.$store.getters.ws
-        },
+        }
     },
     data() {
-        return {            
+        return {    
+            uuid: null,        
             lights: null,
         }
     },
+    methods: {
+        getLights() {
+            if(this.ws) {
+                this.ws.send(JSON.stringify({ object: 'Light', method: 'findAll', uuid: this.uuid}))
+                    
+                this.ws.onmessage = message => {
+                    const data = JSON.parse(message.data)
+                    if(this.uuid === data.uuid) {
+                        this.lights = data.results
+                    }
+                }
+            }
+        }
+    },
     created() {
+        this.uuid = Vue.getUUID()
+        this.getLights()
+    },
+    watch: {
+        ws() {
+            this.getLights()
+        }
+    }
+        
         // this.ws.on('light.found', light => {
         //     console.log('Light found')
         //     let exist = this.lights.filter(li => {
@@ -54,7 +79,6 @@ export default {
         // this.ws.on('light.getAll.error', err => {
         //     console.error('Get all lights :', err.message)
         // })
-    },
 }
 </script>
 

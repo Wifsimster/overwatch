@@ -29,11 +29,6 @@ export default {
         Alert,
         Notify
     },
-    computed: {
-        ws() {
-            return this.$store.getters.ws
-        },
-    },
     created() {
         const ws = new WebSocket('ws://localhost:8082')
 
