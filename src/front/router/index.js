@@ -1,14 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 
-const Dashboard = () => '../pages/Dashboard.vue'
-const Device = () => '../pages/Device.vue'
-const Message = () => '../pages/Message.vue'
-const Type = () => '../pages/Type.vue'
-const Location = () => '../pages/Location.vue'
-const Backup = () => '../pages/Backup.vue'
-const Settings = () => '../pages/Settings.vue'
-const Scenario = () => '../pages/Scenario.vue'
+const Dashboard = () => import('../pages/Dashboard.vue')
+const Device = () => import('../pages/Device.vue')
+const Message = () => import('../pages/Message.vue')
+const Type = () => import('../pages/Type.vue')
+const Location = () => import('../pages/Location.vue')
+const Backup = () => import('../pages/Backup.vue')
+const Settings = () => import('../pages/Settings.vue')
+const Scenario = () => import('../pages/Scenario.vue')
 
 Vue.use(Router)
 

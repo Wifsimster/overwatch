@@ -45,7 +45,7 @@ export default {
     },
     computed: {
         ws() {
-            return this.$store.getters.ws.socket
+            return this.$store.getters.ws
         }
     },
     data() {
@@ -67,9 +67,9 @@ export default {
         },
     },
     created() {
-        this.ws.onopen = () => {
-            this.ws.send(JSON.stringify({ message: `Settings get all`}))
-        }
+        // this.ws.onopen = () => {
+            this.ws.send(JSON.stringify({ object: 'Settings', method: 'findAll'}))
+        // }
 
         // this.ws.emit('setting.getAll')
         // this.ws.on('setting.getAll.result', (settings) => {
@@ -80,5 +80,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../sass/dashboard';
+@import '../sass/pages/dashboard';
 </style>

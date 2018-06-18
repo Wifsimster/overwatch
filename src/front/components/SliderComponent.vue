@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Colors from '../mixins/colors'
+import Vue from 'vue'
 import noUiSlider from 'nouislider'
 export default {
     props: {
@@ -42,7 +42,7 @@ export default {
     },
     methods: {
         setBackground(val) {
-            let lighter = Colors.lighten(0.8, val)
+            let lighter = Vue.lighten(0.8, val)
             slider.children[0].style.backgroundImage = 'linear-gradient(to right, ' + val + ' 0%, ' + lighter + ' 100%)'
         },
     },

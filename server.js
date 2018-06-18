@@ -8,7 +8,7 @@ const router = express.Router()
 const http = require('http')
 const mqtt = require('./src/back/controllers/mqtt')
 const WebSocket = require('ws')
-// const socket = require('socket.io')
+const Controller = require('./src/back/controllers/controller')
 
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -22,19 +22,14 @@ const PORT = 8082
 const server = http.Server(app)
 const wss = new WebSocket.Server({ server })
 
-wss.on(
-  'connection',
-  (connection = (ws, req) => {
-    ws.on('message', (incoming = message => console.log(`Received : ${message}`)))
-  })
-)
-
 server.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`))
 
-// Drop & create tables in DB
-//require('./src/back/models/createDatabase')
+new Controller(wss)
 
 // mqtt(webSocketServer).then(mqttClient => {
 //   require('./src/back/controllers/socket')(mqttClient, io)
 //   require('./src/back/controllers/scenario')(mqttClient, io)
 // })
+
+// Drop & create tables in DB
+//require('./src/back/models/createDatabase')

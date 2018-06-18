@@ -44,7 +44,6 @@
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "webpack-material-design-icons": "^0.1.0",
-    "websocket": "^1.0.26",
     "ws": "^5.2.0",
     "yeelight-wifi": "^2.3.0"
   },

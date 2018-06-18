@@ -15,8 +15,6 @@
 </template>
 
 <script>
-// import io from 'socket.io-client'
-// import WebSocket from 'ws'
 const ComHeader = () => import('../components/HeaderComponent.vue')
 const ComSidebar = () => import('../components/SidebarComponent.vue')
 const Alert = () => import("../components/AlertComponent.vue")
@@ -37,27 +35,17 @@ export default {
         },
     },
     created() {
-        console.log('Starting socket connection...')
-
         const ws = new WebSocket('ws://localhost:8082')
 
         ws.onerror = (err) => console.error('WS :', err)
         
         ws.onopen = () => {
-            console.log('Connection WS open !')
+            console.log('WS connection opened !')
             ws.send(JSON.stringify({ message: `Hi`}))
+            this.$store.dispatch('setWebSocket', ws)
         }
 
         ws.onclose = () => console.log('Connection WS closed !')        
-
-        this.$store.dispatch('setWebSocket', ws)
-
-        // if (this.socket) {
-        //     this.ws.on('notify', data => {
-        //         console.log('Notify :', data)
-        //         this.$store.dispatch('addNotification', data.message)
-        //     })
-        // }
     }
 }
 </script>
@@ -67,7 +55,6 @@ export default {
 @import '../sass/led';
 @import '../sass/card';
 @import '../sass/checkbox';
-@import '../sass/modal';
 @import '../sass/form';
 @import '../sass/btn';
 @import '../sass/device';
