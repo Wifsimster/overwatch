@@ -13,6 +13,6 @@ const Messages = () => import('../components/message/MessagesComponent.vue')
 export default {
     components: {
         Messages,
-    },
+    }
 }
 </script>

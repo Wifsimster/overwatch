@@ -48,9 +48,9 @@
 </template>
 
 <script>
+import Vue from 'vue'
 const RemoveModal = () => import('./MessageRemoveModalComponent.vue')
 const RemoveAllModal = () => import('./MessageRemoveAllModalComponent.vue')
-import Vue from 'vue'
 export default {
     components: {
         RemoveModal,
@@ -69,47 +69,48 @@ export default {
     },
     data() {
         return {
+            uuid: null,
             removeMessage: null,
             removeShow: false,
             removeAllShow: false,
             type: 'data',
-            uuid: null,
         }
     },
     created() {
         this.uuid = Vue.getUUID()
-
+        this.setListener()
         this.getMessages()
-
-        this.ws.on('message.remove.result.' + this.uuid, data => {
+    },
+    watch: {
+        ws() {
+            this.setListener()
             this.getMessages()
-        })
-
-        this.ws.on('message.removeAll.result.' + this.uuid, data => {
+        },
+        type() {
             this.getMessages()
-        })
-
-        this.ws.on('message.add.result', data => {
-            this.getMessages()
-        })
-
-        this.ws.on('message.getAll.result.' + this.uuid, data => {
-            this.$store.dispatch('setMessages', data)
-        })
-
-        this.ws.on('message.getAll.result', data => {
-            console.log('Broadcast message')
-        })
-
+        }
     },
     methods: {
+        setListener() {
+            if(this.ws) {
+                this.ws.onmessage = message => {
+                    const data = JSON.parse(message.data)
+                    if('findAll' === data.method && this.uuid === data.uuid) {
+                        this.devices = data.results.devices
+                    }
+                    if('remove' === data.method && this.uuid === data.uuid) {
+                        this.devices = data.results.devices
+                    }
+                    if('create' === data.method && this.uuid === data.uuid) {
+                        this.devices = data.results.devices
+                    }
+                }
+            }
+        },
         getMessages() {
-            this.ws.emit('message.getAll', {
-                type: this.type,
-                limit: 22,
-                offset: 0,
-                uuid: this.uuid
-            })
+            if(this.ws) {
+                this.ws.send(JSON.stringify({ object: 'Message', method: 'findAll', parameters: { type: this.type, limit: 22, offset: 0 }, uuid: this.uuid}))
+            }
         },
         openRemoveModal(message) {
             this.removeShow = true
@@ -126,12 +127,7 @@ export default {
             this.getMessages()
             this.removeAllShow = false
         },
-    },
-    watch: {
-        type(val) {
-            this.getMessages()
-        },
-    },
+    }
 }  
 </script>
 

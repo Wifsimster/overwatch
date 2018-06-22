@@ -57,6 +57,8 @@
     "babel-preset-stage-3": "^6.24.1",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^0.28.11",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-plugin-prettier": "^2.6.0",
     "file-loader": "^1.1.11",
     "json-loader": "^0.5.7",
     "node-sass": "^4.9.0",

@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 export default {    
     computed: {
         ws() {
@@ -22,16 +23,39 @@ export default {
         },
     },
     data() {
-        return {            
+        return {
+            uuid: null,
             scenarii: null,
         }
     },
     created() {
-        this.ws.emit('scenario.getAll')
-        this.ws.on('scenario.getAll.result', scenarii => {
-            this.scenarii = scenarii
-        })
-    }
+        this.uuid = Vue.getUUID()
+        this.setListener()
+        this.getScenarii()
+    },
+    watch: {
+        ws() {
+            this.setListener()
+            this.getScenarii()
+        }
+    },
+     methods: {
+        setListener() {
+            if(this.ws) {           
+                this.ws.onmessage = message => {
+                    const data = JSON.parse(message.data)
+                    if('findAll' === data.method && this.uuid === data.uuid) {
+                        this.scenarii = data.results.scenarii
+                    }
+                }
+            }
+        },
+        getScenarii() {
+            if(this.ws) {
+                this.ws.send(JSON.stringify({ object: 'Scenario', method: 'findAll', uuid: this.uuid}))
+            }
+        },
+     }
 }
 </script>
 

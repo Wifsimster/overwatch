@@ -13,9 +13,6 @@ const Devices = () => import('../components/device/DevicesComponent.vue')
 export default {
     components: { 
         Devices 
-    },
-    created() {
-        console.log('Devices page loaded !')
     }
 }
 </script>

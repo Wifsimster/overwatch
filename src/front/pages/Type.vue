@@ -33,38 +33,46 @@ import Vue from 'vue'
 export default {
     computed: {
         ws() {
-            return this.$store.getters.ws.socket
+            return this.$store.getters.ws
         }
     },
     data() {
         return {
+            uuid: null,
             types: [],
             edit: false,
-            uuid: null,
         }
     },
     created() {
         this.uuid = Vue.getUUID()
-
-        this.ws.emit('type.getAll', { uuid: this.uuid })
-
-        this.ws.on('type.getAll.result.' + this.uuid, data => {
-            this.types = data
-        })
-
-        this.ws.on('type.updateAll.result.' + this.uuid, data => {
-            this.edit = false
-        })
-
-        this.ws.on('type.updateAll.error', err => {
-            console.log('Error :', err)
-            this.$store.dispatch('setAlert', { type: 'error' })
-        })
+        this.setListener()
+        this.getTypes()
+    },
+    watch: {
+        ws() {
+            this.setListener()
+            this.getTypes()
+        }
     },
     methods: {
         submit() {
             this.ws.emit('type.updateAll', { uuid: this.uuid, data: this.types })
         },
+        getTypes() {
+            if(this.ws) {
+                this.ws.send(JSON.stringify({ object: 'Type', method: 'findAll', uuid: this.uuid}))
+            }
+        },
+        setListener() {    
+            if(this.ws) {    
+                this.ws.onmessage = message => {
+                    const data = JSON.parse(message.data)
+                    if('findAll' === data.method && this.uuid === data.uuid) {
+                        this.types = data.results.types
+                    }
+                }
+            }
+        }
     },
 }  
 </script>

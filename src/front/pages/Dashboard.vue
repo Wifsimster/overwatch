@@ -56,7 +56,33 @@ export default {
             camera: null
         }
     },
+    created() {
+        this.uuid = Vue.getUUID()
+        this.setListener()
+        this.getSettings()
+    },
+    watch: {
+        ws() {
+            this.setListener()
+            this.getSettings()
+        }
+    },
     methods: {
+        setListener() {
+            if(this.ws) {
+                this.ws.onmessage = message => {
+                    const data = JSON.parse(message.data)
+                    if('findAll' === data.method && this.uuid === data.uuid) {
+                        this.settings = data.results.settings
+                    }
+                }
+            }
+        },        
+        getSettings() {
+            if(this.ws) {
+                this.ws.send(JSON.stringify({ object: 'Settings', method: 'findAll', uuid: this.uuid}))
+            }
+        },
         display(name) {
             this.settings.map((setting, index) => {
                 return (setting.name === name && setting.value)
@@ -66,27 +92,6 @@ export default {
             if (devices.length > 0) {
                 alertify.notify(devices.length + ' device(s) to configure !', 'info', 5)
             }
-        },
-        getSettings() {
-            if(this.ws) {
-                this.ws.send(JSON.stringify({ object: 'Settings', method: 'findAll', uuid: this.uuid}))
-                    
-                this.ws.onmessage = message => {
-                    const data = JSON.parse(message.data)
-                    if('findAll' === data.method && this.uuid === data.uuid) {
-                        this.settings = data.results.settings
-                    }
-                }
-            }
-        }
-    },
-    created() {
-        this.uuid = Vue.getUUID()
-        this.getSettings()
-    },
-    watch: {
-        ws() {
-            this.getSettings()
         }
     }
 }

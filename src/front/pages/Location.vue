@@ -37,58 +37,53 @@ import Vue from 'vue'
 export default {    
     computed: {
         ws() {
-            return this.$store.getters.ws.socket
+            return this.$store.getters.ws
         }
     },
     data() {
         return {
+            uuid: null,
             locations: [],
             edit: false,
-            uuid: null,
         }
     },
     created() {
         this.uuid = Vue.getUUID()
-
-        this.ws.emit('location.getAll', { uuid: this.uuid })
-
-        this.ws.on('location.getAll.result.' + this.uuid, data => {
-            this.locations = data
-        })
-
-        this.ws.on('location.updateAll.result.' + this.uuid, data => {
-            this.edit = false
-            this.ws.emit('location.getAll', { uuid: this.uuid })
-        })
-
-        this.ws.on('location.remove.result.' + this.uuid, data => {
-            this.edit = false
-        })
-
-        this.ws.on('location.getAll.error', err => {
-            console.log('Error :', err)
-            this.$store.dispatch('setAlert', { type: 'error' })
-        })
-
-        this.ws.on('location.updateAll.error', err => {
-            console.log('Error :', err)
-            this.$store.dispatch('setAlert', { type: 'error' })
-        })
-
-        this.ws.on('location.remove.error', err => {
-            console.log('Error :', err)
-            this.$store.dispatch('setAlert', { type: 'error' })
-        })
+        this.setListener()
+        this.getLocations()
+    },
+    watch: {
+        ws() {
+            this.setListener()
+            this.getLocations()
+        }
     },
     methods: {
+        setListener() {
+            if(this.ws) {           
+                this.ws.onmessage = message => {
+                    const data = JSON.parse(message.data)
+                    if('findAll' === data.method && this.uuid === data.uuid) {
+                        this.locations = data.results.locations
+                    }
+                }
+            }
+        },
+        getLocations() {
+            if(this.ws) {
+                this.ws.send(JSON.stringify({ object: 'Location', method: 'findAll', uuid: this.uuid}))
+            }
+        },
         submit() {
-            this.ws.emit('location.updateAll', { uuid: this.uuid, data: this.locations })
+           this.getLocations()
         },
         add() {
             this.locations.push({})
         },
         remove(location) {
-            this.ws.emit('location.remove', { uuid: this.uuid, id: location.id })
+            if(this.ws) {
+                this.ws.send(JSON.stringify({ object: 'Location', method: 'destroy', parameters: { id: location.id }, uuid: this.uuid}))
+            }
         },
     },
 }  

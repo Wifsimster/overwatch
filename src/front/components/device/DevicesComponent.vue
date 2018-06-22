@@ -47,9 +47,9 @@
                         </tr>
                     </tbody>
                 </table>    
-                <edit-modal v-if="editShow" :device="editDevice" @update="onUpdate" @close="editShow = false"></edit-modal>    
-                <remove-modal v-if="removeShow" :device="removeDevice" @remove="onRemove" @close="removeShow = false"></remove-modal>    
-                <remove-all-modal v-if="removeAllShow" @removeAll="onRemoveAll" @close="removeAllShow = false"></remove-all-modal>    
+                <edit v-if="editShow" :device="editDevice" @update="onUpdate" @close="editShow = false"></edit>    
+                <remove v-if="removeShow" :device="removeDevice" @remove="onRemove" @close="removeShow = false"></remove>    
+                <remove-all v-if="removeAllShow" @removeAll="onRemoveAll" @close="removeAllShow = false"></remove-all>    
             </div>
             <div v-else>
                 <br>
@@ -60,15 +60,15 @@
 </template>
 
 <script>
-const EditModal = () => import('./DeviceEditModalComponent.vue')
-const RemoveModal = () => import('./DeviceRemoveModalComponent.vue')
-const RemoveAllModal = () => import('./DeviceRemoveAllModalComponent.vue')
 import Vue from 'vue'
+const Edit = () => import('./DeviceEditModalComponent.vue')
+const Remove = () => import('./DeviceRemoveModalComponent.vue')
+const RemoveAll = () => import('./DeviceRemoveAllModalComponent.vue')
 export default {
     components: {
-        EditModal,
-        RemoveModal,
-        RemoveAllModal,
+        Edit,
+        Remove,
+        RemoveAll,
     },
     computed: {
         ws() {
@@ -76,34 +76,43 @@ export default {
         }
     },
     data() {
-        return {            
+        return {
+            uuid: null,   
             devices: null,
             editDevice: null,
             removeDevice: null,
             editShow: false,
             removeShow: false,
             removeAllShow: false,
-            uuid: null,
         }
     },
     created() {
         this.uuid = Vue.getUUID()
-
-        this.ws.emit('device.getAll', { uuid: this.uuid })
-
-        this.ws.on('device.getAll.result.' + this.uuid, devices => {
-            this.devices = devices
-        })
-
-        this.ws.on('device.removeAll.result.' + this.uuid, rst => {
-            this.devices = null
-        })
-
-        this.ws.on('device.add.result.' + this.uuid, rst => {
-            this.ws.emit('device.getAll')
-        })
+        this.setListener()
+        this.getDevices()
+    },
+    watch: {
+        ws() {
+            this.setListener()
+            this.getDevices()
+        }
     },
     methods: {
+        setListener() {
+            if(this.ws) {           
+                this.ws.onmessage = message => {
+                    const data = JSON.parse(message.data)
+                    if('findAll' === data.method && this.uuid === data.uuid) {
+                        this.devices = data.results.devices
+                    }
+                }
+            }
+        },
+        getDevices() {
+            if(this.ws) {
+                this.ws.send(JSON.stringify({ object: 'Device', method: 'findAll', uuid: this.uuid}))
+            }
+        },
         openEditModal(device) {
             this.editShow = true
             this.editDevice = device
@@ -116,17 +125,17 @@ export default {
             this.removeAllShow = true
         },
         onRemove() {
-            this.ws.emit('device.getAll', { uuid: this.uuid })
+            this.getDevices()
             this.removeShow = false
         },
         onRemoveAll() {
-            this.ws.emit('device.getAll', { uuid: this.uuid })
+            this.getDevices()
             this.removeAllShow = false
         },
         onUpdate() {
-            this.ws.emit('device.getAll', { uuid: this.uuid })
+            this.getDevices()
             this.editShow = false
         },
-    },
+    }
 }  
 </script>

@@ -85,24 +85,46 @@
 </template>
 
 <script>
+import Vue from 'vue'
 export default {
     computed: {
         ws() {
-            return this.$store.getters.ws.socket
+            return this.$store.getters.ws
         }
     },
     data() {
         return {
+            uuid: null,
             settings: null,
         }
-    },
+    },    
     created() {
-        this.ws.emit('setting.getAll')
-        this.ws.on('setting.getAll.result', (result) => {
-            this.settings = result
-        })
+        this.uuid = Vue.getUUID()
+        this.setListener()
+        this.getSettings()
+    },
+    watch: {
+        ws() {
+            this.setListener()
+            this.getSettings()
+        }
     },
     methods: {
+        setListener() {
+            if(this.ws) {
+                this.ws.onmessage = message => {
+                    const data = JSON.parse(message.data)
+                    if('findAll' === data.method && this.uuid === data.uuid) {
+                        this.settings = data.results.settings
+                    }
+                }
+            }
+        },        
+        getSettings() {
+            if(this.ws) {
+                this.ws.send(JSON.stringify({ object: 'Settings', method: 'findAll', uuid: this.uuid}))
+            }
+        },
         update() {
             this.ws.emit('setting.update', this.settings)
         },
