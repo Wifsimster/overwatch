@@ -6,18 +6,28 @@ const app_token = '3kYbyFKbG3GUi0LLV6C8HqPx8kwhbPfiXNI8fCW6pt4v57GmtpnAatkOXVwNj
 const track_id = 7
 const app_id = 'fr.freebox.overwatch'
 
-class Freebox {
-  constructor() {}
-
-  findOne() {
-    request(baseURL + '/api_version', (err, res, body) => {
-      if (!err && res.statusCode === 200) {
-        socket.emit('freebox.getOne.result', JSON.parse(body))
-      } else {
-        socket.emit('freebox.getOne.error', err)
-      }
-    })
-  }
+module.exports = {
+  findAll: findAll,
+  findOne: findOne,
+  create: create,
+  update: update,
+  destroy: destroy
 }
 
-module.exports = Freebox
+function findAll() {}
+
+function findOne() {
+  request(baseURL + '/api_version', (err, res, body) => {
+    if (!err && res.statusCode === 200) {
+      socket.emit('freebox.getOne.result', JSON.parse(body))
+    } else {
+      socket.emit('freebox.getOne.error', err)
+    }
+  })
+}
+
+function create() {}
+
+function update() {}
+
+function destroy() {}

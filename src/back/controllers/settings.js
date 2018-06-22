@@ -2,16 +2,24 @@ const jsonfile = require('jsonfile')
 const file = 'config/default.json'
 jsonfile.spaces = 2
 
-class Settings {
-  constructor() {}
-
-  findAll() {
-    return jsonfile.readFileSync(file)
-  }
-
-  update(settings) {
-    return jsonfile.writeFile(file, { settings: settings })
-  }
+module.exports = {
+  findAll: findAll,
+  findOne: findOne,
+  update: update,
+  update: update,
+  destroy: destroy
 }
 
-module.exports = Settings
+function findAll() {
+  return jsonfile.readFileSync(file)
+}
+
+function findOne() {}
+
+function create() {}
+
+function update(settings) {
+  return jsonfile.writeFile(file, { settings: settings })
+}
+
+function destroy() {}

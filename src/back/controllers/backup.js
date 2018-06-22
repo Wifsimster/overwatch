@@ -1,15 +1,17 @@
-class Backup {
-  constructor() {}
-
-  findAll() {}
-
-  findOne() {}
-
-  create() {}
-
-  update() {}
-
-  destroy() {}
+module.exports = {
+  findAll: findAll,
+  findOne: findOne,
+  create: create,
+  update: update,
+  destroy: destroy
 }
 
-module.exports = Backup
+function findAll() {}
+
+function findOne() {}
+
+function create() {}
+
+function update() {}
+
+function destroy() {}
