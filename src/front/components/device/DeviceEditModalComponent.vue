@@ -2,7 +2,7 @@
     <modal @close="hide()">
         <div slot="header">Edit device</div>
         <div slot="body">
-            <form class="pure-form pure-form-aligned">
+            <form class="pure-form pure-form-aligned" v-if="device">
                 <div class="pure-control-group">
                     <label for="name">Name</label>
                     <input id="name" type="text" v-model="device.name">
@@ -17,18 +17,17 @@
                 </div>
                 <div class="pure-control-group">
                     <label for="location">Location</label>
-                    <multiselect :options="locations" placeholder="Select one location" label="name" selectLabel="" selectedLabel="" deselectLabel="" :value="selectedLocation" @input="updateSelectedLocation" v-model="device.location">
-                    </multiselect>
+                    <multiselect v-model="device.location" :options="locations" placeholder="Select one location" label="name" selectLabel="" selectedLabel="" deselectLabel=""></multiselect>
                 </div>
                 <div class="pure-control-group">
                     <label for="type">Type</label>
-                    <multiselect :options="types" :multiple="true" placeholder="Select at least one type" label="name" selectLabel="" selectedLabel="" deselectLabel="" :close-on-select="false" :value="selectedTypes" @input="updateSelectedTypes" v-model="device.types">
+                    <multiselect v-model="device.types" :options="types" :multiple="true" placeholder="Select at least one type" label="name" selectLabel="" selectedLabel="" deselectLabel="" :close-on-select="false">
                     </multiselect>
                 </div>
             </form>
         </div>
         <div slot="footer">
-            <button class="pure-button pure-button-primary" @click="edit">Edit</button>
+            <button class="pure-button pure-button-primary" @click="update">Edit</button>
         </div>
     </modal>
 </template>
@@ -43,8 +42,8 @@ export default {
         Modal,
     },
     props: {
-        device: {
-            type: Object,
+        deviceId: {
+            type: Number,
         },
     },
     computed: {
@@ -60,45 +59,60 @@ export default {
             selectedLocation: null,
             refreshRate: null,
             uuid: null,
+            device: null
         }
     },
     created() {
         this.uuid = Vue.getUUID()
-
-        this.ws.emit('type.getAll', { uuid: this.uuid })
-
-        this.ws.on('type.getAll.result.' + this.uuid, data => {
-            this.types = data
-        })
-
-        this.ws.emit('location.getAll', { uuid: this.uuid })
-
-        this.ws.on('location.getAll.result.' + this.uuid, data => {
-            this.locations = data
-        })
-
-        this.ws.on('device.update.result.' + this.uuid, data => {
-            this.$emit('update')
-        })
+        this.setListener()
+        this.getDevice()
+        this.getLocations()
+        this.getTypes()
     },
-    watch: {
-        device() {
-            this.selectedTypes = this.device.types
-            this.selectedLocation = this.device.location
-        },
+     watch: {
+        ws() {
+            this.setListener()
+            this.getDevice()
+            this.getLocations()
+            this.getTypes()
+        }
     },
     methods: {
+        setListener() {
+            if(this.ws) {           
+                this.ws.onmessage = message => {
+                    const data = JSON.parse(message.data)
+                    if(this.uuid === data.uuid) {
+                        if('Device' === data.object && 'findOne' === data.method)  {
+                            this.device = data.results
+                        }
+                        if('Device' === data.object && 'update' === data.method)  {
+                            this.$emit('update', data.results)
+                        }
+                        if('Location' === data.object && 'findAll' === data.method) {
+                            this.locations = data.results
+                        }
+                        if('Type' === data.object && 'findAll' === data.method) {
+                            this.types = data.results
+                        }
+                    }
+                }
+            }
+        },
+        getDevice() {
+            this.ws.send(JSON.stringify({ object: 'Device', method: 'findOne', parameters:{ id: this.deviceId }, uuid: this.uuid }))
+        },
+        getLocations() {
+            this.ws.send(JSON.stringify({ object: 'Location', method: 'findAll', uuid: this.uuid }))
+        },
+        getTypes() {
+            this.ws.send(JSON.stringify({ object: 'Type', method: 'findAll', uuid: this.uuid }))
+        },
+        update() {
+            this.ws.send(JSON.stringify({ object: 'Device', method: 'update', parameters: this.device, uuid: this.uuid}))
+        },
         hide() {
             this.$emit('close')
-        },
-        updateSelectedTypes(types) {
-            this.device.types = types
-        },
-        updateSelectedLocation(location) {
-            this.device.locationId = location.id
-        },
-        edit() {
-            this.ws.emit('device.update', { uuid: this.uuid, data: this.device })
         },
     }
 }

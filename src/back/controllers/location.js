@@ -1,3 +1,5 @@
+const Location = require('../models/location')
+
 module.exports = {
   findAll: findAll,
   findOne: findOne,
@@ -6,7 +8,9 @@ module.exports = {
   destroy: destroy
 }
 
-function findAll() {}
+function findAll() {
+  return Location.findAll()
+}
 
 function findOne() {}
 

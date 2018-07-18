@@ -12,44 +12,55 @@ class Controller {
   constructor(wss) {
     wss.on('connection', function connection(ws, req) {
       ws.on('message', function incoming(data) {
-        console.log(`== Message received : ${data}`)
 
         try {
           data = JSON.parse(data)
+          const object = data.object
+          const method = data.method
+          const parameters = data.parameters
+          let results = null
+          
+          console.log(`== Message : ${data.object}.${data.method}()\r`)
 
-          switch (data.object) {
-            case 'Settings':
-              ws.send(JSON.stringify(Object.assign(data, { results: Settings[data.method]() })))
-              break
-            case 'Light':
-              ws.send(JSON.stringify(Object.assign(data, { results: Yeelight[data.method]() })))
-              break
-            case 'Freebox':
-              ws.send(JSON.stringify(Object.assign(data, { results: Freebox[data.method]() })))
-              break
-            case 'Device':
-              ws.send(JSON.stringify(Object.assign(data, { results: Device[data.method]() })))
-              break
-            case 'Message':
-              ws.send(JSON.stringify(Object.assign(data, { results: Message[data.method]() })))
-              break
-            case 'Type':
-              ws.send(JSON.stringify(Object.assign(data, { results: Type[data.method]() })))
-              break
-            case 'Location':
-              ws.send(JSON.stringify(Object.assign(data, { results: Location[data.method]() })))
-              break
-            case 'Backup':
-              ws.send(JSON.stringify(Object.assign(data, { results: Backup[data.method]() })))
-              break
-            case 'Scenario':
-              ws.send(JSON.stringify(Object.assign(data, { results: Scenario[data.method]() })))
-              break
-            default:
-              console.log('Object invalid :', data.object)
+          async function executeMethod(data) {
+            switch (object) {
+              case 'Settings':
+                results = Settings[method]()
+                break
+              case 'Device':
+                results = await Device[method](parameters)
+                break
+              case 'Light':
+                results = await Yeelight[method]()
+                break
+              case 'Freebox':
+                results = await Freebox[method]()
+                break
+              case 'Message':
+                results = await Message[method]()
+                break
+              case 'Type':
+                results = await Type[method]()
+                break
+              case 'Location':
+                results = await Location[method]()
+                break
+              case 'Backup':
+                results = await Backup[method]()
+                break
+              case 'Scenario':
+                results = await Scenario[method]()
+                break
+              default:
+                console.log('Object invalid :', object)
+            }
+
+            ws.send(JSON.stringify(Object.assign(data, { results: results })))
           }
+
+          executeMethod(data)
         } catch (err) {
-          console.error('Message is not JSON typed !')
+          console.error('Message is not JSON typed !', err)
         }
       })
     })

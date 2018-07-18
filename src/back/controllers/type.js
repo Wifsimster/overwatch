@@ -1,3 +1,5 @@
+const Type = require('../models/type')
+
 module.exports = {
   findAll: findAll,
   findOne: findOne,
@@ -6,7 +8,9 @@ module.exports = {
   destroy: destroy
 }
 
-function findAll() {}
+function findAll() {
+  return Type.findAll()
+}
 
 function findOne() {}
 

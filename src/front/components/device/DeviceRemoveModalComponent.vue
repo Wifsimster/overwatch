@@ -2,10 +2,10 @@
     <modal @close="hide()">
         <div slot="header">Remove a device</div>
         <div slot="body">
-            <p>Do you really want to delete this device ?</p>
+            <p v-if="device">Remove {{ device.name }} ?</p>
         </div>
         <div slot="footer">
-            <button class="pure-button pure-button-red" @click="remove()">Remove</button>
+            <button class="pure-button pure-button-red" @click="destroy()">Remove</button>
         </div>
     </modal>
 </template>
@@ -18,8 +18,8 @@ export default {
         Modal 
     },
     props: {
-        device: {
-            type: Object,
+        deviceId: {
+            type: Number,
         },
     },
     computed: {
@@ -30,18 +30,41 @@ export default {
     data() {
         return {            
             uuid: null,
+            device: null
         }
     },
     created() {
         this.uuid = Vue.getUUID()
-
-        this.ws.on('device.remove.result.' + this.uuid, () => {
-            this.$emit('remove')
-        })
+        this.setListener()
+        this.getDevice()
+    },
+     watch: {
+        ws() {
+            this.setListener()
+            this.getDevice()
+        }
     },
     methods: {
-        remove() {
-            this.ws.emit('device.remove', { uuid: this.uuid, id: this.device.id })
+        setListener() {
+            if(this.ws) {           
+                this.ws.onmessage = message => {
+                    const data = JSON.parse(message.data)
+                    if(this.uuid === data.uuid) {
+                        if('Device' === data.object && 'findOne' === data.method)  {
+                            this.device = data.results
+                        }
+                        if('Device' === data.object && 'destroy' === data.method)  {
+                            this.$emit('remove', data.results)
+                        }
+                    }
+                }
+            }
+        },
+        getDevice() {
+            this.ws.send(JSON.stringify({ object: 'Device', method: 'findOne', parameters: { id: this.deviceId }, uuid: this.uuid }))
+        },
+        destroy() {
+            this.ws.send(JSON.stringify({ object: 'Device', method: 'destroy', parameters: { id: this.deviceId }, uuid: this.uuid}))
         },
         hide() {
             this.$emit('close')

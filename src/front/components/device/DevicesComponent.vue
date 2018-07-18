@@ -1,10 +1,6 @@
 <template>
     <div>
-        <h2>Devices
-            <a @click="openRemoveAllModal()" title="Remove all devices">
-                <i class="material-icons">delete</i>
-            </a>
-        </h2>
+        <h2>Devices</h2>
         <transition name="opacity">
             <div class="devices" v-if="devices && devices.length > 0">
                 <table>
@@ -47,9 +43,8 @@
                         </tr>
                     </tbody>
                 </table>    
-                <edit v-if="editShow" :device="editDevice" @update="onUpdate" @close="editShow = false"></edit>    
-                <remove v-if="removeShow" :device="removeDevice" @remove="onRemove" @close="removeShow = false"></remove>    
-                <remove-all v-if="removeAllShow" @removeAll="onRemoveAll" @close="removeAllShow = false"></remove-all>    
+                <edit v-if="editShow" :device-id="editDevice.id" @update="onUpdate" @close="editShow = false"></edit>    
+                <remove v-if="removeShow" :device-id="removeDevice.id" @remove="onRemove" @close="removeShow = false"></remove>  
             </div>
             <div v-else>
                 <br>
@@ -63,12 +58,10 @@
 import Vue from 'vue'
 const Edit = () => import('./DeviceEditModalComponent.vue')
 const Remove = () => import('./DeviceRemoveModalComponent.vue')
-const RemoveAll = () => import('./DeviceRemoveAllModalComponent.vue')
 export default {
     components: {
         Edit,
-        Remove,
-        RemoveAll,
+        Remove
     },
     computed: {
         ws() {
@@ -83,7 +76,6 @@ export default {
             removeDevice: null,
             editShow: false,
             removeShow: false,
-            removeAllShow: false,
         }
     },
     created() {
@@ -103,7 +95,7 @@ export default {
                 this.ws.onmessage = message => {
                     const data = JSON.parse(message.data)
                     if('findAll' === data.method && this.uuid === data.uuid) {
-                        this.devices = data.results.devices
+                        this.devices = data.results
                     }
                 }
             }
@@ -121,20 +113,21 @@ export default {
             this.removeShow = true
             this.removeDevice = device
         },
-        openRemoveAllModal() {
-            this.removeAllShow = true
-        },
-        onRemove() {
-            this.getDevices()
-            this.removeShow = false
-        },
-        onRemoveAll() {
-            this.getDevices()
-            this.removeAllShow = false
-        },
-        onUpdate() {
-            this.getDevices()
+        onUpdate(data) {
+            this.devices.map((device, index) => {
+                if(device.id === data.id) {
+                    this.devices[index] = data 
+                }
+            })
             this.editShow = false
+        },
+        onRemove(results) {
+            this.devices.map((device, index) => {
+                if(device.id === this.removeDevice.id) {
+                    this.devices.splice(index, 1)
+                }
+            })
+            this.removeShow = false
         },
     }
 }  

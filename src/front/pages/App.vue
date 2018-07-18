@@ -19,7 +19,6 @@ const ComHeader = () => import('../components/HeaderComponent.vue')
 const ComSidebar = () => import('../components/SidebarComponent.vue')
 const Alert = () => import("../components/AlertComponent.vue")
 const Notify = () => import("../components/NotificationComponent.vue")
-import "../sass/_multiselect.scss"
 import 'purecss'
 import 'purecss/build/grids-responsive.css'
 export default {
@@ -36,7 +35,6 @@ export default {
         
         ws.onopen = () => {
             console.log('WS connection opened !')
-            ws.send(JSON.stringify({ message: `Hi`}))
             this.$store.dispatch('setWebSocket', ws)
         }
 
@@ -44,6 +42,8 @@ export default {
     }
 }
 </script>
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style lang="scss">
 @import '../sass/global';
@@ -55,4 +55,5 @@ export default {
 @import '../sass/device';
 @import '../sass/tabs';
 @import '../sass/transition';
+@import '../sass/multiselect';
 </style>

@@ -1,10 +1,10 @@
-const Device = require("../models/device")
-const Type = require("../models/type")
-const Location = require("../models/location")
-const Message = require("../models/message")
+const Device = require('../models/device')
+const Type = require('../models/type')
+const Location = require('../models/location')
+const Message = require('../models/message')
 
 module.exports = socket => {
-  socket.on("device.getAll", options => {
+  socket.on('device.getAll', options => {
     Device.findAll({
       include: [Type, Location]
     })
@@ -18,7 +18,7 @@ module.exports = socket => {
               limit: 1,
               where: {
                 deviceId: device.id,
-                type: "data"
+                type: 'data'
               }
             })
           )
@@ -31,37 +31,37 @@ module.exports = socket => {
                 return JSON.parse(messages[0].data)
               }
             })
-            socket.emit("device.getAll.result." + options.uuid, devices)
+            socket.emit('device.getAll.result.' + options.uuid, devices)
           })
           .catch(err => {
             console.error(err)
-            socket.emit("device.getAll.error", err)
+            socket.emit('device.getAll.error', err)
           })
       })
       .catch(err => {
         console.error(err)
-        socket.emit("device.getAll.error", err)
+        socket.emit('device.getAll.error', err)
       })
   })
 
-  socket.on("device.getOne", options => {
+  socket.on('device.getOne', options => {
     if (options.id) {
       Device.findById(options.id, {
         include: [Type, Location, Message]
       })
         .then(device => {
-          socket.emit("device.getOne.result." + options.uuid, device)
+          socket.emit('device.getOne.result.' + options.uuid, device)
         })
         .catch(err => {
           console.error(err)
-          socket.emit("device.getOne.error", err)
+          socket.emit('device.getOne.error', err)
         })
     } else {
-      socket.emit("device.getOne.error")
+      socket.emit('device.getOne.error')
     }
   })
 
-  socket.on("device.update", options => {
+  socket.on('device.update', options => {
     if (options.data) {
       let data = options.data
       Device.findById(data.id)
@@ -83,50 +83,50 @@ module.exports = socket => {
                 { where: { id: data.id } }
               )
                 .then((count, rows) => {
-                  socket.emit("device.update.result." + options.uuid, { count: count, rows: rows })
+                  socket.emit('device.update.result.' + options.uuid, { count: count, rows: rows })
                 })
                 .catch(err => {
                   console.error(err)
-                  socket.emit("device.getAll.error", err)
+                  socket.emit('device.getAll.error', err)
                 })
             })
             .catch(err => {
               console.error(err)
-              socket.emit("device.getAll.error", err)
+              socket.emit('device.getAll.error', err)
             })
         })
         .catch(err => {
           console.error(err)
-          socket.emit("device.getAll.error", err)
+          socket.emit('device.getAll.error', err)
         })
     } else {
-      socket.emit("device.getAll.error")
+      socket.emit('device.getAll.error')
     }
   })
 
-  socket.on("device.remove", options => {
+  socket.on('device.remove', options => {
     if (options.data) {
       Device.destroy({ where: { id: options.data.id } })
         .then(rst => {
-          socket.emit("device.remove.result." + options.uuid, rst)
+          socket.emit('device.remove.result.' + options.uuid, rst)
         })
         .catch(err => {
           console.error(err)
-          socket.emit("device.remove.error", err)
+          socket.emit('device.remove.error', err)
         })
     } else {
-      socket.emit("device.remove.error")
+      socket.emit('device.remove.error')
     }
   })
 
-  socket.on("device.removeAll", options => {
+  socket.on('device.removeAll', options => {
     Device.destroy({ where: {} })
       .then(rst => {
-        socket.emit("device.removeAll.result." + options.uuid, rst)
+        socket.emit('device.removeAll.result.' + options.uuid, rst)
       })
       .catch(err => {
         console.error(err)
-        socket.emit("device.removeAll.error", err)
+        socket.emit('device.removeAll.error', err)
       })
   })
 }
