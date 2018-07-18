@@ -42,7 +42,7 @@
             </div>
         </transition>
     
-        <remove-modal v-if="removeShow" :message="removeMessage" @remove="onRemove" @close="removeShow = false"></remove-modal>
+        <remove-modal v-if="removeShow" :messageId="removeMessage.id" @remove="onRemove" @close="removeShow = false"></remove-modal>
         <remove-all-modal v-if="removeAllShow" @removeAll="onRemoveAll" @close="removeAllShow = false"></remove-all-modal>
     </div>
 </template>
@@ -60,9 +60,6 @@ export default {
         ws() {
             return this.$store.getters.ws
         },
-        messages() {
-            return this.$store.getters.messages
-        },
         filters() {
             return this.$store.getters.filters
         },
@@ -70,13 +67,14 @@ export default {
     data() {
         return {
             uuid: null,
+            messages: null,
             removeMessage: null,
             removeShow: false,
             removeAllShow: false,
             type: 'data',
         }
     },
-    created() {
+     created() {
         this.uuid = Vue.getUUID()
         this.setListener()
         this.getMessages()
@@ -87,6 +85,7 @@ export default {
             this.getMessages()
         },
         type() {
+            this.setListener()
             this.getMessages()
         }
     },
@@ -95,14 +94,10 @@ export default {
             if(this.ws) {
                 this.ws.onmessage = message => {
                     const data = JSON.parse(message.data)
-                    if('findAll' === data.method && this.uuid === data.uuid) {
-                        this.devices = data.results.devices
-                    }
-                    if('remove' === data.method && this.uuid === data.uuid) {
-                        this.devices = data.results.devices
-                    }
-                    if('create' === data.method && this.uuid === data.uuid) {
-                        this.devices = data.results.devices
+                    if(this.uuid === data.uuid) {
+                        if('Message' === data.object && 'findAll' === data.method) {
+                            this.messages = data.results
+                        }
                     }
                 }
             }
@@ -120,11 +115,15 @@ export default {
             this.removeAllShow = true
         },
         onRemove() {
-            this.getMessages()
+            this.messages.map((message, index) => {
+                if(message.id === this.removeMessage.id) {
+                    this.messages.splice(index, 1)
+                }
+            })
             this.removeShow = false
         },
         onRemoveAll() {
-            this.getMessages()
+            this.messages = null
             this.removeAllShow = false
         },
     }

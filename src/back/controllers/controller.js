@@ -12,14 +12,13 @@ class Controller {
   constructor(wss) {
     wss.on('connection', function connection(ws, req) {
       ws.on('message', function incoming(data) {
-
         try {
           data = JSON.parse(data)
           const object = data.object
           const method = data.method
           const parameters = data.parameters
           let results = null
-          
+
           console.log(`== Message : ${data.object}.${data.method}()\r`)
 
           async function executeMethod(data) {
@@ -30,14 +29,14 @@ class Controller {
               case 'Device':
                 results = await Device[method](parameters)
                 break
+              case 'Message':
+                results = await Message[method](parameters)
+                break
               case 'Light':
                 results = await Yeelight[method]()
                 break
               case 'Freebox':
                 results = await Freebox[method]()
-                break
-              case 'Message':
-                results = await Message[method]()
                 break
               case 'Type':
                 results = await Type[method]()
