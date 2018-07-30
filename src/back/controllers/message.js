@@ -9,9 +9,9 @@ module.exports = {
   destroy: destroy
 }
 
-function findAll(parameters = {}) {
+function findAll(parameters = { orderBy: 'updatedAt' }) {
   let options = {
-    order: [['createdAt', 'DESC']],
+    order: [parameters.orderBy.split(' ')],
     limit: parameters.limit,
     offset: parameters.offset,
     include: [],

@@ -63,7 +63,6 @@ export default {
     data() {
         return {
             devices: [],
-            socket: io(),
         }
     },
     created() {

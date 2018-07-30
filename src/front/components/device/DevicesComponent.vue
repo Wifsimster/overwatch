@@ -42,13 +42,13 @@
                             </td>
                         </tr>
                     </tbody>
-                </table>    
+                </table>
                 <edit v-if="editShow" :device-id="editDevice.id" @update="onUpdate" @close="editShow = false"></edit>    
                 <remove v-if="removeShow" :device-id="removeDevice.id" @remove="onRemove" @close="removeShow = false"></remove>  
             </div>
             <div v-else>
                 <br>
-                <p class="center">No device</p>
+                <p class="center">No device.</p>
             </div>
         </transition>
     </div>

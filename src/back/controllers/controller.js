@@ -33,22 +33,22 @@ class Controller {
                 results = await Message[method](parameters)
                 break
               case 'Light':
-                results = await Yeelight[method]()
+                results = await Yeelight[method](parameters)
                 break
               case 'Freebox':
-                results = await Freebox[method]()
+                results = await Freebox[method](parameters)
                 break
               case 'Type':
-                results = await Type[method]()
+                results = await Type[method](parameters)
                 break
               case 'Location':
-                results = await Location[method]()
+                results = await Location[method](parameters)
                 break
               case 'Backup':
-                results = await Backup[method]()
+                results = await Backup[method](parameters)
                 break
               case 'Scenario':
-                results = await Scenario[method]()
+                results = await Scenario[method](parameters)
                 break
               default:
                 console.log('Object invalid :', object)

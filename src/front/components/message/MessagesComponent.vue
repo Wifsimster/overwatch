@@ -1,4 +1,4 @@
-<template>
+j<template>
     <div>
         <h2>Messages
             <a @click="openRemoveAllModal()" title="Remove all messages">
