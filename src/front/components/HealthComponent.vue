@@ -30,14 +30,33 @@
                 <span>MQTT Error !</span>
             </span>
         </transition>
+        
+        <transition name="opacity">
+            <span v-if="wsHealth === 'online'">
+                <span class="led green"></span>
+                <span>WS Online</span>
+            </span>
+        </transition>
+        <transition name="opacity">
+            <span v-if="wsHealth === 'closed'">
+                <span class="led red"></span>
+                <span>WS Offline</span>
+            </span>
+        </transition>
+        <transition name="opacity">
+            <span v-if="wsHealth === 'error'">
+                <span class="led red"></span>
+                <span>WS on error</span>
+            </span>
+        </transition>
     </div>
 </template>
 
 <script>
 export default {
     computed: {
-        ws() {
-            return this.$store.getters.ws
+        wsHealth() {
+            return this.$store.getters.webSocket.health
         }
     },
     data() {
@@ -50,14 +69,15 @@ export default {
         }
     },
     created() {
-        if(this.socket) {
-            this.ws.send('mqtt.status')
 
-            this.ws.on('message', function incoming(data) {
-                console.log('Data :', data)
-            })
-        }
+        // if(this.socket) {
+        //     this.ws.send('mqtt.status')
 
+        //     this.ws.on('message', function incoming(data) {
+        //         console.log('Data :', data)
+        //     })
+        // }
+        //        
         // this.ws.on('mqtt.connected', result => {
         //     this.online = true
         //     this.offline = false

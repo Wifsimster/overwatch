@@ -29,11 +29,6 @@ export default {
             type: Number,
         },
     },
-    computed: {
-        ws() {
-            return this.$store.getters.ws
-        }
-    },
     data() {
         return {
             uuid: null,
@@ -44,34 +39,28 @@ export default {
         this.uuid = Vue.getUUID()
         this.getInfo()
     },
-     watch: {
-        ws() {
-            this.getInfo()
-        }
-    },
     methods: {
-        setListener() {
-            if(this.ws) {           
-                this.ws.onmessage = message => {
-                    const data = JSON.parse(message.data)
-                    if(this.uuid === data.uuid) {
-                        if('Location' === data.object && 'findOne' === data.method)  {
-                            this.location = data.results
-                        }
-                        if('Location' === data.object && 'update' === data.method)  {
-                            this.$emit('update', data.results)
-                        }
+        getInfo() {
+            this.$ws.send(JSON.stringify({ object: 'Location', method: 'findOne', parameters:{ id: this.id }, uuid: this.uuid }))
+            this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Location' === data.object && 'findOne' === data.method)  {
+                        this.location = data.results
                     }
                 }
             }
         },
-        getInfo() {
-            this.ws.send(JSON.stringify({ object: 'Location', method: 'findOne', parameters:{ id: this.id }, uuid: this.uuid }))
-            this.setListener()
-        },
         update() {
-            this.ws.send(JSON.stringify({ object: 'Location', method: 'update', parameters: this.location, uuid: this.uuid}))
-            this.setListener()
+            this.$ws.send(JSON.stringify({ object: 'Location', method: 'update', parameters: this.location, uuid: this.uuid}))
+             this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Location' === data.object && 'update' === data.method)  {
+                        this.$emit('update', data.results)
+                    }
+                }
+            }
         },
         hide() {
             this.$emit('close')

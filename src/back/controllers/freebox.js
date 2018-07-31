@@ -1,33 +1,54 @@
-const request = require('request-promise-native')
+const axios = require('axios')
 const crypto = require('crypto')
 
-const baseURL = 'http://mafreebox.freebox.fr/api/v3/'
-const app_token = '3kYbyFKbG3GUi0LLV6C8HqPx8kwhbPfiXNI8fCW6pt4v57GmtpnAatkOXVwNjwXn'
-const track_id = 7
-const app_id = 'fr.freebox.overwatch'
+const baseURL = 'http://mafreebox.freebox.fr/api/v4/'
+const appId = 'fr.freebox.overwatch'
+// const app_token = '3kYbyFKbG3GUi0LLV6C8HqPx8kwhbPfiXNI8fCW6pt4v57GmtpnAatkOXVwNjwXn'
+// const track_id = 7
 
 module.exports = {
-  findAll: findAll,
-  findOne: findOne,
-  create: create,
-  update: update,
-  destroy: destroy
+  generateToken: generateToken,
+  getAuthorization: getAuthorization,
+  getChallenge: getChallenge,
+  openSession: openSession,
+  closeSession: closeSession,
+  getInfos: getInfos
 }
 
-function findAll() {}
-
-function findOne() {
-  request(baseURL + '/api_version', (err, res, body) => {
-    if (!err && res.statusCode === 200) {
-      socket.emit('freebox.getOne.result', JSON.parse(body))
-    } else {
-      socket.emit('freebox.getOne.error', err)
-    }
+function generateToken() {
+  return axios.post(baseURL + 'login/authorize', {
+    app_id: appId,
+    app_name: 'Overwatch',
+    app_version: '1.0.0',
+    device_name: 'Overwatch'
   })
 }
 
-function create() {}
+function getAuthorization(parameters = { trackId: null }) {
+  return axios.get(`${baseURL}login/authorize/${parameters.trackId}`)
+}
 
-function update() {}
+function getChallenge() {
+  return axios.get(`${baseURL}login`)
+}
 
-function destroy() {}
+function openSession(parameters = { appId: null, challenge: null }) {
+  return axios.post(`${baseURL}login/session`, {
+    app_id: parameters.appId,
+    password: parameters.challenge
+  })
+}
+
+function closeSession() {
+  return axios.post(`${baseURL}login/logout`, {})
+}
+
+function getInfos(parameters) {
+  return axios.get(
+    `${baseURL}login/session`,
+    {},
+    {
+      headers: { 'X-Fbx-App-Auth': parameters.token }
+    }
+  )
+}

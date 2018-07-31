@@ -56,9 +56,6 @@ export default {
         DestroyAll,
     },
     computed: {
-        ws() {
-            return this.$store.getters.ws
-        },
         filters() {
             return this.$store.getters.filters
         },
@@ -76,33 +73,27 @@ export default {
      created() {
         this.uuid = Vue.getUUID()
         this.getList()
+        this.setListener()
     },
     watch: {
-        ws() {
-            this.getList()
-        },
         type() {
             this.getList()
         }
     },
     methods: {
         setListener() {
-            if(this.ws) {
-                this.ws.onmessage = message => {
-                    const data = JSON.parse(message.data)
-                    if(this.uuid === data.uuid) {
-                        if('Message' === data.object && 'findAll' === data.method) {
-                            this.list = data.results
-                        }
+            this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Message' === data.object && 'findAll' === data.method) {
+                        this.list = data.results
                     }
                 }
             }
         },
         getList() {
-            if(this.ws) {
-                this.ws.send(JSON.stringify({ object: 'Message', method: 'findAll', parameters: { type: this.type, limit: 22, offset: 0 }, uuid: this.uuid}))
-                this.setListener()
-            }
+            this.$ws.send(JSON.stringify({ object: 'Message', method: 'findAll', parameters: { type: this.type, limit: 22, offset: 0 }, uuid: this.uuid}))
+            this.setListener()
         },
         openDestroyModal(item) {
             this.destroyModalShow = true

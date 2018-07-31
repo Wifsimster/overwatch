@@ -63,11 +63,6 @@ export default {
         Edit,
         Destroy
     },
-    computed: {
-        ws() {
-            return this.$store.getters.ws
-        }
-    },
     data() {
         return {
             uuid: null,
@@ -80,11 +75,6 @@ export default {
     created() {
         this.uuid = Vue.getUUID()
         this.getList()
-    },
-    watch: {
-        ws() {
-            this.getList()
-        }
     },
     methods: {
         openEditModal(item) {
@@ -108,17 +98,12 @@ export default {
             this.destroyModalShow = false
         },
         getList() {
-            this.ws.send(JSON.stringify({ object: 'Device', method: 'findAll', uuid: this.uuid, parameters : { orderBy: 'name'} }))
-            this.setListener()
-        },
-        setListener() {   
-            if(this.ws) {           
-                this.ws.onmessage = message => {
-                    const data = JSON.parse(message.data)
-                    if(this.uuid === data.uuid) {
-                        if('Device' === data.object && 'findAll' === data.method) {
-                            this.list = data.results
-                        }
+            this.$ws.send(JSON.stringify({ object: 'Device', method: 'findAll', uuid: this.uuid, parameters : { orderBy: 'name'} }))
+            this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Device' === data.object && 'findAll' === data.method) {
+                        this.list = data.results
                     }
                 }
             }

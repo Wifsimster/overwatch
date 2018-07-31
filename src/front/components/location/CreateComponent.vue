@@ -24,11 +24,6 @@ export default {
         Multiselect,
         Modal,
     },
-    computed: {
-        ws() {
-            return this.$store.getters.ws
-        }
-    },
     data() {
         return {
             uuid: null,
@@ -39,22 +34,17 @@ export default {
         this.uuid = Vue.getUUID()
     },
     methods: {
-        setListener() {
-            if(this.ws) {           
-                this.ws.onmessage = message => {
-                    const data = JSON.parse(message.data)
-                    if(this.uuid === data.uuid) {
-                        if('Location' === data.object && 'create' === data.method)  {
-                            this.$emit('create', data.results)
-                        }
+        create() {
+            if(this.name) {
+                this.$ws.send(JSON.stringify({ object: 'Location', method: 'create', parameters: { name: this.name }, uuid: this.uuid}))
+                this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Location' === data.object && 'create' === data.method)  {
+                        this.$emit('create', data.results)
                     }
                 }
             }
-        },
-        create() {
-            if(this.name) {
-                this.ws.send(JSON.stringify({ object: 'Location', method: 'create', parameters: { name: this.name }, uuid: this.uuid}))
-                this.setListener()
             }
         },
         hide() {

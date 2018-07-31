@@ -29,16 +29,6 @@ export default {
         Notify
     },
     created() {
-        const ws = new WebSocket('ws://localhost:8082')
-
-        ws.onerror = (err) => console.error('WS :', err)
-        
-        ws.onopen = () => {
-            console.log('WS connection opened !')
-            this.$store.dispatch('setWebSocket', ws)
-        }
-
-        ws.onclose = () => console.log('Connection WS closed !')        
     }
 }
 </script>

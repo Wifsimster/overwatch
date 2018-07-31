@@ -26,12 +26,6 @@
                 </router-link>
             </li>
             <li>
-                <router-link to="/backup" class="link">
-                    <i class="material-icons">backup</i>
-                    <span>Backup</span>
-                </router-link>
-            </li>
-            <li>
                 <router-link to="/scenario" class="link">
                     <i class="material-icons">alarm_on</i>
                     <span>Scenario</span>
@@ -40,17 +34,16 @@
         </ul>
     
         <div class="bottom">
-            <mqtt-health></mqtt-health>
-        </div>
-    
+            <health></health>
+        </div>    
     </div>
 </template>
 
 <script>
-const MqttHealth = () => import('./MqttHealthComponent.vue')
+const Health = () => import('./HealthComponent.vue')
 export default {
     components: { 
-        MqttHealth 
+        Health 
     },
 }
 </script>

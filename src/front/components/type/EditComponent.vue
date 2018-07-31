@@ -33,11 +33,6 @@ export default {
             type: Number,
         },
     },
-    computed: {
-        ws() {
-            return this.$store.getters.ws
-        }
-    },
     data() {
         return {
             uuid: null,
@@ -48,34 +43,29 @@ export default {
         this.uuid = Vue.getUUID()
         this.getInfo()
     },
-     watch: {
-        ws() {
-            this.getInfo()
-        }
-    },
-    methods: {
-        setListener() {
-            if(this.ws) {           
-                this.ws.onmessage = message => {
-                    const data = JSON.parse(message.data)
-                    if(this.uuid === data.uuid) {
-                        if('Type' === data.object && 'findOne' === data.method)  {
-                            this.type = data.results
-                        }
-                        if('Type' === data.object && 'update' === data.method)  {
-                            this.$emit('update', data.results)
-                        }
+    methods: {       
+              
+        getInfo() {
+            this.$ws.send(JSON.stringify({ object: 'Type', method: 'findOne', parameters:{ id: this.id }, uuid: this.uuid }))
+            this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Type' === data.object && 'findOne' === data.method)  {
+                        this.type = data.results
                     }
                 }
             }
         },
-        getInfo() {
-            this.ws.send(JSON.stringify({ object: 'Type', method: 'findOne', parameters:{ id: this.id }, uuid: this.uuid }))
-            this.setListener()
-        },
         update() {
-            this.ws.send(JSON.stringify({ object: 'Type', method: 'update', parameters: this.type, uuid: this.uuid}))
-            this.setListener()
+            this.$ws.send(JSON.stringify({ object: 'Type', method: 'update', parameters: this.type, uuid: this.uuid}))
+            this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Type' === data.object && 'update' === data.method)  {
+                        this.$emit('update', data.results)
+                    }
+                }
+            }
         },
         hide() {
             this.$emit('close')

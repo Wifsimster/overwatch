@@ -1,6 +1,5 @@
 <template>
-    <div class="flex-container" v-if="settings">
-    
+    <div class="flex-container" v-if="settings">    
         <h1>Others</h1>
         <div class="flex-container others">
             <date-time v-if="settings" :settings="settings"></date-time>
@@ -30,8 +29,8 @@
 <script>
 import Vue from 'vue'
 const DateTime = () => import('../components/DateTimeComponent.vue')
-const Freebox = () => import('../components/FreeboxComponent.vue')
-const Camera = () => import('../components/CameraComponent.vue')
+const Freebox = () => import('../components/freebox/FreeboxComponent.vue')
+const Camera = () => import('../components/camera/CameraComponent.vue')
 const Lights = () => import('../components/yeelight/LightsComponent.vue')
 const Esp8266 = () => import('../components/esp8266/Esp8266Component.vue')
 const Netatmo = () => import('../components/netatmo/NetatmoComponent.vue')
@@ -44,11 +43,6 @@ export default {
         Netatmo,
         Esp8266,
     },
-    computed: {
-        ws() {
-            return this.$store.getters.ws
-        }
-    },
     data() {
         return {
             uuid: null,
@@ -58,19 +52,12 @@ export default {
     },
     created() {
         this.uuid = Vue.getUUID()
-        this.setListener()
         this.getSettings()
-    },
-    watch: {
-        ws() {
-            this.setListener()
-            this.getSettings()
-        }
     },
     methods: {
         setListener() {
-            if(this.ws) {
-                this.ws.onmessage = message => {
+            if(this.$ws) {
+                this.$ws.onmessage = message => {
                     const data = JSON.parse(message.data)
                     if('findAll' === data.method && this.uuid === data.uuid) {
                         this.settings = data.results.settings
@@ -79,9 +66,8 @@ export default {
             }
         },        
         getSettings() {
-            if(this.ws) {
-                this.ws.send(JSON.stringify({ object: 'Settings', method: 'findAll', uuid: this.uuid}))
-            }
+            this.$ws.send(JSON.stringify({ object: 'Settings', method: 'findAll', uuid: this.uuid}))
+            this.setListener()
         },
         display(name) {
             this.settings.map((setting, index) => {

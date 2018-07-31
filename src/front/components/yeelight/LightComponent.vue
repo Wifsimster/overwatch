@@ -66,11 +66,6 @@ export default {
             required: true,
         },
     },
-    computed: {
-        ws() {
-            return this.$store.getters.ws
-        },
-    },
     data() {
         return {            
             bulbImg: bulbImg,
@@ -112,60 +107,58 @@ export default {
             this.getValues()
         },
         getValues() {
-            if (this.device) {
-                this.ws.emit('light.getValues', this.device.id)
-
-                this.ws.on('light.getValues.result.' + this.device.id, data => {
-                    if (data && typeof data === 'object') {
-                        Object.assign(this.device, data)
-                        if (this.device.power === 'on') { this.state = true }
-                        if (this.device.power === 'off') { this.state = false }
+            if (this.device) {           
+                 this.$ws.send(JSON.stringify({ object: 'Light', method: 'findOne', uuid: this.uuid, parameters : { id: this.device.id } }))
+                 this.$ws.onmessage = message => {
+                    const data = JSON.parse(message.data)
+                    if(this.uuid === data.uuid) {
+                        if('Light' === data.object && 'findOne' === data.method) {
+                            Object.assign(this.device, data.results)
+                            if (this.device.power === 'on') { this.state = true }
+                            if (this.device.power === 'off') { this.state = false }
+                        }
                     }
-                })
-
-                this.ws.on('light.getValues.error.' + this.device.id, err => {
-                    console.error('Error :', err)
-                    this.error = true
-                })
+                }
             }
         },
         toggle() {
-            this.ws.emit('light.toggle', this.device.id)
-            this.ws.on('light.toggle.result.' + this.device.id, () => {
-                console.log('Toggle')
-                this.getValues()
-            })
-            this.ws.on('light.toggle.error.' + this.device.id, err => {
-                console.error('Error :', err)
-                this.error = true
-            })
+            this.$ws.send(JSON.stringify({ object: 'Light', method: 'toggle', uuid: this.uuid, parameters : { id: this.device.id } }))
+            this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Light' === data.object && 'toggle' === data.method) {
+                        this.getValues()
+                    }
+                }
+            }
         },
-        setBrightness(value) {
-            this.ws.emit('light.setBrightness', {
+        setBrightness(value) {            
+            this.$ws.send(JSON.stringify({ object: 'Light', method: 'setBrightness', uuid: this.uuid, parameters : {
                 id: this.device.id,
                 brightness: parseInt(value)
-            })
-            this.ws.on('light.setBrightness.result.' + this.device.id, () => {
-                console.log('Result - SetBrightness')
-            })
-            this.ws.on('light.setBrightness.error.' + this.device.id, err => {
-                console.error('Error :', err)
-                this.error = true
-            })
+            }}))
+            this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Light' === data.object && 'setBrightness' === data.method) {
+                        this.getValues()
+                    }
+                }
+            }
         },
         setRGB(value) {
-            this.ws.emit('light.setRGB', {
+             this.$ws.send(JSON.stringify({ object: 'Light', method: 'setRGB', uuid: this.uuid, parameters : {
                 id: this.device.id,
                 hex: value
-            })
-            this.ws.on('light.setRGB.result.' + this.device.id, () => {
-                console.log('Result - SetRGB :', value)
-                this.hex = value
-            })
-            this.ws.on('light.setRGB.error.' + this.device.id, err => {
-                console.error('Error :', err)
-                this.error = true
-            })
+            }}))
+            this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Light' === data.object && 'setRGB' === data.method) {
+                        this.hex = value
+                    }
+                }
+            }
         },
         onClose() {
             this.modalShow = false

@@ -28,11 +28,6 @@ export default {
         Multiselect,
         Modal,
     },
-    computed: {
-        ws() {
-            return this.$store.getters.ws
-        }
-    },
     data() {
         return {
             uuid: null,
@@ -44,9 +39,10 @@ export default {
         this.uuid = Vue.getUUID()
     },
     methods: {
-        setListener() {
-            if(this.ws) {           
-                this.ws.onmessage = message => {
+        create() {
+            if(this.name) {
+                this.$ws.send(JSON.stringify({ object: 'Type', method: 'create', parameters: { name: this.name, key: this.key }, uuid: this.uuid}))
+                this.$ws.onmessage = message => {
                     const data = JSON.parse(message.data)
                     if(this.uuid === data.uuid) {
                         if('Type' === data.object && 'create' === data.method)  {
@@ -54,12 +50,6 @@ export default {
                         }
                     }
                 }
-            }
-        },
-        create() {
-            if(this.name) {
-                this.ws.send(JSON.stringify({ object: 'Type', method: 'create', parameters: { name: this.name, key: this.key }, uuid: this.uuid}))
-                this.setListener()
             }
         },
         hide() {

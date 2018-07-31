@@ -24,11 +24,6 @@ export default {
             type: Number,
         },
     },
-    computed: {
-        ws() {
-            return this.$store.getters.ws
-        }
-    },
     data() {
         return {
             uuid: null,
@@ -39,34 +34,28 @@ export default {
         this.uuid = Vue.getUUID()
         this.getInfo()
     },
-     watch: {
-        ws() {
-            this.getInfo()
-        }
-    },
-    methods: {
-        setListener() {
-            if(this.ws) {           
-                this.ws.onmessage = message => {
-                    const data = JSON.parse(message.data)
-                    if(this.uuid === data.uuid) {
-                        if('Type' === data.object && 'findOne' === data.method)  {
-                            this.location = data.results
-                        }
-                        if('Type' === data.object && 'destroy' === data.method)  {
-                            this.$emit('destroy', data.results)
-                        }
+    methods: {       
+        getInfo() {
+            this.$ws.send(JSON.stringify({ object: 'Type', method: 'findOne', parameters:{ id: this.id }, uuid: this.uuid }))
+            this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Type' === data.object && 'findOne' === data.method)  {
+                        this.location = data.results
                     }
                 }
             }
         },
-        getInfo() {
-            this.ws.send(JSON.stringify({ object: 'Type', method: 'findOne', parameters:{ id: this.id }, uuid: this.uuid }))
-            this.setListener()
-        },
         destroy() {
-            this.ws.send(JSON.stringify({ object: 'Type', method: 'destroy', parameters: { id: this.id }, uuid: this.uuid}))
-            this.setListener()
+            this.$ws.send(JSON.stringify({ object: 'Type', method: 'destroy', parameters: { id: this.id }, uuid: this.uuid}))
+            this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Type' === data.object && 'destroy' === data.method)  {
+                        this.$emit('destroy', data.results)
+                    }
+                }
+            }
         },
         hide() {
             this.$emit('close')

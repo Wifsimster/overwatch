@@ -23,7 +23,6 @@ Personal home automation with real time messaging for Raspberry Pi 3.
 - [x] Color picker for Yeelight devices
 - [ ] [H801](https://github.com/Wifsimster/h801-mqtt/tree/master) RGB led strip
 - [ ] Enable/disabled scenario
-- [ ] Backup data
 - [ ] Netatmo meteo prevision
 
 ## Powered with
@@ -31,7 +30,7 @@ Personal home automation with real time messaging for Raspberry Pi 3.
 - [Vue.js 2.5.x](https://vuejs.org/)
 - [Webpack 4.x](https://webpack.js.org/)
 - [MQTT 2.18.x](https://github.com/mqttjs/MQTT.js)
-- [Web Socket 5.x](https://github.com/websockets/ws)
+- [Web Socket 6.x](https://github.com/websockets/ws)
 - [Sequelize 4.x](http://docs.sequelizejs.com/en/v3/)
 - [RTSP stream wrapper](https://github.com/Wifsimster/node-rtsp-stream-es6)
 - [Node-cron](https://github.com/merencia/node-cron)

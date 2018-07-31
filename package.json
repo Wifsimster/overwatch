@@ -13,6 +13,7 @@
     "stats": "node_modules/.bin/webpack --config webpack.prod.js --mode production --profile --json > stats.json"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express": "^4.16.3",

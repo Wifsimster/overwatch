@@ -5,7 +5,6 @@ const Device = require('./device')
 const Message = require('./message')
 const Type = require('./type')
 const Location = require('./location')
-const Backup = require('./backup')
 const Scenario = require('./scenario')
 
 class Controller {
@@ -36,16 +35,16 @@ class Controller {
                 results = await Yeelight[method](parameters)
                 break
               case 'Freebox':
-                results = await Freebox[method](parameters)
+                results = await Freebox[method](parameters).catch(err => {
+                  console.error('Error :', err)
+                  return { error: true, err: err }
+                })
                 break
               case 'Type':
                 results = await Type[method](parameters)
                 break
               case 'Location':
                 results = await Location[method](parameters)
-                break
-              case 'Backup':
-                results = await Backup[method](parameters)
                 break
               case 'Scenario':
                 results = await Scenario[method](parameters)

@@ -46,11 +46,6 @@ export default {
             type: Number,
         },
     },
-    computed: {
-        ws() {
-            return this.$store.getters.ws
-        }
-    },
     data() {
         return {
             types: [],
@@ -64,54 +59,54 @@ export default {
     },
     created() {
         this.uuid = Vue.getUUID()
-        this.getDevice()
+        this.getInfo()
         this.getLocations()
         this.getTypes()
     },
-     watch: {
-        ws() {
-            this.getDevice()
-            this.getLocations()
-            this.getTypes()
-        }
-    },
     methods: {
-        setListener() {
-            if(this.ws) {           
-                this.ws.onmessage = message => {
-                    const data = JSON.parse(message.data)
-                    if(this.uuid === data.uuid) {
-                        if('Device' === data.object && 'findOne' === data.method)  {
-                            this.device = data.results
-                        }
-                        if('Device' === data.object && 'update' === data.method)  {
-                            this.$emit('update', data.results)
-                        }
-                        if('Location' === data.object && 'findAll' === data.method) {
-                            this.locations = data.results
-                        }
-                        if('Type' === data.object && 'findAll' === data.method) {
-                            this.types = data.results
-                        }
+        getInfo() {
+            this.$ws.send(JSON.stringify({ object: 'Device', method: 'findOne', parameters:{ id: this.id }, uuid: this.uuid }))
+             this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Device' === data.object && 'findOne' === data.method)  {
+                        this.device = data.results
                     }
                 }
             }
         },
-        getDevice() {
-            this.ws.send(JSON.stringify({ object: 'Device', method: 'findOne', parameters:{ id: this.id }, uuid: this.uuid }))
-            this.setListener()
-        },
         getLocations() {
-            this.ws.send(JSON.stringify({ object: 'Location', method: 'findAll', uuid: this.uuid }))
-            this.setListener()
+            this.$ws.send(JSON.stringify({ object: 'Location', method: 'findAll', uuid: this.uuid }))
+             this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Location' === data.object && 'findAll' === data.method) {
+                        this.locations = data.results
+                    }
+                }
+            }
         },
         getTypes() {
-            this.ws.send(JSON.stringify({ object: 'Type', method: 'findAll', uuid: this.uuid }))
-            this.setListener()
+            this.$ws.send(JSON.stringify({ object: 'Type', method: 'findAll', uuid: this.uuid }))
+             this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Type' === data.object && 'findAll' === data.method) {
+                        this.types = data.results
+                    }
+                }
+            }
         },
         update() {
-            this.ws.send(JSON.stringify({ object: 'Device', method: 'update', parameters: this.device, uuid: this.uuid}))
-            this.setListener()
+            this.$ws.send(JSON.stringify({ object: 'Device', method: 'update', parameters: this.device, uuid: this.uuid}))
+             this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if(this.uuid === data.uuid) {
+                    if('Device' === data.object && 'update' === data.method)  {
+                        this.$emit('update', data.results)
+                    }
+                }
+            }
         },
         hide() {
             this.$emit('close')

@@ -1,18 +1,18 @@
 export default {
   state: {
-    ws: null
+    health: null
   },
   getters: {
-    ws: state => state.ws
+    webSocket: state => state
   },
   mutations: {
-    setWebSocket(state, data) {
-      state.ws = data
+    setWebSocketHealth(state, data) {
+      state.health = data
     }
   },
   actions: {
-    setWebSocket: ({ commit, state }, data) => {
-      commit('setWebSocket', data)
+    setWebSocketHealth: ({ commit, state }, data) => {
+      commit('setWebSocketHealth', data)
     }
   }
 }
