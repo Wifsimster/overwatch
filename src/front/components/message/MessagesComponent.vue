@@ -1,7 +1,7 @@
-j<template>
+<template>
     <div>
         <h2>Messages
-            <a @click="openRemoveAllModal()" title="Remove all messages">
+            <a @click="openDestroyAllModal()" title="Destroy all">
                 <i class="material-icons">delete</i>
             </a>
         </h2>
@@ -14,7 +14,7 @@ j<template>
         </div>
     
         <transition name="opacity">
-            <div class="messages" v-if="messages && messages.length > 0">
+            <div class="messages" v-if="list && list.length > 0">
                 <table>
                     <thead>
                         <tr>
@@ -24,12 +24,12 @@ j<template>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="message in messages" :key="message.id">
-                            <td>{{ message.createdAt | moment('DD/MM/YY HH:mm:ss') }}</td>
-                            <td>{{ message.data }}</td>
+                        <tr v-for="item in list" :key="item.id">
+                            <td>{{ item.createdAt | moment('DD/MM/YY HH:mm:ss') }}</td>
+                            <td>{{ item.data }}</td>
                             <td>
-                                <a @click="openRemoveModal(message)" title="Remove the message">
-                                    <i class="material-icons">remove</i>
+                                <a @click="openDestroyModal(item)" title="Destroy">
+                                    <i class="material-icons">delete</i>
                                 </a>
                             </td>
                         </tr>
@@ -38,23 +38,22 @@ j<template>
             </div>
             <div v-else>
                 <br>
-                <p class="center">No {{ type }} message</p>
+                <p class="center">No item.</p>
             </div>
-        </transition>
-    
-        <remove-modal v-if="removeShow" :messageId="removeMessage.id" @remove="onRemove" @close="removeShow = false"></remove-modal>
-        <remove-all-modal v-if="removeAllShow" @removeAll="onRemoveAll" @close="removeAllShow = false"></remove-all-modal>
+        </transition>    
+        <destroy v-if="destroyModalShow" :id="selected.id" @destroy="onDestroy" @close="destroyModalShow = false"></destroy>
+        <destroy-all v-if="destroyAllModalShow" @destroyAll="onDestroyAll" @close="destroyAllModalShow = false"></destroy-all>
     </div>
 </template>
 
 <script>
 import Vue from 'vue'
-const RemoveModal = () => import('./MessageRemoveModalComponent.vue')
-const RemoveAllModal = () => import('./MessageRemoveAllModalComponent.vue')
+const Destroy = () => import('./DestroyComponent.vue')
+const DestroyAll = () => import('./DestroyAllComponent.vue')
 export default {
     components: {
-        RemoveModal,
-        RemoveAllModal,
+        Destroy,
+        DestroyAll,
     },
     computed: {
         ws() {
@@ -67,26 +66,23 @@ export default {
     data() {
         return {
             uuid: null,
-            messages: null,
-            removeMessage: null,
-            removeShow: false,
-            removeAllShow: false,
+            list: null,
+            selected: null,
+            destroyModalShow: false,
+            destroyAllModalShow: false,
             type: 'data',
         }
     },
      created() {
         this.uuid = Vue.getUUID()
-        this.setListener()
-        this.getMessages()
+        this.getList()
     },
     watch: {
         ws() {
-            this.setListener()
-            this.getMessages()
+            this.getList()
         },
         type() {
-            this.setListener()
-            this.getMessages()
+            this.getList()
         }
     },
     methods: {
@@ -96,35 +92,36 @@ export default {
                     const data = JSON.parse(message.data)
                     if(this.uuid === data.uuid) {
                         if('Message' === data.object && 'findAll' === data.method) {
-                            this.messages = data.results
+                            this.list = data.results
                         }
                     }
                 }
             }
         },
-        getMessages() {
+        getList() {
             if(this.ws) {
                 this.ws.send(JSON.stringify({ object: 'Message', method: 'findAll', parameters: { type: this.type, limit: 22, offset: 0 }, uuid: this.uuid}))
+                this.setListener()
             }
         },
-        openRemoveModal(message) {
-            this.removeShow = true
-            this.removeMessage = message
+        openDestroyModal(item) {
+            this.destroyModalShow = true
+            this.selected = item
         },
-        openRemoveAllModal() {
-            this.removeAllShow = true
+        openDestroyAllModal() {
+            this.destroyAllModalShow = true
         },
-        onRemove() {
-            this.messages.map((message, index) => {
-                if(message.id === this.removeMessage.id) {
-                    this.messages.splice(index, 1)
+        onDestroy() {
+            this.list.map((item, index) => {
+                if(item.id === this.selected.id) {
+                    this.list.splice(index, 1)
                 }
             })
-            this.removeShow = false
+            this.destroyModalShow = false
         },
-        onRemoveAll() {
-            this.messages = null
-            this.removeAllShow = false
+        onDestroyAll() {
+            this.list = null
+            this.destroyAllModalShow = false
         },
     }
 }  

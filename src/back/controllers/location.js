@@ -8,14 +8,65 @@ module.exports = {
   destroy: destroy
 }
 
-function findAll() {
-  return Location.findAll()
+function findAll(parameters = { orderBy: 'updatedAt' }) {
+  return Location.findAll({
+    order: [parameters.orderBy.split(' ')]
+  })
 }
 
-function findOne() {}
+function findOne(parameters) {
+  return Location.findById(parameters.id)
+}
 
-function create() {}
+function create(parameters) {
+  return new Promise((resolve, reject) => {
+    Location.findOne({
+      where: {
+        name: parameters.name
+      }
+    })
+      .then(location => {
+        if (location) {
+          reject('Name already exists !')
+        } else {
+          Location.create(parameters).then(data => {
+            resolve(data)
+          })
+        }
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
 
-function update() {}
+function update(parameters) {
+  return new Promise((resolve, reject) => {
+    Location.findById(parameters.id)
+      .then(location => {
+        location
+          .update({
+            name: parameters.name
+          })
+          .then(() => {
+            Location.findById(parameters.id)
+              .then(data => {
+                resolve(data)
+              })
+              .catch(err => {
+                reject(err)
+              })
+          })
+          .catch(err => {
+            reject(err)
+          })
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
 
-function destroy() {}
+function destroy(parameters) {
+  return Location.destroy({ where: parameters })
+}

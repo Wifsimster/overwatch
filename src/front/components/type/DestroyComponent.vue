@@ -1,20 +1,11 @@
 <template>
     <modal @close="hide()">
-        <div slot="header">Edit type</div>
+        <div slot="header">Destroy</div>
         <div slot="body">
-            <form class="pure-form pure-form-aligned" v-if="type">
-                <div class="pure-control-group">
-                    <label for="name">Name</label>
-                    <input id="name" type="text" v-model="type.name">
-                </div>
-                <div class="pure-control-group">
-                    <label for="key">Key</label>
-                    <input id="key" type="text" v-model="type.key">
-                </div>
-            </form>
+            <p v-if="location">Destroy "{{ location.name }}" ?</p>
         </div>
         <div slot="footer">
-            <button class="pure-button pure-button-primary" @click="update">Edit</button>
+            <button class="pure-button pure-button-red" @click="destroy">Destroy</button>
         </div>
     </modal>
 </template>
@@ -29,7 +20,7 @@ export default {
         Modal,
     },
     props: {
-        typeId: {
+        id: {
             type: Number,
         },
     },
@@ -41,18 +32,16 @@ export default {
     data() {
         return {
             uuid: null,
-            type: null
+            location: null
         }
     },
     created() {
         this.uuid = Vue.getUUID()
-        this.setListener()
-        this.getType()
+        this.getInfo()
     },
      watch: {
         ws() {
-            this.setListener()
-            this.getType()
+            this.getInfo()
         }
     },
     methods: {
@@ -62,20 +51,22 @@ export default {
                     const data = JSON.parse(message.data)
                     if(this.uuid === data.uuid) {
                         if('Type' === data.object && 'findOne' === data.method)  {
-                            this.type = data.results
+                            this.location = data.results
                         }
-                        if('Type' === data.object && 'update' === data.method)  {
-                            this.$emit('update', data.results)
+                        if('Type' === data.object && 'destroy' === data.method)  {
+                            this.$emit('destroy', data.results)
                         }
                     }
                 }
             }
         },
-        getType() {
-            this.ws.send(JSON.stringify({ object: 'Type', method: 'findOne', parameters:{ id: this.typeId }, uuid: this.uuid }))
+        getInfo() {
+            this.ws.send(JSON.stringify({ object: 'Type', method: 'findOne', parameters:{ id: this.id }, uuid: this.uuid }))
+            this.setListener()
         },
-        update() {
-            this.ws.send(JSON.stringify({ object: 'Type', method: 'update', parameters: this.type, uuid: this.uuid}))
+        destroy() {
+            this.ws.send(JSON.stringify({ object: 'Type', method: 'destroy', parameters: { id: this.id }, uuid: this.uuid}))
+            this.setListener()
         },
         hide() {
             this.$emit('close')

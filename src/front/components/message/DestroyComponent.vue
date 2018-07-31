@@ -1,11 +1,11 @@
 <template>
     <modal @close="hide()">
-        <div slot="header">Remove all messages</div>
+        <div slot="header">Destroy</div>
         <div slot="body">
-            <p>Remove all existing messages ?</p>
+            <p v-if="message">Destroy "{{ message.data }}"" ?</p>
         </div>
         <div slot="footer">
-            <button class="pure-button pure-button-red" @click="remove()">Remove all</button>
+            <button class="pure-button pure-button-red" @click="destroy()">Destroy</button>
         </div>
     </modal>
 </template>
@@ -18,8 +18,8 @@ export default {
         Modal 
     },
     props: {
-        device: {
-            type: Object,
+        id: {
+            type: Number,
         },
     },
     computed: {
@@ -29,33 +29,42 @@ export default {
     },
     data() {
         return {            
-            uuid: null
+            uuid: null,
+            message: null
         }
     },
     created() {
         this.uuid = Vue.getUUID()
-        this.setListener()
+        this.getInfo()
     },
      watch: {
         ws() {
-            this.setListener()
+            this.getInfo()
         }
     },
     methods: {
-        setListener() {
+         setListener() {
             if(this.ws) {           
                 this.ws.onmessage = message => {
                     const data = JSON.parse(message.data)
                     if(this.uuid === data.uuid) {
+                        if('Message' === data.object && 'findOne' === data.method)  {
+                            this.message = data.results
+                        }
                         if('Message' === data.object && 'destroy' === data.method)  {
-                            this.$emit('removeAll', data.results)
+                            this.$emit('destroy', data.results)
                         }
                     }
                 }
             }
         },
-        remove() {
-            this.ws.send(JSON.stringify({ object: 'Message', method: 'destroy', parameters: {}, uuid: this.uuid}))
+        getInfo() {
+            this.ws.send(JSON.stringify({ object: 'Message', method: 'findOne', parameters: { id: this.id }, uuid: this.uuid }))
+            this.setListener()
+        },
+        destroy() {
+            this.ws.send(JSON.stringify({ object: 'Message', method: 'destroy', parameters: { id: this.id }, uuid: this.uuid}))
+            this.setListener()
         },
         hide() {
             this.$emit('close')

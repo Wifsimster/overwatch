@@ -1,11 +1,11 @@
 <template>
     <modal @close="hide()">
-        <div slot="header">Remove a device</div>
+        <div slot="header">Destroy</div>
         <div slot="body">
-            <p v-if="device">Remove {{ device.name }} ?</p>
+            <p v-if="device">Destroy "{{ device.name }}"" ?</p>
         </div>
         <div slot="footer">
-            <button class="pure-button pure-button-red" @click="destroy()">Remove</button>
+            <button class="pure-button pure-button-red" @click="destroy()">Destroy</button>
         </div>
     </modal>
 </template>
@@ -18,7 +18,7 @@ export default {
         Modal 
     },
     props: {
-        deviceId: {
+        id: {
             type: Number,
         },
     },
@@ -35,13 +35,11 @@ export default {
     },
     created() {
         this.uuid = Vue.getUUID()
-        this.setListener()
-        this.getDevice()
+        this.getInfo()
     },
      watch: {
         ws() {
-            this.setListener()
-            this.getDevice()
+            this.getInfo()
         }
     },
     methods: {
@@ -54,17 +52,19 @@ export default {
                             this.device = data.results
                         }
                         if('Device' === data.object && 'destroy' === data.method)  {
-                            this.$emit('remove', data.results)
+                            this.$emit('destroy', data.results)
                         }
                     }
                 }
             }
         },
-        getDevice() {
-            this.ws.send(JSON.stringify({ object: 'Device', method: 'findOne', parameters: { id: this.deviceId }, uuid: this.uuid }))
+        getInfo() {
+            this.ws.send(JSON.stringify({ object: 'Device', method: 'findOne', parameters: { id: this.id }, uuid: this.uuid }))
+            this.setListener()
         },
         destroy() {
-            this.ws.send(JSON.stringify({ object: 'Device', method: 'destroy', parameters: { id: this.deviceId }, uuid: this.uuid}))
+            this.ws.send(JSON.stringify({ object: 'Device', method: 'destroy', parameters: { id: this.id }, uuid: this.uuid}))
+            this.setListener()
         },
         hide() {
             this.$emit('close')

@@ -1,8 +1,10 @@
 <template>
     <div>
-        <h2>Types</h2>
+        <h2>Types
+            <a @click="createModalShow = true" title="Create"><i class="material-icons">add</i></a>
+        </h2>
         <transition name="opacity">
-            <div class="types" v-if="types && types.length > 0">
+            <div v-if="list && list.length > 0">
                 <table>
                     <thead>
                         <tr>
@@ -13,23 +15,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="type in types" :key="type.id">
-                            <td>{{ type.name }}</td>
-                            <td>{{ type.key }}</td>
-                            <td>{{ type.updatedAt | moment('DD/MM/YY HH:mm:ss') }}</td>
+                        <tr v-for="item in list" :key="item.id">
+                            <td>{{ item.name }}</td>
+                            <td>{{ item.key }}</td>
+                            <td>{{ item.updatedAt | moment('DD/MM/YY HH:mm:ss') }}</td>
                             <td>
-                                <a @click="openEditModal(type)">
-                                    <i class="material-icons" title="Edit type info">edit</i>
+                                <a @click="openEditModal(item)">
+                                    <i class="material-icons" title="Edit">edit</i>
+                                </a>
+                                 <a @click="openDestroyModal(item)">
+                                    <i class="material-icons" title="Destroy">delete</i>
                                 </a>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <edit v-if="editShow" :type-id="editType.id" @update="onUpdate" @close="editShow = false"></edit>
+                <create v-if="createModalShow" @create="onCreate" @close="createModalShow = false"></create>
+                <edit v-if="editModalShow" :id="selected.id" @update="onUpdate" @close="editModalShow = false"></edit>
+                <destroy v-if="destroyModalShow" :id="selected.id" @destroy="onDestroy" @close="destroyModalShow = false"></destroy>
             </div>
             <div v-else>
                 <br>
-                <p class="center">No type.</p>
+                <p class="center">No item.</p>
             </div>
         </transition>
     </div>
@@ -37,10 +44,14 @@
 
 <script>
 import Vue from 'vue'
-const Edit = () => import('./TypeEditModalComponent.vue')
+const Create = () => import('./CreateComponent.vue')
+const Edit = () => import('./EditComponent.vue')
+const Destroy = () => import('./DestroyComponent.vue')
 export default {
     components: {
-        Edit
+        Create,
+        Edit,
+        Destroy
     },
     computed: {
         ws() {
@@ -50,37 +61,50 @@ export default {
     data() {
         return {
             uuid: null,
-            types: null,
-            editType: null,
-            editShow: false,
+            list: null,
+            selected: null,
+            editModalShow: false,
+            createModalShow: false,
+            destroyModalShow: false
         }
     },
     created() {
         this.uuid = Vue.getUUID()
-        this.setListener()
-        this.getTypes()
+        this.getList()
     },
     watch: {
         ws() {
-            this.setListener()
-            this.getTypes()
+            this.getList()
         }
     },
     methods: {
-        openEditModal(type) {
-            this.editShow = true
-            this.editType = type
+        openEditModal(item) {
+            this.editModalShow = true
+            this.selected = item
+        },
+        openDestroyModal(item) {
+            this.destroyModalShow = true
+            this.selected = item
         },
         onUpdate(data) {
-            this.types.map((type, index) => {
-                if(type.id === data.id) {
-                    this.types[index] = data 
+            this.list.map((item, index) => {
+                if(item.id === data.id) {
+                    this.list[index] = data 
                 }
             })
-            this.editShow = false
+            this.editModalShow = false
         },
-        getTypes() {
+        onCreate(data) {
+            this.getList()
+            this.createModalShow = false
+        },
+        onDestroy(data) {
+            this.getList()
+            this.destroyModalShow = false
+        },
+        getList() {
             this.ws.send(JSON.stringify({ object: 'Type', method: 'findAll', uuid: this.uuid, parameters : { orderBy: 'name'} }))
+            this.setListener()
         },
         setListener() {   
             if(this.ws) {           
@@ -88,7 +112,7 @@ export default {
                     const data = JSON.parse(message.data)
                     if(this.uuid === data.uuid) {
                         if('Type' === data.object && 'findAll' === data.method) {
-                            this.types = data.results
+                            this.list = data.results
                         }
                     }
                 }

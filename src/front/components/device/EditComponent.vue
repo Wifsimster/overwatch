@@ -1,6 +1,6 @@
 <template>
     <modal @close="hide()">
-        <div slot="header">Edit device</div>
+        <div slot="header">Edit</div>
         <div slot="body">
             <form class="pure-form pure-form-aligned" v-if="device">
                 <div class="pure-control-group">
@@ -27,7 +27,7 @@
             </form>
         </div>
         <div slot="footer">
-            <button class="pure-button pure-button-primary" @click="update">Edit</button>
+            <button class="pure-button pure-button-primary" @click="update">Update</button>
         </div>
     </modal>
 </template>
@@ -42,7 +42,7 @@ export default {
         Modal,
     },
     props: {
-        deviceId: {
+        id: {
             type: Number,
         },
     },
@@ -64,14 +64,12 @@ export default {
     },
     created() {
         this.uuid = Vue.getUUID()
-        this.setListener()
         this.getDevice()
         this.getLocations()
         this.getTypes()
     },
      watch: {
         ws() {
-            this.setListener()
             this.getDevice()
             this.getLocations()
             this.getTypes()
@@ -100,16 +98,20 @@ export default {
             }
         },
         getDevice() {
-            this.ws.send(JSON.stringify({ object: 'Device', method: 'findOne', parameters:{ id: this.deviceId }, uuid: this.uuid }))
+            this.ws.send(JSON.stringify({ object: 'Device', method: 'findOne', parameters:{ id: this.id }, uuid: this.uuid }))
+            this.setListener()
         },
         getLocations() {
             this.ws.send(JSON.stringify({ object: 'Location', method: 'findAll', uuid: this.uuid }))
+            this.setListener()
         },
         getTypes() {
             this.ws.send(JSON.stringify({ object: 'Type', method: 'findAll', uuid: this.uuid }))
+            this.setListener()
         },
         update() {
             this.ws.send(JSON.stringify({ object: 'Device', method: 'update', parameters: this.device, uuid: this.uuid}))
+            this.setListener()
         },
         hide() {
             this.$emit('close')

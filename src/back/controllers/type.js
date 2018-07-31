@@ -18,13 +18,33 @@ function findOne(parameters) {
   return Type.findById(parameters.id)
 }
 
-function create() {}
+function create(parameters) {
+  return new Promise((resolve, reject) => {
+    Type.findOne({
+      where: {
+        name: parameters.name
+      }
+    })
+      .then(location => {
+        if (location) {
+          reject('Name already exists !')
+        } else {
+          Type.create(parameters).then(data => {
+            resolve(data)
+          })
+        }
+      })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
 
 function update(parameters) {
   return new Promise((resolve, reject) => {
     Type.findById(parameters.id)
-      .then(device => {
-        device
+      .then(type => {
+        type
           .update({
             name: parameters.name,
             key: parameters.key
@@ -48,6 +68,6 @@ function update(parameters) {
   })
 }
 
-function destroy() {
+function destroy(parameters) {
   return Type.destroy({ where: parameters })
 }
