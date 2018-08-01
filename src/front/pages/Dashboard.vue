@@ -54,20 +54,15 @@ export default {
         this.uuid = Vue.getUUID()
         this.getSettings()
     },
-    methods: {
-        setListener() {
-            if(this.$ws) {
-                this.$ws.onmessage = message => {
-                    const data = JSON.parse(message.data)
-                    if('findAll' === data.method && this.uuid === data.uuid) {
-                        this.settings = data.results.settings
-                    }
+    methods: {       
+        getSettings() {
+            this.$ws.send(JSON.stringify({ object: 'Settings', method: 'findAll', uuid: this.uuid}))            
+            this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if('findAll' === data.method && this.uuid === data.uuid) {
+                    this.settings = data.results
                 }
             }
-        },        
-        getSettings() {
-            this.$ws.send(JSON.stringify({ object: 'Settings', method: 'findAll', uuid: this.uuid}))
-            this.setListener()
         },
         display(name) {
             this.settings.map((setting, index) => {

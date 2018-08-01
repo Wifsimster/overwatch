@@ -4,6 +4,7 @@
             <li>
                 <router-link to="/" exact class="link">
                     <i class="material-icons">home</i>
+                    <span class="title">Overwatch</span>
                 </router-link>
             </li>
         </ul>
@@ -18,5 +19,5 @@
 </template>
 
 <style lang="scss" scoped>
-@import '../sass/components/header'
+@import '../sass/components/header';
 </style>

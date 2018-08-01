@@ -3,36 +3,42 @@
 $height: 60px;
 
 .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: $height;
-    background-color: $black;
-    z-index: 10;
-    width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: $height;
+  background-color: $black;
+  z-index: 10;
+  width: 100%;
 
-    ul {
-        float: left;
-        margin: 0;
-        padding: 0;
-        list-style: none;
-        li {
-            float: left;
-            position: relative;
-            display: block;
-            margin: 0;
-            padding: 0;
-            a {
-                line-height: $height;
-                color: $dusty-gray;
-                padding: 0 15px;
-                position: relative;
-                display: block;
-                i {
-                    font-weight: 600;
-                    font-size: 24px;
-                }
-            }
+  .title {
+    font-size: 24px;
+    font-weight: 600;
+    margin-left: 10px;
+  }
+
+  ul {
+    float: left;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    li {
+      float: left;
+      position: relative;
+      display: block;
+      margin: 0;
+      padding: 0;
+      a {
+        line-height: $height;
+        color: $dusty-gray;
+        padding: 0 15px;
+        position: relative;
+        display: block;
+        i {
+          font-weight: 600;
+          font-size: 24px;
         }
+      }
     }
+  }
 }
