@@ -53,10 +53,10 @@ export default {
             this.$ws.onmessage = message => {
             const data = JSON.parse(message.data)
                 if('findAll' === data.method && this.uuid === data.uuid) {
-                    this.netatmoDevice = data.results[0]
+                    this.netatmoDevice = data.results
                 }
             }
-        }
+        },
     }
 }
 </script>

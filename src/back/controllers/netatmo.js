@@ -12,7 +12,11 @@ module.exports = {
 function findAll() {
   return new Promise((resolve, reject) => {
     api.getStationsData(function(err, data) {
-      resolve(data)
+      if (!err) {
+        resolve(data[0])
+      } else {
+        reject(err)
+      }
     })
   })
 }

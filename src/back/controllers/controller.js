@@ -24,7 +24,7 @@ class Controller {
           async function executeMethod(data) {
             switch (object) {
               case 'Settings':
-                results = Settings[method]()
+                results = await Settings[method](parameters)
                 break
               case 'Device':
                 results = await Device[method](parameters)
@@ -36,10 +36,7 @@ class Controller {
                 results = await Yeelight[method](parameters)
                 break
               case 'Freebox':
-                results = await Freebox[method](parameters).catch(err => {
-                  console.error('Error :', err)
-                  return { error: true, err: err }
-                })
+                results = await Freebox[method](parameters)
                 break
               case 'Type':
                 results = await Type[method](parameters)

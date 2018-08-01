@@ -76,7 +76,7 @@
                     </div>
     
                     <div class="pure-controls">
-                        <button class="pure-button pure-button-primary" @click="update()">Save</button>
+                        <button class="pure-button pure-button-primary" @click="update()">Update</button>
                     </div>
                 </div>
             </form>
@@ -87,11 +87,6 @@
 <script>
 import Vue from 'vue'
 export default {
-    computed: {
-        ws() {
-            return this.$store.getters.ws
-        }
-    },
     data() {
         return {
             uuid: null,
@@ -100,33 +95,20 @@ export default {
     },    
     created() {
         this.uuid = Vue.getUUID()
-        this.setListener()
-        this.getSettings()
+        this.getInfos()
     },
-    watch: {
-        ws() {
-            this.setListener()
-            this.getSettings()
-        }
-    },
-    methods: {
-        setListener() {
-            if(this.ws) {
-                this.ws.onmessage = message => {
-                    const data = JSON.parse(message.data)
-                    if('findAll' === data.method && this.uuid === data.uuid) {
-                        this.settings = data.results.settings
-                    }
+    methods: {       
+        getInfos() {
+            this.$ws.send(JSON.stringify({ object: 'Settings', method: 'findAll', uuid: this.uuid}))
+            this.$ws.onmessage = message => {
+                const data = JSON.parse(message.data)
+                if('findAll' === data.method && this.uuid === data.uuid) {
+                    this.settings = data.results
                 }
-            }
-        },        
-        getSettings() {
-            if(this.ws) {
-                this.ws.send(JSON.stringify({ object: 'Settings', method: 'findAll', uuid: this.uuid}))
             }
         },
         update() {
-            this.ws.emit('setting.update', this.settings)
+            this.$ws.send(JSON.stringify({ object: 'Settings', method: 'update', uuid: this.uuid, parameters: this.settings }))
         },
     },
 }

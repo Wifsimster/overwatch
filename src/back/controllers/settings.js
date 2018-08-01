@@ -4,22 +4,19 @@ jsonfile.spaces = 2
 
 module.exports = {
   findAll: findAll,
-  findOne: findOne,
-  update: update,
-  update: update,
-  destroy: destroy
+  update: update
 }
 
 function findAll() {
-  return jsonfile.readFileSync(file)
+  return new Promise((resolve, reject) => {
+    const data = jsonfile.readFileSync(file)
+    resolve(data.settings)
+  })
 }
 
-function findOne() {}
-
-function create() {}
-
-function update(settings) {
-  return jsonfile.writeFile(file, { settings: settings })
+function update(parameters) {
+  return new Promise((resolve, reject) => {
+    jsonfile.writeFile(file, { settings: parameters })
+    resolve()
+  })
 }
-
-function destroy() {}
