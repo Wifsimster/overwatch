@@ -6,6 +6,7 @@ const Message = require('./message')
 const Type = require('./type')
 const Location = require('./location')
 const Scenario = require('./scenario')
+const Netatmo = require('./netatmo')
 
 class Controller {
   constructor(wss) {
@@ -48,6 +49,9 @@ class Controller {
                 break
               case 'Scenario':
                 results = await Scenario[method](parameters)
+                break
+              case 'Netatmo':
+                results = await Netatmo[method](parameters)
                 break
               default:
                 console.log('Object invalid :', object)

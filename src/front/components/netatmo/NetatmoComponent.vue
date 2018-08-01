@@ -1,6 +1,6 @@
 <template>
     <transition name="opacity">
-        <div class="flex-container" v-if="settings.netatmo.display">
+        <div class="flex-container" v-if="settings.netatmo.display && netatmoDevice">
             <temperature :device="netatmoDevice"></temperature>
             <outdoor-temperature :device="netatmoDevice"></outdoor-temperature>
             <humidity :device="netatmoDevice"></humidity>
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-// import netatmo from 'netatmo'
+import Vue from 'vue'
 import Humidity from './HumidityComponent.vue'
 import OutdoorHumidity from './ModuleHumidityComponent.vue'
 import Temperature from './TemperatureComponent.vue'
@@ -39,25 +39,24 @@ export default {
     },
     data() {
         return {
-            netatmoDevice: {},
-            netatmoApi: {},
+            netatmoDevice: null
         }
     },
     created() {
-        // this.netatmoApi = new netatmo(this.settings.netatmo)
-        // this.getNetatmoData()
-        // setInterval(() => { this.getNetatmoData() }, 300000)
+        this.uuid = Vue.getUUID()
+        this.getInfos()        
+        setInterval(() => { this.getInfos() }, 30000)
     },
     methods: {
-        // getNetatmoData() {
-        //     this.netatmoApi.getStationsData((err, devices) => {
-        //         if (!err) {
-        //             this.netatmoDevice = devices[0]
-        //         } else {
-        //             console.error(err)
-        //         }
-        //     })
-        // },
+        getInfos() {
+            this.$ws.send(JSON.stringify({ object: 'Netatmo', method: 'findAll', uuid: this.uuid}))
+            this.$ws.onmessage = message => {
+            const data = JSON.parse(message.data)
+                if('findAll' === data.method && this.uuid === data.uuid) {
+                    this.netatmoDevice = data.results[0]
+                }
+            }
+        }
     }
 }
 </script>

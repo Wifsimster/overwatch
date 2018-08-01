@@ -36,9 +36,9 @@
 </template>
 
 <script>
+import moment from 'moment'
 import icon from '../../assets/pressure.png'
 const Modal = () => import('../ModalComponent.vue')
-import moment from 'moment'
 export default {
     components: { 
         Modal 
