@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import icon from '../../assets/motion.png'
+import icon from '../../assets/motion.svg'
 import moment from 'moment'
 const Modal = () => import('../ModalComponent.vue')
 import Vue from 'vue'

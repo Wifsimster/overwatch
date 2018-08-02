@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import icon from '../../assets/thermometer.png'
+import icon from '../../assets/thermometer.svg'
 const Modal = () => import('../ModalComponent.vue')
 import moment from 'moment'
 export default {
@@ -68,5 +68,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../sass/components/netatmo-device'
+@import '../../sass/components/netatmo-device';
 </style>

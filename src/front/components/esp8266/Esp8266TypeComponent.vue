@@ -93,12 +93,12 @@
 </template>
 
 <script>
-import humidity from '../../assets/humidity.png'
-import pressure from '../../assets/pressure.png'
-import dimmer from '../../assets/dimmer.png'
-import luminosity from '../../assets/luminosity.png'
-import gas from '../../assets/gas.png'
-import rgbw from '../../assets/led_strip.png'
+import humidity from '../../assets/humidity.svg'
+import pressure from '../../assets/pressure.svg'
+import dimmer from '../../assets/dimmer.svg'
+import luminosity from '../../assets/luminosity.svg'
+import gas from '../../assets/gas.svg'
+import rgbw from '../../assets/led_strip.svg'
 const Esp8266Switch = () => import('./Esp8266SwitchComponent.vue')
 const Esp8266Motion = () => import('./Esp8266MotionComponent.vue')
 import Vue from 'vue'

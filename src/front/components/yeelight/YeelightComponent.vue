@@ -17,7 +17,7 @@
 
 <script>
 const RangeSlider = () => import('vue-range-slider')
-import bulb from '../assets/bulb.png'
+import bulb from '../assets/bulb.svg'
 import 'vue-range-slider/dist/vue-range-slider.css'
 export default {
     components: {

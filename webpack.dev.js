@@ -9,7 +9,11 @@ module.exports = merge(common, {
     compress: true,
     historyApiFallback: true
   },
-  devtool: 'inline-source-map',
+  resolve: {
+    alias: {
+      vue: 'vue/dist/vue.js'
+    }
+  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development')

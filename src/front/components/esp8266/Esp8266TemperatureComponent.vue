@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import icon from '../../assets/thermometer.png'
+import icon from '../../assets/thermometer.svg'
 export default {
     components: { 
         Modal 

@@ -49,7 +49,7 @@
 <script>
 const Modal = () => import('../ModalComponent.vue')
 const Slider = () => import('../SliderComponent.vue')
-import bulbImg from '../../assets/bulb.png'
+import bulbImg from '../../assets/bulb.svg'
 const Switchy = () => import('../SwitchComponent.vue')
 const ColorsPicker = () => import('../ColorsPickerComponent.vue')
 import Vue from 'vue'

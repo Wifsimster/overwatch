@@ -1,6 +1,6 @@
 const path = require('path')
-const webpack = require('webpack')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = {
   entry: ['babel-polyfill', path.resolve('src/front', 'app.js')],
@@ -16,7 +16,7 @@ module.exports = {
   resolveLoader: {
     moduleExtensions: ['-loader']
   },
-  plugins: [new CleanWebpackPlugin(['dist'])],
+  plugins: [new CleanWebpackPlugin(['dist']), new BundleAnalyzerPlugin()],
   module: {
     rules: [
       { test: /\.vue$/, loader: 'vue' },

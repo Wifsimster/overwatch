@@ -69,14 +69,14 @@
 </template>
 
 <script>
-import thermometer from '../assets/thermometer.png'
-import humidity from '../assets/humidity.png'
-import pressure from '../assets/pressure.png'
-import _switch from '../assets/switch.png'
-import dimmer from '../assets/dimmer.png'
-import luminosity from '../assets/luminosity.png'
-import gas from '../assets/gas.png'
-import rgbw from '../assets/led_strip.png'
+import thermometer from '../assets/thermometer.svg'
+import humidity from '../assets/humidity.svg'
+import pressure from '../assets/pressure.svg'
+import _switch from '../assets/switch.svg'
+import dimmer from '../assets/dimmer.svg'
+import luminosity from '../assets/luminosity.svg'
+import gas from '../assets/gas.svg'
+import rgbw from '../assets/led_strip.svg'
 import moment from 'moment'
 export default {
     props: {

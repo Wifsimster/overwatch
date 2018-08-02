@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import icon from '../../assets/switch.png'
+import icon from '../../assets/switch.svg'
 const Switchy = () => import('../SwitchComponent.vue')
 import moment from 'moment'
 const Modal = () => import('../ModalComponent.vue')
