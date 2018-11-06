@@ -1,9 +1,9 @@
 const path = require('path')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
+const VueLoaderPlugin = require('vue-loader')
 
 module.exports = {
-  entry: ['babel-polyfill', path.resolve('src/front', 'app.js')],
+  entry: ['@babel/polyfill', path.resolve('src/front/app.js')],
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
@@ -13,19 +13,15 @@ module.exports = {
   resolve: {
     modules: [path.join(__dirname, 'src'), 'node_modules']
   },
-  resolveLoader: {
-    moduleExtensions: ['-loader']
-  },
-  plugins: [new CleanWebpackPlugin(['dist']), new BundleAnalyzerPlugin()],
+  plugins: [new CleanWebpackPlugin(['dist']), new VueLoaderPlugin()],
   module: {
     rules: [
-      { test: /\.vue$/, loader: 'vue' },
-      { test: /\.js$/, loader: 'babel', exclude: /node_modules/ },
-      { test: /\.html$/, use: [{ loader: 'vue-html' }] },
-      { test: /\.css/, use: ['style', 'css'] },
-      { test: /\.scss/, use: ['style', 'css', 'sass'] },
-      { test: /\.(png|jpg|gif|svg)$/, loader: 'url?limit=100000&name=../img/[name].[ext]' },
-      { test: /\.(woff(2)?|eot|otf|ttf|svg)(\?[a-z0-9=\.]+)?$/, loader: 'file?name=../fonts/[name].[ext]' }
+      { test: /\.vue$/, loader: 'vue-loader' },
+      { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
+      { test: /\.css$/, use: ['vue-style-loader', 'css-loader'] },
+      { test: /\.scss$/, use: ['vue-style-loader', 'css-loader', 'sass-loader'] },
+      { test: /\.(png|jpg|gif|svg)$/, loader: 'url-loader?limit=100000&name=../img/[name].[ext]' },
+      { test: /\.(woff(2)?|eot|otf|ttf|svg)(\?[a-z0-9=\.]+)?$/, loader: 'file-loader?name=../fonts/[name].[ext]' }
     ]
   }
 }

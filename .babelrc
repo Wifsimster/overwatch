@@ -1,5 +1,5 @@
 {
-  "presets": ["es2015", "stage-3"],
-  "plugins": ["syntax-dynamic-import", "transform-runtime"],
+  "presets": ["@babel/preset-env"],
+  "plugins": ["@babel/plugin-syntax-dynamic-import", "@babel/plugin-transform-runtime"],
   "comments": false
 }
