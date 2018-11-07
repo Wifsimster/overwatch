@@ -1,6 +1,6 @@
 const path = require('path')
 const CleanWebpackPlugin = require('clean-webpack-plugin')
-const VueLoaderPlugin = require('vue-loader')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 
 module.exports = {
   entry: ['@babel/polyfill', path.resolve('src/front/app.js')],
