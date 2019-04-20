@@ -60,12 +60,12 @@
 }
 
 @mixin box-shadow($params) {
-  -webkit-box-shadow : $params;
-  -moz-box-shadow    : $params;
-  box-shadow         : $params;
+  -webkit-box-shadow: $params;
+  -moz-box-shadow: $params;
+  box-shadow: $params;
 }
 
-@mixin rotate ($deg) {
+@mixin rotate($deg) {
   @include transform(rotate(#{$deg}deg));
 }
 
@@ -132,44 +132,53 @@
 }
 
 @mixin bp($point) {
-  @if $point == xlg { // 1400px
-    @media (max-width: $screen-xlg) { @content; }
-  }
-  @else if $point == lg { // 1200px
-    @media (max-width: $screen-lg) { @content; }
-  }
-  @else if $point == md { // 992px
-    @media (max-width: $screen-md)  { @content; }
-  }
-  @else if $point == sm { // 768px
-    @media (max-width: $screen-sm)  { @content; }
-  }
-  @else if $point == xs { // 480px
-    @media (max-width: $screen-xs)  { @content; }
+  @if $point == xlg {
+    // 1400px
+    @media (max-width: $screen-xlg) {
+      @content;
+    }
+  } @else if $point == lg {
+    // 1200px
+    @media (max-width: $screen-lg) {
+      @content;
+    }
+  } @else if $point == md {
+    // 992px
+    @media (max-width: $screen-md) {
+      @content;
+    }
+  } @else if $point == sm {
+    // 768px
+    @media (max-width: $screen-sm) {
+      @content;
+    }
+  } @else if $point == xs {
+    // 480px
+    @media (max-width: $screen-xs) {
+      @content;
+    }
   }
 }
 
-@mixin triangle($direction, $size: 10px, $color: #222){
-  content: '';
+@mixin triangle($direction, $size: 10px, $color: #222) {
+  content: "";
   display: block;
   position: absolute;
-  height: 0; width: 0;
-  @if ($direction == up){
+  height: 0;
+  width: 0;
+  @if ($direction == up) {
     border-bottom: $size solid $color;
     border-left: $size solid transparent;
     border-right: $size solid transparent;
-  }
-  @else if ($direction == down){
+  } @else if ($direction == down) {
     border-top: $size solid $color;
     border-left: $size solid transparent;
     border-right: $size solid transparent;
-  }
-  @else if ($direction == left){
+  } @else if ($direction == left) {
     border-top: $size solid transparent;
     border-bottom: $size solid transparent;
     border-right: $size solid $color;
-  }
-  @else if ($direction == right){
+  } @else if ($direction == right) {
     border-top: $size solid transparent;
     border-bottom: $size solid transparent;
     border-left: $size solid $color;
@@ -186,18 +195,24 @@
 }
 
 /* Forms label + input sizing */
-@mixin label-width($prt, $important:"") {
-  & > label { width: $prt% #{$important}; }
+@mixin label-width($prt, $important: "") {
+  & > label {
+    width: $prt% #{$important};
+  }
   @include prefix($prt);
 }
 
-@mixin input-width($prt, $offset:35px, $important:"") {
-  & > input, & > textarea, & > .select-wrapper, & > .file-field, & > .dropdown {
+@mixin input-width($prt, $offset: 35px, $important: "") {
+  & > input,
+  & > textarea,
+  & > .select-wrapper,
+  & > .file-field,
+  & > .dropdown {
     width: calc(#{$prt}% - #{$offset}) #{$important};
   }
 }
 
-@mixin prefix($prt, $offset:10px) {
+@mixin prefix($prt, $offset: 10px) {
   &.prefix {
     i {
       left: calc(#{$prt}% + #{$offset});
@@ -208,14 +223,14 @@
   }
 }
 
-@mixin prefix-right($input, $label:0) {
+@mixin prefix-right($input, $label: 0) {
   $padding-left: 10px;
   $padding-right: 35px;
-  
-  $label: $label + %;
+
+  $label: $label + "%";
   $prt: (#{$label} + #{$input});
   $offset: #{$padding-right} + 5px;
-  
+
   &.prefix-right {
     input {
       padding: 0 $padding-right 0 $padding-left;
@@ -230,9 +245,9 @@
 // Extend
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none;   /* Chrome/Safari/Opera */
-  -khtml-user-select: none;    /* Konqueror */
-  -moz-user-select: none;      /* Firefox */
-  -ms-user-select: none;       /* IE/Edge */
-  user-select: none;           /* non-prefixed version */
+  -webkit-user-select: none; /* Chrome/Safari/Opera */
+  -khtml-user-select: none; /* Konqueror */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE/Edge */
+  user-select: none; /* non-prefixed version */
 }

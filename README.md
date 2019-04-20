@@ -2,6 +2,9 @@
 
 Personal home automation with real time messaging for Raspberry Pi 3.
 
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Wifsimster/overwatch/blob/master/LICENSE)
+[![npm version](https://badge.fury.io/js/overwatch.svg)](https://www.npmjs.com/package/overwatch)
+
 ## Alpha version :shit:
 
 > Work in progress...
