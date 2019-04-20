@@ -23,7 +23,6 @@
     "font-awesome-webpack": "0.0.5-beta.2",
     "jsmpeg": "^1.0.0",
     "jsonfile": "^5.0.0",
-    "medoc": "^1.0.1",
     "method-override": "^3.0.0",
     "mqtt": "^2.18.8",
     "net": "^1.0.2",
