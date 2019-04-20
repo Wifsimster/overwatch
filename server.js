@@ -1,28 +1,30 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const favicon = require('serve-favicon')
-const WebSocket = require('ws')
-const methodOverride = require('method-override')
-const cors = require('cors')
+const express = require("express")
+const bodyParser = require("body-parser")
+const favicon = require("serve-favicon")
+const WebSocket = require("ws")
+const methodOverride = require("method-override")
+const cors = require("cors")
 const app = express()
-const router = express.Router()
-const http = require('http')
-const mqtt = require('./src/back/controllers/mqtt')
-const Controller = require('./src/back/controllers/controller')
+express.Router()
+const http = require("http")
+const mqtt = require("./src/back/controllers/mqtt")
+const Controller = require("./src/back/controllers/controller")
 
 app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 app.use(methodOverride())
-app.use(express.static(__dirname + '/'))
-app.use(favicon(__dirname + '/src/front/assets/favicon.png'))
+app.use(express.static(__dirname + "/"))
+app.use(favicon(__dirname + "/src/front/assets/favicon.png"))
 
 const PORT = 8082
 
 const server = http.Server(app)
 const wss = new WebSocket.Server({ server })
 
-server.listen(PORT, () => console.log(`Server started on http://localhost:${PORT}`))
+server.listen(PORT, () =>
+  console.log(`Server started on http://localhost:${PORT}`)
+)
 
 new Controller(wss)
 
