@@ -4,11 +4,9 @@ Personal home automation with real time messaging for Raspberry Pi 3.
 
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/Wifsimster/overwatch/blob/master/LICENSE)
 
-## Alpha version :shit:
+## Ended project :shit:
 
-> Work in progress...
-
-> You can check out my work and ask for new features any time.
+> See my new domotic projet Overwatch 2
 
 ## Functions
 
